@@ -1,0 +1,140 @@
+<div class="py-20 lg:py-32 bg-white">
+  <div class="mx-auto max-w-[1400px] px-6 lg:px-12">
+    <div class="mb-16 lg:mb-24 text-center animate-in fade-in slide-in-from-top-4 duration-700">
+      <h1 class="text-4xl lg:text-7xl font-black text-gray-900 uppercase tracking-tighter leading-none">
+        {{ section.settings.title }}
+      </h1>
+    </div>
+
+    {%- liquid
+      case section.settings.sort
+        when 'products_high', 'products_low'
+          assign collections = collections | sort: 'all_products_count'
+        when 'date', 'date_reversed'
+          assign collections = collections | sort: 'published_at'
+      endcase
+
+      if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+        assign collections = collections | reverse
+      endif
+
+      assign paginate_by = 30
+      assign columns_desktop = section.settings.columns_desktop
+      assign columns_mobile = section.settings.columns_mobile
+    -%}
+
+    {%- paginate collections by paginate_by -%}
+      <div 
+        class="grid grid-cols-1 {% if columns_mobile == '2' %}sm:grid-cols-2{% endif %} lg:grid-cols-{{ columns_desktop }} gap-8 lg:gap-12 animate-in fade-in slide-in-from-bottom-4 duration-1000"
+        role="list"
+      >
+        {%- for collection in collections -%}
+          <div class="h-full">
+            {% render 'card-collection',
+              card_collection: collection,
+              media_aspect_ratio: section.settings.image_ratio,
+              columns: columns_desktop
+            %}
+          </div>
+        {%- endfor -%}
+      </div>
+      
+      {%- if paginate.pages > 1 -%}
+        <div class="mt-16 lg:mt-24 flex justify-center">
+          {% render 'pagination', paginate: paginate %}
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-list-collections.name",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:sections.main-list-collections.settings.title.label",
+      "default": "t:sections.main-list-collections.settings.title.default"
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "options": [
+        {
+          "value": "alphabetical",
+          "label": "t:sections.main-list-collections.settings.sort.options__1.label"
+        },
+        {
+          "value": "alphabetical_reversed",
+          "label": "t:sections.main-list-collections.settings.sort.options__2.label"
+        },
+        {
+          "value": "date_reversed",
+          "label": "t:sections.main-list-collections.settings.sort.options__3.label"
+        },
+        {
+          "value": "date",
+          "label": "t:sections.main-list-collections.settings.sort.options__4.label"
+        },
+        {
+          "value": "products_high",
+          "label": "t:sections.main-list-collections.settings.sort.options__5.label"
+        },
+        {
+          "value": "products_low",
+          "label": "t:sections.main-list-collections.settings.sort.options__6.label"
+        }
+      ],
+      "default": "alphabetical",
+      "label": "t:sections.main-list-collections.settings.sort.label"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__1.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__2.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.main-list-collections.settings.image_ratio.options__3.label"
+        }
+      ],
+      "default": "adapt",
+      "label": "t:sections.main-list-collections.settings.image_ratio.label"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3,
+      "label": "t:sections.main-list-collections.settings.columns_desktop.label"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-list-collections.settings.columns_mobile.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-list-collections.settings.columns_mobile.options__2.label"
+        }
+      ],
+      "default": "2",
+      "label": "t:sections.main-list-collections.settings.columns_mobile.label"
+    }
+  ]
+}
+{% endschema %}

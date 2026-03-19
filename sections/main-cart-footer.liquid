@@ -1,0 +1,171 @@
+<div
+  class="bg-white border-t border-gray-100 py-12 lg:py-20 {% if cart == empty %} hidden {% endif %}"
+  id="main-cart-footer"
+  data-id="{{ section.id }}"
+>
+  <div class="max-w-[1440px] mx-auto px-8 lg:px-12">
+    <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
+      
+      {%- comment -%} [[ LEFT: NOTES & APPS ]] {%- endcomment -%}
+      <div class="flex-1 space-y-12">
+        {%- if settings.show_cart_note -%}
+          <cart-note class="block group/note">
+            <label for="Cart-note" class="block text-[10px] font-black text-gray-300 uppercase tracking-[0.2em] mb-4">{{ 'sections.cart.note' | t }}</label>
+            <textarea
+              class="w-full p-8 bg-gray-50 border border-gray-100 rounded-[2rem] text-sm text-gray-900 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 focus:bg-white outline-none resize-none h-40 transition-all font-medium"
+              name="note"
+              form="cart"
+              id="Cart-note"
+              placeholder="Any special requests for your order?"
+            >{{ cart.note }}</textarea>
+          </cart-note>
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            <div class="bg-gray-50 p-8 rounded-[2rem] border border-gray-100">
+              {% render block %}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} [[ RIGHT: SUMMARY ]] {%- endcomment -%}
+      <div class="w-full lg:w-[480px] shrink-0">
+        <div class="bg-gray-50 p-10 lg:p-12 rounded-[3rem] border border-gray-100 shadow-2xl shadow-gray-100/50 space-y-10 lg:sticky lg:top-8">
+          
+          <div class="space-y-6">
+            <h2 class="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">Order Summary</h2>
+            
+            <div class="space-y-4">
+              {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                  {%- when 'subtotal' -%}
+                    <div class="js-contents" {{ block.shopify_attributes }}>
+                      <div class="space-y-4">
+                        {%- if cart.cart_level_discount_applications.size > 0 -%}
+                          <div class="space-y-2">
+                            {%- for discount in cart.cart_level_discount_applications -%}
+                              <div class="flex items-center justify-between text-xs font-bold text-blue-600 bg-blue-50/50 px-4 py-3 rounded-xl border border-blue-100/50">
+                                <span class="flex items-center gap-2">
+                                    {% render 'icon-library', icon: 'discount-line', class: 'w-4 h-4' %}
+                                    {{ discount.title | escape }}
+                                </span>
+                                <span class="text-sm font-black">-{{ discount.total_allocated_amount | money }}</span>
+                              </div>
+                            {%- endfor -%}
+                          </div>
+                        {%- endif -%}
+
+                        <div class="flex items-center justify-between py-2">
+                          <span class="text-sm font-black text-gray-900 uppercase tracking-tight">{{ 'sections.cart.estimated_total' | t }}</span>
+                          <span class="text-4xl font-black text-gray-900 tracking-tight">{{ cart.total_price | money_with_currency }}</span>
+                        </div>
+
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-relaxed">
+                          {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                            {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                          {%- elsif cart.taxes_included -%}
+                            {{ 'sections.cart.taxes_included_shipping_at_checkout' | t }}
+                          {%- else -%}
+                            Taxes and shipping calculated at checkout
+                          {%- endif -%}
+                        </p>
+                      </div>
+                    </div>
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+          {%- comment -%} [[ CTAS ]] {%- endcomment -%}
+          <div class="space-y-4">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'buttons' -%}
+                <div class="cart__ctas" {{ block.shopify_attributes }}>
+                  <button
+                    type="submit"
+                    id="checkout"
+                    class="w-full relative overflow-hidden group/checkout"
+                    name="checkout"
+                    {% if cart == empty %}disabled{% endif %}
+                    form="cart"
+                  >
+                    <div class="relative z-10 flex items-center justify-center gap-3 py-6 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.25em] transition-all group-hover/checkout:bg-black group-hover/checkout:translate-y-[-2px] group-hover/checkout:shadow-2xl active:translate-y-[1px]">
+                      <span>{{ 'sections.cart.checkout' | t }}</span>
+                      {% render 'icon-library', icon: 'arrow-right-line', class: 'w-5 h-5 transition-transform group-hover/checkout:translate-x-1.5' %}
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover/checkout:opacity-10 transition-opacity blur-xl"></div>
+                  </button>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if additional_checkout_buttons -%}
+              <div class="cart__dynamic-checkout-buttons additional-checkout-buttons pt-4">
+                {{ content_for_additional_checkout_buttons }}
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div id="cart-errors" class="text-red-500 text-xs font-bold text-center"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-cart-footer.name",
+  "class": "cart__footer-wrapper",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "t:sections.main-cart-footer.blocks.subtotal.name",
+      "limit": 1
+    },
+    {
+      "type": "buttons",
+      "name": "t:sections.main-cart-footer.blocks.buttons.name",
+      "limit": 1
+    },
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}

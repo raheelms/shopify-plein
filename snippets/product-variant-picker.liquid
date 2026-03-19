@@ -1,0 +1,74 @@
+{%- unless product.has_only_default_variant -%}
+  <variant-selects
+    id="variant-selects-{{ section.id }}"
+    class="flex flex-col gap-10"
+    data-section="{{ section.id }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign swatch_count = option.values | map: 'swatch' | compact | size
+        assign picker_type = block.settings.picker_type
+
+        if swatch_count > 0 and block.settings.swatch_shape != 'none'
+          if block.settings.picker_type == 'dropdown'
+            assign picker_type = 'swatch_dropdown'
+          else
+            assign picker_type = 'swatch'
+          endif
+        endif
+      -%}
+
+      <div class="product-form__input space-y-4">
+        <label class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+          {{ option.name }}: 
+          <span data-selected-value class="text-gray-900 ml-2">{{ option.selected_value }}</span>
+        </label>
+
+        {%- if picker_type == 'swatch' or picker_type == 'button' -%}
+          <fieldset class="flex flex-wrap gap-4 border-none p-0 m-0">
+            {% render 'product-variant-options',
+              product: product,
+              option: option,
+              block: block,
+              picker_type: picker_type
+            %}
+          </fieldset>
+        {%- else -%}
+          <div class="relative group max-w-[440px]">
+            {%- if picker_type == 'swatch_dropdown' -%}
+              <span
+                data-selected-value
+                class="absolute left-6 top-1/2 -translate-y-1/2 z-10"
+              >
+                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
+              </span>
+            {%- endif -%}
+            
+            <select
+              id="Option-{{ section.id }}-{{ forloop.index0 }}"
+              class="appearance-none w-full bg-white border border-gray-100 rounded-2xl h-16 pl-6 {% if picker_type == 'swatch_dropdown' %}pl-16{% endif %} pr-14 font-black text-gray-900 cursor-pointer focus:outline-none focus:ring-4 focus:ring-blue-50 focus:border-blue-600 transition-all shadow-sm hover:border-gray-200"
+              name="options[{{ option.name | escape }}]"
+              form="{{ product_form_id }}"
+            >
+              {% render 'product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                picker_type: picker_type
+              %}
+            </select>
+            
+            <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-gray-900 transition-colors">
+              {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-6 h-6' %}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+  </variant-selects>
+{%- endunless -%}

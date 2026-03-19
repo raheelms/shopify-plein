@@ -1,0 +1,247 @@
+{% comment %}
+  Featured Collections Grid - 6 collections in 3x2 layout
+  Kruidvat-style category browsing section
+{% endcomment %}
+
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .featured-collections {
+    padding: 0;
+  }
+  .featured-collections__title {
+    font-size: {{ section.settings.heading_size }}rem;
+    font-weight: {{ section.settings.heading_weight }};
+    text-transform: {{ section.settings.heading_transform }};
+    text-align: {{ section.settings.heading_alignment }};
+    margin-bottom: 2rem;
+    color: {{ section.settings.heading_color }};
+  }
+  .featured-collections__grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 1.5rem;
+  }
+  @media screen and (max-width: 989px) {
+    .featured-collections {
+      padding: 0;
+    }
+    .featured-collections__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .featured-collection-card__title {
+      font-size: 1.2rem;
+    }
+    .featured-collection-card__overlay {
+      padding: 1rem;
+    }
+  }
+    @media screen and (max-width: 768px) {
+    .featured-collections {
+      padding: 0;
+    }
+    .featured-collections__grid.slider--mobile {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .featured-collection-card.slider__slide {
+      flex: 0 0 45%;
+      width: 45%;
+      scroll-snap-align: start;
+    }
+    .featured-collection-card__title {
+      font-size: 1.2rem;
+    }
+    .featured-collection-card__overlay {
+      padding: 1rem;
+    }
+  }
+  .featured-collection-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    background: #fff;
+  }
+  .featured-collection-card:hover {
+  }
+  .featured-collection-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #f9f9f9;
+  }
+  .featured-collection-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+  }
+  .featured-collection-card__content {
+    padding: 1.2rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .featured-collection-card__title {
+    color: #004b91;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+  }
+{%- endstyle -%}
+
+<div class="featured-collections page-width">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="featured-collections__title">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <slider-component class="slider-mobile-gutter">
+    <div class="featured-collections__grid slider slider--mobile" id="Slider-{{ section.id }}">
+      {%- for block in section.blocks limit: 8 -%}
+        {%- assign collection = block.settings.collection -%}
+        <a
+          href="{{ collection.url | default: '#' }}"
+          class="featured-collection-card slider__slide"
+          id="Slide-{{ section.id }}-{{ forloop.index }}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="featured-collection-card__image-wrapper">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 800 | image_tag: class: 'featured-collection-card__image' }}
+            {%- elsif collection.featured_image != blank -%}
+              {{
+                collection.featured_image
+                | image_url: width: 800
+                | image_tag: class: 'featured-collection-card__image'
+              }}
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg featured-collection-card__image' }}
+            {%- endif -%}
+          </div>
+          <div class="featured-collection-card__content">
+            <h3 class="featured-collection-card__title">
+              {{ block.settings.title | default: collection.title | default: 'Collection' }}
+            </h3>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </slider-component>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collections Grid",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 1,
+      "max": 5,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading Size",
+      "default": 2.2
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "800"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#004b91"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "heading_transform",
+      "label": "Heading Text Style",
+      "options": [
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "none", "label": "Normal" }
+      ],
+      "default": "uppercase"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_block",
+      "name": "Collection Card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image (optional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom Title (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections Grid",
+      "blocks": [
+        { "type": "category_block", "settings": { "title": "Beauty" } },
+        { "type": "category_block", "settings": { "title": "Skincare" } },
+        { "type": "category_block", "settings": { "title": "Hair Care" } },
+        { "type": "category_block", "settings": { "title": "Health" } },
+        { "type": "category_block", "settings": { "title": "Home" } },
+        { "type": "category_block", "settings": { "title": "Special Offers" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,388 @@
+{% comment %}
+  Offer Collections Grid - Shows collections with offer=1 metafield or selected manually
+{% endcomment %}
+
+{%- style -%}
+  .offer-collections {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    margin-top: {{ section.settings.margin_top_mobile }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .offer-collections {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      margin-top: {{ section.settings.margin_top }}px;
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+  .offer-collections__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: {{ section.settings.heading_margin_bottom }}px;
+    text-align: {{ section.settings.heading_alignment }};
+  }
+  .offer-collections__title {
+    font-size: {{ section.settings.heading_size_mobile }}rem;
+    font-weight: {{ section.settings.heading_weight }};
+    margin: 0;
+    color: {{ section.settings.heading_color }};
+    text-transform: {{ section.settings.heading_transform }};
+  }
+  @media screen and (min-width: 750px) {
+    .offer-collections__title {
+      font-size: {{ section.settings.heading_size }}rem;
+    }
+  }
+  .offer-collections__view-all {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: {{ section.settings.heading_color }};
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .offer-collections__view-all:hover {
+    border-bottom-color: currentColor;
+  }
+  .offer-collections__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.5rem;
+  }
+  .offer-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    background: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #f0f0f0;
+  }
+  .offer-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  }
+  .offer-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #f9f9f9;
+  }
+  .offer-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1rem;
+    transition: transform 0.3s ease;
+  }
+  .offer-card__content {
+    padding: 1.2rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .offer-card__title {
+    color: #004b91;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    text-align: center;
+  }
+  .offer-card__badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: #d13579;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    line-height: 1;
+  }
+
+  @media screen and (max-width: 989px) {
+    .offer-collections__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media screen and (max-width: 749px) {
+    .offer-collections__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+{%- endstyle -%}
+
+<div class="offer-collections page-width">
+  <div class="offer-collections__header">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="offer-collections__title">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.view_all_link != blank and section.settings.view_all_text != blank -%}
+      <a href="{{ section.settings.view_all_link }}" class="offer-collections__view-all">
+        {{ section.settings.view_all_text }}
+      </a>
+    {%- endif -%}
+  </div>
+
+  <div class="offer-collections__grid">
+    {%- assign count = 0 -%}
+
+    {%- comment -%} Automatic retrieval based on metafield {%- endcomment -%}
+    {%- if section.settings.auto_filter -%}
+      {%- for collection in collections -%}
+        {%- if collection.metafields.custom.offer == true or collection.metafields.custom.offer.value == true -%}
+          {%- if count < 6 -%}
+            {% render 'offer-card-item', collection: collection %}
+            {%- assign count = count | plus: 1 -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- comment -%} Block-based manual selection (Attribute) {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      {%- if count < 6 -%}
+        {%- assign collection = block.settings.collection -%}
+        {%- if collection != blank -%}
+          {% render 'offer-card-item',
+            collection: collection,
+            custom_title: block.settings.title,
+            custom_image: block.settings.image
+          %}
+          {%- assign count = count | plus: 1 -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Offer Collections Grid",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Huidige Aanbiedingen"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 1.0,
+      "max": 6.0,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading Size (Desktop)",
+      "default": 2.0
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 1.0,
+      "max": 6.0,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading Size (Mobile)",
+      "default": 1.8
+    },
+
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "heading_transform",
+      "label": "Heading Text Style",
+      "options": [
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "none", "label": "Normal" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_filter",
+      "label": "Auto-populate from Metafields (offer=1)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Link Text",
+      "default": "Bekijk alles"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "Link URL"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Manual Offer",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom Title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Offer Collections Grid",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

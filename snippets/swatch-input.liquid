@@ -1,0 +1,60 @@
+{% comment %}
+  Renders a swatch input component.
+  Accepts:
+  - id: {String} unique input id
+  - type: {String} input type. Accepts 'radio' or 'checkbox', defaults to 'radio' (optional)
+  - name: {String} input name,
+  - value: {ProductOptionValueDrop} input value
+  - swatch: {SwatchDrop} the swatch drop
+  - product_form_id: {String} id of the form associted with the input
+  - checked: {Boolean} default checked status
+  - disabled: {Boolean} default disabled status (optional)
+  - visually_disabled: {Boolean} style the swatch as disabled, but leave the input enabled (optional)
+  - shape: {String} swatch shape. Accepts 'square', defaults to circle (optional)
+  - help_text: {String} additional content to render inside the label (optional)
+  - additional_props: {String} (optional) additional properties to attach to the input
+
+  Usage:
+   {% render 'swatch-input',
+      id: input_id,
+      name: input_name,
+      value: input_value,
+      swatch: swatch,
+      product_form_id: product_form_id,
+      checked: checked
+    %}
+{% endcomment %}
+
+<div class="relative group">
+  <input
+    type="{{ type | default: 'radio' }}"
+    id="{{ id }}"
+    name="{{ name }}"
+    value="{{ value }}"
+    form="{{ product_form_id }}"
+    class="sr-only peer{% if visually_disabled %} visually-disabled{% endif %}"
+    {% if checked %}
+      checked
+    {% endif %}
+    {% if disabled %}
+      disabled
+    {% endif %}
+    {% if additional_props %}
+      {{ additional_props }}
+    {% endif %}
+  >
+  <label
+    for="{{ id }}"
+    title="{{ value }}"
+    class="relative block p-1 border-2 border-transparent rounded-full cursor-pointer transition-all peer-checked:border-blue-600 peer-checked:shadow-lg peer-disabled:opacity-40 peer-disabled:cursor-not-allowed hover:border-gray-200 active:scale-95"
+  >
+    <div class="p-0.5 rounded-full overflow-hidden">
+      {% render 'swatch', swatch: swatch, shape: shape %}
+    </div>
+    {{ help_text }}
+    
+    {%- if visually_disabled -%}
+      <div class="absolute inset-0 bg-white/40 backdrop-blur-[1px] rounded-full"></div>
+    {%- endif -%}
+  </label>
+</div>

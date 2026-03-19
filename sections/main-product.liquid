@@ -1,0 +1,207 @@
+{% comment %}
+  Main Product Section — Plein.nl Layout
+  Design: plein.nl inspired
+{% endcomment %}
+
+<product-info
+  id="MainProduct-{{ section.id }}"
+  class="product section-{{ section.id }}-padding block"
+  data-section="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-update-url="true"
+  data-url="{{ product.url }}"
+>
+  <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+  {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
+  {% assign media_count = product.media.size %}
+
+  {%- comment -%} [[ PAGE CONTAINER ]] {%- endcomment -%}
+  <div class="max-w-[1440px] mx-auto px-6 lg:px-12 py-4 lg:py-8">
+    
+    {%- comment -%} [[ ABOVE THE FOLD: Two-column product layout ]] {%- endcomment -%}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+      
+      {%- comment -%} [[ LEFT: Media Gallery — plein.nl style ]] {%- endcomment -%}
+      <div class="lg:col-span-7">
+        <div class="relative bg-white overflow-hidden border border-gray-200">
+          {%- comment -%} Pink promo badge (2+2 gratis style) {%- endcomment -%}
+          {%- if product.compare_at_price > product.price or product.tags contains '2+2' or product.tags contains 'offer' -%}
+            <div class="absolute top-4 left-4 z-10">
+              <span class="bg-[#d81159] text-white text-xs font-bold px-3 py-1.5 rounded">
+                {%- if product.tags contains '2+2' -%}2+2 gratis{%- else -%}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% korting{%- endif -%}
+              </span>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Light blue outline wishlist heart {%- endcomment -%}
+          <a href="/pages/wishlist" class="absolute top-4 right-4 z-10 w-9 h-9 bg-white/90 rounded-full border-2 border-[#007fb1] flex items-center justify-center text-[#007fb1] hover:bg-[#007fb1] hover:text-white transition-colors">
+            {% render 'icon-library', icon: 'heart-line', class: 'w-5 h-5' %}
+          </a>
+          
+          <div class="p-4 lg:p-6">
+            {% render 'product-media-gallery', variant_images: variant_images, media_count: media_count %}
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} [[ RIGHT: Purchase Box & USPs — plein.nl style ]] {%- endcomment -%}
+      <div class="lg:col-span-5 lg:sticky lg:top-28">
+        <div class="bg-white border border-gray-200 rounded p-6 lg:p-8 space-y-5">
+          
+          <h1 class="text-[22px] font-bold text-[#1a1a2e] leading-snug">
+            {{ product.title }}
+          </h1>
+
+          {%- comment -%} Star Rating {%- endcomment -%}
+          <div class="flex items-center gap-2">
+            <div class="flex items-center gap-0.5 text-[#f5a623]">
+              {% for i in (1..5) %}
+                {% render 'icon-library', icon: 'star-fill', class: 'w-4 h-4' %}
+              {% endfor %}
+            </div>
+            <a href="#reviews" class="text-[13px] text-[#007fb1] hover:underline">
+              ({{ product.metafields.reviews.rating_count | default: '4' }} reviews)
+            </a>
+          </div>
+
+          {%- comment -%} Price — Pink accent {%- endcomment -%}
+          <div class="flex items-baseline gap-3 flex-wrap">
+            <div class="text-[32px] font-bold leading-none">
+              {% render 'price', product: product, use_variant: true, show_badges: false, accent_color: true %}
+            </div>
+            {%- if product.compare_at_price > product.price -%}
+              <span class="bg-[#d81159] text-white text-xs font-bold px-2 py-0.5 rounded">
+                {{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% korting
+              </span>
+            {%- endif -%}
+          </div>
+          {%- if product.metafields.custom.bulk_offer != blank -%}
+            <p class="text-[13px] text-gray-600">{{ product.metafields.custom.bulk_offer }}</p>
+          {%- else -%}
+            <p class="text-[13px] text-gray-600">Koop 4 en betaal {{ product.selected_or_first_available_variant.price | divided_by: 4 | money }} per stuk</p>
+          {%- endif -%}
+          
+          {%- comment -%} Buy Box {%- endcomment -%}
+          <div id="ProductInfo-{{ section.id }}" class="space-y-4">
+            {%- assign variant_picker_block = section.blocks | where: 'type', 'variant_picker' | first -%}
+            {%- if variant_picker_block -%}
+              <div>
+                {% render 'product-variant-picker', product: product, block: variant_picker_block, product_form_id: 'product-form-' | append: section.id %}
+              </div>
+            {%- endif -%}
+
+            {%- assign buy_buttons_block = section.blocks | where: 'type', 'buy_buttons' | first -%}
+            {%- if buy_buttons_block -%}
+              {% render 'buy-buttons', product: product, block: buy_buttons_block, product_form_id: 'product-form-' | append: section.id, section_id: section.id %}
+            {%- endif -%}
+
+            {%- comment -%} Shipping — truck icon {%- endcomment -%}
+            <div class="flex items-center gap-2 text-[13px] text-gray-700">
+              {% render 'icon-library', icon: 'truck-line', class: 'w-4 h-4 text-[#55a51c]' %}
+              <span>Voor <strong>23:59u</strong> besteld, <strong>morgen</strong> in huis <span class="text-gray-400">*</span></span>
+            </div>
+          </div>
+
+          {%- comment -%} USP List — checkmarks, bordered {%- endcomment -%}
+          <div class="border border-gray-200 rounded p-4 space-y-2.5">
+            <ul class="space-y-2.5">
+              <li class="flex items-center gap-2.5 text-[14px] text-gray-700">
+                <span class="text-[#55a51c] font-bold text-lg">✔</span>
+                <span><strong>Gratis</strong> verzorging vanaf €35 <span class="text-gray-400">*</span></span>
+              </li>
+              <li class="flex items-center gap-2.5 text-[14px] text-gray-700">
+                <span class="text-[#55a51c] font-bold text-lg">✔</span>
+                <span><strong>CO2 neutraal</strong> bezorgd</span>
+              </li>
+              <li class="flex items-center gap-2.5 text-[14px] text-gray-700">
+                <span class="text-[#55a51c] font-bold text-lg">✔</span>
+                <span>Binnen 30 dagen <strong>gratis</strong> retourneren</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} [[ BELOW THE FOLD: Content + Sidebar — plein.nl two-column ]] {%- endcomment -%}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-12">
+      
+      {%- comment -%} [[ MAIN CONTENT: Accordions + Reviews ]] {%- endcomment -%}
+      <div class="lg:col-span-8 space-y-8">
+        {% render 'product-accordions', product: product %}
+        
+        {%- comment -%} Reviews Section {%- endcomment -%}
+        <div id="reviews" class="border border-gray-200 rounded overflow-hidden">
+          <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+            <h2 class="text-lg font-bold text-gray-900">Reviews</h2>
+            <a href="#write-review" class="text-[14px] font-semibold text-[#007fb1] hover:underline bg-white border border-[#007fb1] px-4 py-2 rounded transition-colors">
+              Schrijf jouw review
+            </a>
+          </div>
+          <div class="p-6 space-y-6">
+            {%- comment -%} Placeholder reviews — replace with app/reviews {%- endcomment -%}
+            <div class="flex gap-4 p-4 border border-gray-100 rounded">
+              <div class="flex gap-0.5 text-[#f5a623]">
+                {% for i in (1..5) %}{% render 'icon-library', icon: 'star-fill', class: 'w-4 h-4' %}{% endfor %}
+              </div>
+              <div class="flex-1">
+                <p class="text-[12px] text-gray-500">12 maart 2025 • Jan D.</p>
+                <p class="text-sm text-gray-700 mt-1"><strong>Plus:</strong> Goede kwaliteit, snelle levering</p>
+                <p class="text-sm text-gray-700"><strong>Min:</strong> -</p>
+                <p class="text-sm text-gray-600 mt-2">Zeer tevreden met dit product. Aanrader!</p>
+              </div>
+            </div>
+            <a href="/pages/reviews" class="inline-block text-[14px] text-[#007fb1] hover:underline font-medium">
+              Bekijk alle reviews &rsaquo;
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} [[ SIDEBAR: Promo boxes + Cross-sell ]] {%- endcomment -%}
+      <div class="lg:col-span-4 space-y-6">
+        {% render 'product-sidebar', product: product %}
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
+</product-info>
+
+{% schema %}
+{
+  "name": "t:sections.main-product.name",
+  "tag": "section",
+  "class": "section",
+  "blocks": [
+    {
+      "type": "title",
+      "name": "t:sections.main-product.blocks.title.name",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "t:sections.main-product.blocks.price.name",
+      "limit": 1
+    },
+    {
+      "type": "variant_picker",
+      "name": "t:sections.main-product.blocks.variant_picker.name",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "t:sections.main-product.blocks.buy_buttons.name",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "t:sections.main-product.blocks.description.name",
+      "limit": 1
+    }
+  ]
+}
+{% endschema %}

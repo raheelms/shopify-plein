@@ -1,0 +1,70 @@
+{%- unless template == 'index' or template == 'cart' or template == 'list-collections' or template == '404' -%}
+  {%- assign t = template | split: '.' | first -%}
+  <style>
+    .breadcrumb-wrapper { width: 100%; min-width: 0; }
+    .breadcrumb-bar { display: flex !important; align-items: center !important; justify-content: space-between !important; width: 100% !important; gap: 1rem; }
+    .breadcrumb-bar .breadcrumb-nav { flex: 0 1 auto; min-width: 0; }
+    .breadcrumb-bar .breadcrumb-brand-link { flex: 0 0 auto; margin-left: auto !important; }
+  </style>
+  <div class="breadcrumb-wrapper max-w-[1440px] mx-auto px-6 lg:px-12 pt-4 pb-2">
+    <div class="breadcrumb-bar">
+      <nav class="breadcrumb-nav" role="navigation" aria-label="breadcrumbs">
+        <ol class="flex flex-wrap items-center gap-1.5 list-none p-0 m-0 text-[13px]">
+          <li class="flex items-center">
+            <a href="{{ routes.root_url }}" title="Home" class="text-gray-400 hover:text-[#004c97] flex items-center">
+              {% render 'icon-library', icon: 'home-4-fill', class: 'w-5 h-5' %}
+            </a>
+          </li>
+          {%- if t == 'page' -%}
+            <li class="text-gray-300 flex items-center">
+              {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-5 h-5' %}
+            </li>
+            <li class="text-gray-500">
+              {{ page.title }}
+            </li>
+          {%- elsif t == 'product' -%}
+            {%- if collection.url -%}
+              <li class="text-gray-300 flex items-center">
+                {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-5 h-5' %}
+              </li>
+              <li>
+                <a href="{{ collection.url }}" class="text-[#004c97] hover:underline">{{ collection.title }}</a>
+              </li>
+            {%- endif -%}
+            <li class="text-gray-300 flex items-center">
+              {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-5 h-5' %}
+            </li>
+            <li class="text-gray-500 truncate max-w-[200px] sm:max-w-[320px]" title="{{ product.title }}">
+              {{ product.title | truncate: 50 }}
+            </li>
+          {%- elsif t == 'collection' and collection.handle -%}
+            <li class="text-gray-300 flex items-center">
+              {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-5 h-5' %}
+            </li>
+            {%- if current_tags -%}
+              {%- capture url -%}/collections/{{ collection.handle }}{%- endcapture -%}
+              <li><a href="{{ url }}" class="text-[#004c97] hover:underline">{{ collection.title }}</a></li>
+              <li class="text-gray-300 flex items-center">
+                {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-5 h-5' %}
+              </li>
+              <li class="text-gray-500">
+                {{- current_tags | join: ' + ' -}}
+              </li>
+            {%- else -%}
+              <li class="text-gray-500">
+                {{ collection.title }}
+              </li>
+            {%- endif -%}
+          {%- endif -%}
+        </ol>
+      </nav>
+
+      {%- comment -%} Brand link on the far right (product pages only) {%- endcomment -%}
+      {%- if t == 'product' and product.vendor != blank -%}
+        <a href="{{ product.vendor | url_for_vendor }}" class="breadcrumb-brand-link text-[13px] text-[#004c97] hover:underline whitespace-nowrap">
+          Alles van {{ product.vendor }} &rsaquo;
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endunless -%}

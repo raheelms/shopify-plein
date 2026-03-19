@@ -1,0 +1,387 @@
+{%- style -%}
+  .featured-brands {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    margin-top: {{ section.settings.margin_top_mobile }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+  @media screen and (min-width: 750px) {
+    .featured-brands {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      margin-top: {{ section.settings.margin_top }}px;
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+  .featured-brands__title {
+    font-size: {{ section.settings.heading_size_mobile }}rem;
+    font-weight: {{ section.settings.heading_weight }};
+    margin-bottom: {{ section.settings.heading_margin_bottom }}px;
+    color: {{ section.settings.heading_color }};
+    text-align: {{ section.settings.heading_alignment }};
+    text-transform: {{ section.settings.heading_transform }};
+  }
+  @media screen and (min-width: 750px) {
+    .featured-brands__title {
+      font-size: {{ section.settings.heading_size }}rem;
+    }
+  }
+  .brands-slider {
+    position: relative;
+    overflow: hidden;
+  }
+  .brands-slider__track {
+    display: flex;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    gap: 1.5rem;
+  }
+  .brands-slider__item {
+    flex: 0 0 calc((100% - (7 * 1.5rem)) / 8); /* 8 items on desktop */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid #e5e5e5;
+    transition: box-shadow 0.2s;
+  }
+  .brands-slider__item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .brands-slider__image {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.7;
+    transition: all 0.3s;
+  }
+  .brands-slider__item:hover .brands-slider__image {
+    filter: grayscale(0);
+    opacity: 1;
+  }
+
+  /* Carousel Controls */
+  .brands-slider__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .brands-slider__arrow--prev { left: 0; }
+  .brands-slider__arrow--next { right: 0; }
+  .brands-slider__arrow svg { width: 16px; height: 16px; fill: #121212; }
+
+  @media screen and (max-width: 989px) {
+    .brands-slider__item {
+      flex: 0 0 calc((100% - (3 * 1.5rem)) / 4); /* 4 items on tablet */
+    }
+  }
+  @media screen and (max-width: 749px) {
+    .brands-slider__item {
+      flex: 0 0 calc((100% - (1 * 1.5rem)) / 2); /* 2 items on mobile */
+    }
+    .brands-slider__track {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 1rem;
+      padding-bottom: 1rem;
+    }
+    .brands-slider__item {
+      scroll-snap-align: start;
+    }
+    .brands-slider__arrow { display: none; }
+  }
+{%- endstyle -%}
+
+<div class="featured-brands page-width">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="featured-brands__title">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <div class="brands-slider" id="brands-{{ section.id }}">
+    <button class="brands-slider__arrow brands-slider__arrow--prev" data-brands-prev aria-label="Previous brands">
+      <svg viewBox="0 0 24 24">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+      </svg>
+    </button>
+
+    <div class="brands-slider__track" id="brands-track-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        <div class="brands-slider__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.brand_logo != blank -%}
+            <a href="{{ block.settings.brand_link | default: '#' }}" class="full-width">
+              {{
+                block.settings.brand_logo
+                | image_url: width: 200
+                | image_tag: class: 'brands-slider__image', loading: 'lazy'
+              }}
+            </a>
+          {%- else -%}
+            {{ 'logo' | placeholder_svg_tag: 'placeholder-svg brands-slider__image' }}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <button class="brands-slider__arrow brands-slider__arrow--next" data-brands-next aria-label="Next brands">
+      <svg viewBox="0 0 24 24">
+        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.getElementById('brands-{{ section.id }}');
+    if (!slider) return;
+
+    const track = slider.querySelector('.brands-slider__track');
+    const prevBtn = slider.querySelector('[data-brands-prev]');
+    const nextBtn = slider.querySelector('[data-brands-next]');
+
+    let scrollAmount = 0;
+    const step = 200; // rough step size for simplicity, or calculate based on item width
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        scrollAmount = Math.min(scrollAmount + track.clientWidth / 2, maxScroll);
+        track.style.transform = `translateX(-${scrollAmount}px)`;
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        scrollAmount = Math.max(scrollAmount - track.clientWidth / 2, 0);
+        track.style.transform = `translateX(-${scrollAmount}px)`;
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Featured Brands Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Onze Merken"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 1.0,
+      "max": 6.0,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading Size (Desktop)",
+      "default": 2.0
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 1.0,
+      "max": 6.0,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading Size (Mobile)",
+      "default": 1.8
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "heading_transform",
+      "label": "Heading Text Style",
+      "options": [
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "none", "label": "Normal" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "transparent"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "brand_logo",
+          "label": "Brand Logo"
+        },
+        {
+          "type": "url",
+          "id": "brand_link",
+          "label": "Brand Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Brands Carousel",
+      "blocks": [
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" }
+      ]
+    }
+  ]
+}
+{% endschema %}

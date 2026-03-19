@@ -1,0 +1,80 @@
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "blocks": {
+        "top_bar_1": {
+          "type": "top_bar_feature",
+          "settings": {
+            "icon": "truck",
+            "text": "<strong>Gratis</strong> bezorging vanaf 35,- *"
+          }
+        },
+        "top_bar_2": {
+          "type": "top_bar_feature",
+          "settings": {
+            "icon": "clock",
+            "text": "Voor <strong>23.59u</strong> besteld, <strong>morgen</strong> in huis *"
+          }
+        },
+        "top_bar_3": {
+          "type": "top_bar_feature",
+          "settings": {
+            "icon": "return",
+            "text": "<strong>Gratis</strong> retourneren"
+          }
+        },
+        "top_bar_4": {
+          "type": "top_bar_feature",
+          "settings": {
+            "icon": "leaf",
+            "text": "<strong>CO2 neutraal</strong> bezorgd"
+          }
+        },
+        "top_bar_link_1": {
+          "type": "top_bar_link",
+          "settings": {
+            "label": "Zakelijk",
+            "link": "/pages/zakelijk"
+          }
+        },
+        "top_bar_link_2": {
+          "type": "top_bar_link",
+          "settings": {
+            "label": "Klantenservice",
+            "link": "/pages/klantenservice"
+          }
+        }
+      },
+      "block_order": [
+        "top_bar_1",
+        "top_bar_2",
+        "top_bar_3",
+        "top_bar_4",
+        "top_bar_link_1",
+        "top_bar_link_2"
+      ],
+      "settings": {
+        "logo_position": "middle-left",
+        "mobile_logo_position": "center",
+        "menu": "main-menu",
+        "menu_type_desktop": "plein",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "enable_customer_avatar": true,
+        "margin_bottom": 0,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

@@ -1,0 +1,392 @@
+/* ====================== */
+/* KRUIDVAT PRODUCT CARDS */
+/* ====================== */
+
+/* Card Container */
+.card-wrapper {
+    position: relative;
+}
+
+.card__inner {
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+    background: var(--kruidvat-card-bg, #fff);
+    border: 1px solid var(--kruidvat-card-border, #f0f0f0);
+}
+
+.card-wrapper:hover .card__inner {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Promotional Badge - Top Left */
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+}
+
+.product-badge__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    line-height: 1.1;
+    text-align: center;
+    text-transform: lowercase;
+}
+
+.product-badge__item--deal {
+    background-color: var(--kruidvat-badge-bg, #d13579);
+    color: var(--kruidvat-badge-text, #fff);
+    border: none;
+}
+
+.product-badge__item--shipping {
+    background-color: #004b91;
+    color: #fff;
+    padding: 6px;
+    border-radius: 4px;
+    width: auto;
+    height: auto;
+}
+
+.product-badge__item--member {
+    background-color: #000;
+    color: #fff;
+    border-radius: 4px;
+    width: auto;
+    height: auto;
+    padding: 4px 8px;
+    font-size: 1rem;
+}
+
+/* Wishlist Heart Icon */
+.card__wishlist {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 5;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    border: none;
+}
+
+.card__wishlist:hover {
+    transform: scale(1.1);
+}
+
+.card__wishlist svg {
+    width: 18px;
+    height: 18px;
+    stroke: #004b91;
+    fill: transparent;
+    stroke-width: 2;
+}
+
+.card__wishlist.is-active svg {
+    fill: #004b91;
+}
+
+/* Kruidvat Card - Simplified "Box" Structure */
+
+.kruidvat-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--kruidvat-card-bg, #ffffff);
+    border: 1px solid var(--kruidvat-card-border, #e0e0e0);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+
+.kruidvat-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Badge (Pinned Top-Left) */
+.kruidvat-card__badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background-color: var(--kruidvat-badge-bg, #d13579);
+    color: var(--kruidvat-badge-text, #ffffff);
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    text-transform: uppercase;
+    border-bottom-right-radius: 8px;
+}
+
+/* Image Box */
+.kruidvat-card__image-box {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: 200px;
+    /* Keep container height constraint */
+    width: 100%;
+}
+
+.kruidvat-card__image-box img,
+.kruidvat-card__image-box svg {
+    mix-blend-mode: multiply;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    padding: 0rem;
+    /* Padding for image inside box */
+}
+
+/* Content Container */
+.kruidvat-card__content-box {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+/* Name Box */
+.kruidvat-card__name-box {
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.4;
+    height: 4rem;
+    /* Limit to approx 2 lines */
+    overflow: hidden;
+}
+
+.kruidvat-card__name-box a {
+    text-decoration: none;
+    color: #212121;
+}
+
+.kruidvat-card__name-box a:hover {
+    text-decoration: underline;
+}
+
+/* Size/Variant Box */
+.kruidvat-card__size-box {
+    font-size: 1.2rem;
+    color: #757575;
+    margin-bottom: 0.5rem;
+    min-height: 1.8rem;
+}
+
+/* Rating Box */
+.kruidvat-card__rating-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.kruidvat-card__rating-box .count {
+    color: #757575;
+}
+
+/* Price Box */
+.kruidvat-card__price-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+.kruidvat-card__price-box .price-current {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--kruidvat-price-color, #212121);
+}
+
+.kruidvat-card__price-box .price-list {
+    font-size: 1.2rem;
+    color: #9e9e9e;
+    text-decoration: line-through;
+}
+
+/* Button Box (Full Width) */
+.kruidvat-card__button-box {
+    margin-top: 0;
+}
+
+.kruidvat-card__add-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    background-color: var(--kruidvat-button-bg, #E30613);
+    color: var(--kruidvat-button-text, #ffffff);
+    border: none;
+    border-radius: 4px;
+    padding: 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.kruidvat-card__add-btn:hover:not([disabled]) {
+    opacity: 0.9;
+}
+
+.kruidvat-card__add-btn[disabled] {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+    color: #9e9e9e;
+}
+
+/* Price Display */
+.price--kruidvat {
+    display: inline-flex;
+    align-items: flex-start;
+    color: var(--kruidvat-price-color, #212121);
+    padding: 0;
+    font-weight: 800;
+}
+
+.price--kruidvat .price__euros {
+    font-size: 2.2rem;
+    line-height: 1;
+}
+
+.price--kruidvat .price__cents {
+    font-size: 1.4rem;
+    line-height: 1;
+    margin-left: 1px;
+    vertical-align: super;
+}
+
+.price__list {
+    display: block;
+    font-size: 1.2rem;
+    color: #757575;
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+.price-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Vendor/Brand Name */
+.card-information .caption-with-letter-spacing {
+    font-weight: 700;
+    color: #121212;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+}
+
+.card__heading {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+/* Quick Add Button - Full Width Red */
+.quick-add {
+    padding: 0 1rem 1rem;
+}
+
+.quick-add__submit,
+.card__button {
+    width: 100%;
+    background-color: var(--kruidvat-button-bg, #E30613) !important;
+    color: var(--kruidvat-button-text, #ffffff) !important;
+    border: none !important;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: normal;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    transition: background-color 0.2s ease;
+    text-transform: none;
+}
+
+.quick-add__submit:hover,
+.card__button:hover {
+    background-color: #c40511 !important;
+}
+
+.delivery-promise {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    color: #E30613;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.delivery-promise svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.quick-add__submit::before,
+.card__button::before {
+    content: '+';
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+
+/* Rating Stars */
+.rating {
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.rating-star {
+    color: #ffb400;
+}
+
+.rating-count {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* Card Information Layout */
+.card-information {
+    padding: 1rem;
+}
+
+/* Unit Price */
+.unit-price {
+    font-size: 1.1rem;
+    color: #666;
+    margin-top: 0.3rem;
+}

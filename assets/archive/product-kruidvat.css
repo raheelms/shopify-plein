@@ -1,0 +1,118 @@
+/* Kruidvat Product Page Styles */
+
+/* Product Title */
+.product__title h1 {
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #121212;
+    letter-spacing: 0.05em;
+    font-size: 2.6rem;
+    line-height: 1.2;
+}
+
+/* Price */
+.product__info-container .price {
+    font-family: inherit;
+}
+
+.product__info-container .price .price-item--regular,
+.product__info-container .price .price-item--sale {
+    font-weight: 900;
+    color: #E30613;
+    /* Kruidvat Red */
+    font-size: 2.4rem;
+}
+
+.product__info-container .price .price-item--last {
+    font-size: 3.6rem;
+    line-height: 1;
+}
+
+/* Add to Cart Button */
+.product-form__submit {
+    background-color: #E30613 !important;
+    color: #ffffff !important;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    border: none;
+    font-size: 1.8rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(227, 6, 19, 0.2) !important;
+    min-height: 60px;
+}
+
+.product-form__submit:hover {
+    background-color: #c40511 !important;
+    /* Darker red hover */
+    transform: translateY(-1px);
+}
+
+.product-form__submit:active {
+    transform: translateY(0);
+}
+
+/* Dynamic Checkout Button Override */
+.shopify-payment-button__button {
+    border-radius: 4px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+}
+
+.shopify-payment-button__button--unbranded {
+    background-color: #FFED00 !important;
+    /* Kruidvat Yellow for secondary actions */
+    color: #121212 !important;
+}
+
+.shopify-payment-button__button--unbranded:hover {
+    background-color: #e6d600 !important;
+}
+
+/* Quantity Input */
+.product-form__quantity .quantity {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    min-height: 50px;
+}
+
+.product-form__quantity .quantity__input {
+    font-weight: 700;
+    color: #121212;
+}
+
+.product-form__quantity .quantity__button {
+    color: #121212;
+}
+
+/* Variant Picker (Pills) */
+.product-form__input .form__label {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    color: #121212;
+}
+
+.product-form__input input[type=radio]:checked+label {
+    background-color: #121212;
+    color: #ffffff;
+    border-color: #121212;
+}
+
+.product-form__input input[type=radio]+label {
+    border-radius: 20px;
+    /* Pill shape */
+    font-weight: 600;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.product-form__input input[type=radio]+label:hover {
+    border-color: #121212;
+}
+
+/* Accordions (Description/Details) */
+.product__accordion .accordion__title {
+    font-weight: 700;
+    text-transform: uppercase;
+}

@@ -1,0 +1,253 @@
+{% comment %}
+  Refactored Cart Drawer - Tailwind CSS Only
+  Premium SaaS Aesthetic
+{% endcomment %}
+
+<script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
+
+<cart-drawer class="drawer fixed inset-0 z-[100] overflow-hidden group/drawer {% if cart == empty %} is-empty{% endif %}" role="dialog" aria-modal="true" aria-label="{{ 'sections.cart.title' | t }}">
+  <div id="CartDrawer" class="relative inset-0 h-full w-full">
+    {%- comment -%} [[ OVERLAY ]] {%- endcomment -%}
+    <div id="CartDrawer-Overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm opacity-0 transition-opacity duration-500 group-[.active]/drawer:opacity-100" onclick="this.closest('cart-drawer').close()"></div>
+    
+    {%- comment -%} [[ DRAWER INNER ]] {%- endcomment -%}
+    <div
+      class="drawer__inner absolute right-0 top-0 h-full w-full max-w-[480px] bg-white shadow-2xl flex flex-col transform transition-transform duration-500 translate-x-full group-[.active]/drawer:translate-x-0"
+      tabindex="-1"
+    >
+      {%- comment -%} [[ HEADER ]] {%- endcomment -%}
+      <div class="px-8 py-8 border-b border-gray-100 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-4">
+          <h2 class="text-2xl font-black text-gray-900 tracking-tight uppercase">{{ 'sections.cart.title' | t }}</h2>
+          <span class="px-2 py-0.5 bg-gray-100 rounded-full text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            {{ cart.item_count }} {{ 'sections.cart.items' | t | default: 'Items' }}
+          </span>
+        </div>
+        <button
+          class="p-2 -mr-2 text-gray-400 hover:text-gray-900 transition-colors group/close"
+          type="button"
+          onclick="this.closest('cart-drawer').close()"
+          aria-label="{{ 'accessibility.close' | t }}"
+        >
+          {% render 'icon-library', icon: 'close-line', class: 'w-6 h-6 transition-transform group-hover/close:rotate-90' %}
+        </button>
+      </div>
+
+      {%- if cart == empty -%}
+        <div class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-8 animate-in fade-in zoom-in-95 duration-500">
+          <div class="relative">
+            <div class="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center relative z-10">
+              {% render 'icon-library', icon: 'shopping-bag-line', class: 'w-10 h-10 text-gray-300' %}
+            </div>
+            <div class="absolute inset-0 bg-blue-100 rounded-[2.5rem] blur-2xl opacity-20 animate-pulse"></div>
+          </div>
+          <div class="space-y-3">
+            <h2 class="text-2xl font-black text-gray-900 uppercase tracking-tight">{{ 'sections.cart.empty' | t }}</h2>
+            <p class="text-gray-500 text-sm max-w-[280px] mx-auto leading-relaxed">Your curation space is waiting. Discover our latest collections and start adding pieces you love.</p>
+          </div>
+          <a href="{{ routes.all_products_collection_url }}" class="inline-flex items-center justify-center px-10 py-5 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl hover:shadow-gray-200 active:scale-95">
+            {{ 'general.continue_shopping' | t }}
+          </a>
+        </div>
+      {%- else -%}
+        <cart-drawer-items class="flex-1 overflow-y-auto px-8 py-8 custom-scrollbar">
+          <form
+            action="{{ routes.cart_url }}"
+            id="CartDrawer-Form"
+            class="space-y-10"
+            method="post"
+          >
+            <div id="CartDrawer-CartItems" class="js-contents space-y-10">
+              {%- for item in cart.items -%}
+                <div id="CartDrawer-Item-{{ item.index | plus: 1 }}" class="flex gap-8 relative group/item">
+                  {%- comment -%} Item Image {%- endcomment -%}
+                  <div class="relative w-28 h-28 bg-gray-50 rounded-2xl overflow-hidden shrink-0 border border-gray-100 flex items-center justify-center p-4">
+                    {% if item.image %}
+                      <img
+                        class="max-w-full max-h-full object-contain mix-blend-multiply"
+                        src="{{ item.image | image_url: width: 300 }}"
+                        alt="{{ item.image.alt | escape }}"
+                        loading="lazy"
+                        width="150"
+                        height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                      >
+                    {% endif %}
+                    <a href="{{ item.url }}" class="absolute inset-0 z-10" aria-hidden="true"></a>
+                  </div>
+
+                  {%- comment -%} Item Body {%- endcomment -%}
+                  <div class="flex-1 flex flex-col min-w-0">
+                    <div class="flex justify-between items-start gap-4 mb-2">
+                        <div class="min-w-0">
+                            {%- if settings.show_vendor -%}
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{{ item.product.vendor }}</p>
+                            {%- endif -%}
+                            <a href="{{ item.url }}" class="text-base font-bold text-gray-900 leading-snug hover:text-blue-600 transition-colors line-clamp-2">
+                                {{- item.product.title | escape -}}
+                            </a>
+                        </div>
+                        <div class="text-right flex flex-col items-end">
+                             {%- if item.original_line_price != item.final_line_price -%}
+                                <s class="text-xs text-gray-300 line-through mb-0.5">
+                                    {{ item.original_line_price | money }}
+                                </s>
+                                <span class="text-base font-black text-blue-600">
+                                    {{ item.final_line_price | money }}
+                                </span>
+                            {%- else -%}
+                                <span class="text-base font-black text-gray-900">
+                                    {{ item.original_line_price | money }}
+                                </span>
+                            {%- endif -%}
+                        </div>
+                    </div>
+
+                    {%- comment -%} Options & Meta {%- endcomment -%}
+                    {%- if item.product.has_only_default_variant == false or item.properties.size != 0 -%}
+                        <div class="flex flex-wrap gap-x-4 gap-y-1.5 mt-1">
+                            {%- for option in item.options_with_values -%}
+                                <div class="text-[11px] font-medium text-gray-500">
+                                    <span class="text-gray-300 uppercase text-[9px] font-black mr-1 tracking-wider">{{ option.name }}:</span> {{ option.value }}
+                                </div>
+                            {%- endfor -%}
+                            {%- for property in item.properties -%}
+                                {%- assign property_first_char = property.first | slice: 0 -%}
+                                {%- if property.last != blank and property_first_char != '_' -%}
+                                    <div class="text-[11px] font-medium text-gray-500">
+                                        <span class="text-gray-300 uppercase text-[9px] font-black mr-1 tracking-wider">{{ property.first }}:</span>
+                                        {%- if property.last contains '/uploads/' -%}
+                                            <a href="{{ property.last }}" class="text-blue-600 underline" target="_blank">{{ property.last | split: '/' | last }}</a>
+                                        {%- else -%}
+                                            {{ property.last }}
+                                        {%- endif -%}
+                                    </div>
+                                {%- endif -%}
+                            {%- endfor -%}
+                        </div>
+                    {%- endif -%}
+
+                    {%- comment -%} Quantity & Remove {%- endcomment -%}
+                    <div class="flex items-center justify-between mt-auto pt-6">
+                        <quantity-popover>
+                             <div class="flex items-center bg-gray-50 rounded-xl border border-gray-100 p-0.5 shadow-sm">
+                                <quantity-input class="flex items-center">
+                                    <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-20" name="minus" type="button" {% if item.instructions and item.instructions.can_update_quantity == false %}disabled{% endif %}>
+                                        {% render 'icon-library', icon: 'subtract-line', class: 'w-3.5 h-3.5' %}
+                                    </button>
+                                    <input
+                                        class="w-10 bg-transparent text-center text-xs font-black text-gray-900 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        type="number"
+                                        data-quantity-variant-id="{{ item.variant.id }}"
+                                        name="updates[]"
+                                        value="{{ item.quantity }}"
+                                        data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}"
+                                        min="0"
+                                        data-min="{{ item.variant.quantity_rule.min }}"
+                                        {% if item.variant.quantity_rule.max != null %}max="{{ item.variant.quantity_rule.max }}"{% endif %}
+                                        step="{{ item.variant.quantity_rule.increment }}"
+                                        aria-label="{{ 'products.product.quantity.input_label' | t: product: item.product.title | escape }}"
+                                        id="Drawer-quantity-{{ item.index | plus: 1 }}"
+                                        data-index="{{ item.index | plus: 1 }}"
+                                        {% if item.instructions and item.instructions.can_update_quantity == false %}disabled{% endif %}
+                                    >
+                                    <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-20" name="plus" type="button" {% if item.instructions and item.instructions.can_update_quantity == false %}disabled{% endif %}>
+                                        {% render 'icon-library', icon: 'add-line', class: 'w-3.5 h-3.5' %}
+                                    </button>
+                                </quantity-input>
+                             </div>
+                        </quantity-popover>
+
+                        <cart-remove-button id="CartDrawer-Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
+                            <button type="button" class="group/remove flex items-center gap-2 text-[10px] font-black text-gray-400 hover:text-red-500 uppercase tracking-widest transition-colors" aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}">
+                                <div class="p-1.5 rounded-lg bg-gray-50 group-hover/remove:bg-red-50 transition-colors">
+                                  {% render 'icon-library', icon: 'delete-bin-line', class: 'w-4 h-4' %}
+                                </div>
+                                <span class="hidden sm:inline">Remove</span>
+                            </button>
+                        </cart-remove-button>
+                    </div>
+
+                    <div id="CartDrawer-LineItemError-{{ item.index | plus: 1 }}" class="mt-2" role="alert">
+                        <small class="cart-item__error-text text-red-500 text-[10px] font-bold"></small>
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+            <p id="CartDrawer-LiveRegionText" class="sr-only" role="status"></p>
+            <p id="CartDrawer-LineItemStatus" class="sr-only" aria-hidden="true" role="status">{{ 'accessibility.loading' | t }}</p>
+          </form>
+        </cart-drawer-items>
+
+        {%- comment -%} [[ FOOTER ]] {%- endcomment -%}
+        <div class="px-8 py-10 border-t border-gray-100 bg-white/50 backdrop-blur-md space-y-8 shrink-0 shadow-[0_-10px_30px_rgba(0,0,0,0.02)]">
+          {%- if settings.show_cart_note -%}
+            <details class="group/note">
+              <summary class="flex items-center justify-between text-[11px] font-black text-gray-400 uppercase tracking-widest cursor-pointer hover:text-gray-900 list-none transition-colors select-none">
+                <span class="flex items-center gap-2">
+                  {% render 'icon-library', icon: 'chat-note-line', class: 'w-4 h-4' %}
+                  {{ 'sections.cart.note' | t }}
+                </span>
+                {% render 'icon-library', icon: 'add-line', class: 'w-4 h-4 transition-transform group-open/note:rotate-45' %}
+              </summary>
+              <cart-note class="block mt-6">
+                <textarea
+                  id="CartDrawer-Note"
+                  class="w-full p-5 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-900 focus:ring-2 focus:ring-gray-900 focus:bg-white outline-none resize-none h-28 transition-all"
+                  name="note"
+                  placeholder="Special instructions for your order..."
+                >{{ cart.note }}</textarea>
+              </cart-note>
+            </details>
+          {%- endif -%}
+
+          <div class="space-y-4">
+             {%- if cart.cart_level_discount_applications.size > 0 -%}
+              <div class="space-y-2">
+                {%- for discount in cart.cart_level_discount_applications -%}
+                  <div class="flex items-center justify-between text-xs font-bold text-blue-600 bg-blue-50/50 px-4 py-3 rounded-xl border border-blue-100/50">
+                    <span class="flex items-center gap-2">
+                        {% render 'icon-library', icon: 'discount-line', class: 'w-4 h-4' %}
+                        {{ discount.title | escape }}
+                    </span>
+                    <span class="text-sm font-black">-{{ discount.total_allocated_amount | money }}</span>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            <div class="flex items-center justify-between pb-2">
+              <span class="text-xs font-black text-gray-400 uppercase tracking-widest">{{ 'sections.cart.estimated_total' | t }}</span>
+              <div class="text-right">
+                <span class="text-3xl font-black text-gray-900 tracking-tight">{{ cart.total_price | money_with_currency }}</span>
+                <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest">Taxes and shipping calculated at checkout</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <button
+              type="submit"
+              id="CartDrawer-Checkout"
+              class="w-full relative overflow-hidden group/checkout"
+              name="checkout"
+              form="CartDrawer-Form"
+              {% if cart == empty %}disabled{% endif %}
+            >
+              <div class="relative z-10 flex items-center justify-center gap-3 py-5 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.25em] transition-all group-hover/checkout:bg-black group-hover/checkout:translate-y-[-2px] group-hover/checkout:shadow-2xl active:translate-y-[1px]">
+                 <span>{{ 'sections.cart.checkout' | t }}</span>
+                 {% render 'icon-library', icon: 'arrow-right-line', class: 'w-5 h-5 transition-transform group-hover/checkout:translate-x-1.5' %}
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover/checkout:opacity-10 transition-opacity blur-xl"></div>
+            </button>
+            <p class="text-center">
+              <button type="button" class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-gray-900 transition-colors" onclick="this.closest('cart-drawer').close()">
+                Or continue shopping
+              </button>
+            </p>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</cart-drawer>

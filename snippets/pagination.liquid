@@ -1,0 +1,59 @@
+<div class="flex justify-center pt-16 lg:pt-24 pb-12">
+  <nav class="flex items-center gap-2" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+    <ul class="flex items-center gap-2 list-none p-0 m-0" role="list">
+      
+      {%- if paginate.previous -%}
+        <li>
+          <a
+            href="{{ paginate.previous.url }}{{ anchor }}"
+            class="flex items-center justify-center w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 text-gray-400 hover:bg-white hover:text-gray-900 hover:shadow-md hover:border-gray-200 transition-all group"
+            aria-label="{{ 'general.pagination.previous' | t }}"
+          >
+            {% render 'icon-library', icon: 'arrow-left-s-line', class: 'w-6 h-6 group-hover:-translate-x-0.5 transition-transform' %}
+          </a>
+        </li>
+      {%- endif -%}
+
+      {%- for part in paginate.parts -%}
+        <li>
+          {%- if part.is_link -%}
+            <a
+              href="{{ part.url }}{{ anchor }}"
+              class="flex items-center justify-center w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 text-sm font-bold text-gray-500 hover:bg-white hover:text-gray-900 hover:shadow-md hover:border-gray-200 transition-all"
+              aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+            >
+              {{- part.title -}}
+            </a>
+          {%- else -%}
+            {%- if part.title == paginate.current_page -%}
+              <span
+                class="flex items-center justify-center w-12 h-12 rounded-2xl bg-blue-600 border border-blue-500 text-sm font-black text-white shadow-lg shadow-blue-200"
+                aria-current="page"
+                aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+              >
+                {{- part.title -}}
+              </span>
+            {%- else -%}
+              <span class="flex items-center justify-center w-12 h-12 text-sm font-bold text-gray-300">
+                {{ part.title }}
+              </span>
+            {%- endif -%}
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+
+      {%- if paginate.next -%}
+        <li>
+          <a
+            href="{{ paginate.next.url }}{{ anchor }}"
+            class="flex items-center justify-center w-12 h-12 rounded-2xl bg-gray-50 border border-gray-100 text-gray-400 hover:bg-white hover:text-gray-900 hover:shadow-md hover:border-gray-200 transition-all group"
+            aria-label="{{ 'general.pagination.next' | t }}"
+          >
+            {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-6 h-6 group-hover:translate-x-0.5 transition-transform' %}
+          </a>
+        </li>
+      {%- endif -%}
+
+    </ul>
+  </nav>
+</div>

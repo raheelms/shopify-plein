@@ -1,0 +1,21 @@
+{% comment %}
+  Plein.nl style menu — simple horizontal nav bar, no dropdowns
+  Categories: Verzorging, Beauty, Gezondheid, etc. — black text, equal spacing
+{% endcomment %}
+
+<nav class="header__inline-menu" aria-label="Main navigation">
+  <ul class="flex items-center gap-0 list-none p-0 m-0" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li>
+        <a
+          id="HeaderMenu-{{ link.handle }}"
+          href="{{ link.url }}"
+          class="block px-4 py-3 text-[15px] font-medium text-gray-900 hover:text-[#004c97] transition-colors {% if link.current %}text-[#004c97] font-semibold{% endif %}"
+          {% if link.current %}aria-current="page"{% endif %}
+        >
+          {{- link.title | escape -}}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

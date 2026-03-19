@@ -1,0 +1,56 @@
+{% comment %}
+  Product Page Sidebar — Plein.nl style
+  Promo boxes + Anderen bekeken ook
+{% endcomment %}
+
+{%- comment -%} Promo Info Boxes {%- endcomment -%}
+<div class="space-y-4">
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <p class="text-[14px] font-bold text-gray-900">Gratis verzending</p>
+    <p class="text-[13px] text-gray-600 mt-1">Vanaf €35 bestelling</p>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <p class="text-[14px] font-bold text-gray-900">Actie</p>
+    <p class="text-[13px] text-gray-600 mt-1">2+2 gratis op geselecteerde producten</p>
+  </div>
+</div>
+
+{%- comment -%} Anderen bekeken ook — uses collection products {%- endcomment -%}
+<div class="border border-gray-200 rounded overflow-hidden">
+  <h3 class="text-[15px] font-bold text-gray-900 p-4 border-b border-gray-200 bg-gray-50">
+    Anderen bekeken ook
+  </h3>
+  <div class="p-4">
+    {%- if collection and collection.products.size > 1 -%}
+      <div class="grid grid-cols-2 gap-4">
+        {%- assign shown = 0 -%}
+        {%- for coll_product in collection.products -%}
+          {%- if coll_product.id != product.id and shown < 4 -%}
+            <div>
+              {% render 'card-product-plein', card_product: coll_product, compact: true %}
+            </div>
+            {%- assign shown = shown | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      {%- comment -%} Fallback: all products from first collection {%- endcomment -%}
+      {%- assign fallback_collection = product.collections | first -%}
+      {%- if fallback_collection and fallback_collection.products.size > 1 -%}
+        <div class="grid grid-cols-2 gap-4">
+          {%- assign shown = 0 -%}
+          {%- for coll_product in fallback_collection.products -%}
+            {%- if coll_product.id != product.id and shown < 4 -%}
+              <div>
+                {% render 'card-product-plein', card_product: coll_product, compact: true %}
+              </div>
+              {%- assign shown = shown | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <p class="text-[13px] text-gray-500">Geen gerelateerde producten.</p>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,76 @@
+{% comment %}
+  Renders a weekly top product card
+  Accepts:
+  - card_product: {Object} Product Liquid object
+{% endcomment %}
+
+{%- if card_product and card_product != empty -%}
+  <div class="group relative bg-white border border-gray-100 rounded-[2rem] p-5 transition-all duration-500 hover:shadow-2xl hover:shadow-gray-200/50 hover:border-blue-100">
+    {%- comment -%} Row 1: Title {%- endcomment -%}
+    <a href="{{ card_product.url }}" class="block mb-4">
+      <h3 class="text-xs font-black text-gray-900 uppercase tracking-[0.1em] leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
+        {{ card_product.title | escape }}
+      </h3>
+    </a>
+
+    {%- comment -%} Row 2: Image | Price | Button {%- endcomment -%}
+    <div class="flex items-center gap-5">
+      {%- comment -%} Col 1: Image {%- endcomment -%}
+      <a href="{{ card_product.url }}" class="relative shrink-0 w-20 h-20 overflow-hidden bg-gray-50 rounded-2xl">
+        {%- if card_product.featured_media -%}
+          {{ card_product.featured_media | image_url: width: 240 | image_tag: 
+            loading: 'lazy', 
+            class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110',
+            width: 80,
+            height: 80
+          }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'w-full h-full fill-gray-200 transition-transform duration-700 group-hover:scale-110' }}
+        {%- endif -%}
+        <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      </a>
+
+      {%- comment -%} Col 2: Price {%- endcomment -%}
+      <div class="flex-1 min-w-0">
+        {%- assign price = card_product.price -%}
+        {%- assign euro_part = price | divided_by: 100 -%}
+        {%- assign cent_part = price | modulo: 100 -%}
+        {%- if cent_part < 10 -%}{%- assign cent_part = cent_part | prepend: '0' -%}{%- endif -%}
+
+        <div class="flex items-baseline gap-1">
+          <span class="text-xl font-black text-gray-900 tracking-tighter">{{ euro_part }}</span>
+          <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest -mt-1">.{{ cent_part }}</span>
+        </div>
+
+        {%- if card_product.selected_or_first_available_variant.unit_price_measurement -%}
+          <div class="text-[8px] font-black text-gray-400 uppercase tracking-widest mt-1">
+            {{ card_product.selected_or_first_available_variant.unit_price | money }} /
+            {{ card_product.selected_or_first_available_variant.unit_price_measurement.reference_unit }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Col 3: Add Button {%- endcomment -%}
+      <div class="shrink-0">
+        {%- form 'product', card_product -%}
+          <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+          <button
+            type="submit"
+            name="add"
+            class="w-12 h-12 flex items-center justify-center bg-gray-900 text-white rounded-2xl transition-all duration-300 hover:bg-black hover:scale-110 active:scale-95 disabled:bg-gray-100 disabled:text-gray-300"
+            aria-label="Add to cart"
+            {% unless card_product.available %}
+              disabled
+            {% endunless %}
+          >
+            {%- if card_product.available -%}
+              {% render 'icon-library', icon: 'shopping-cart-fill', class: 'w-5 h-5' %}
+            {%- else -%}
+              {% render 'icon-library', icon: 'close-line', class: 'w-5 h-5' %}
+            {%- endif -%}
+          </button>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

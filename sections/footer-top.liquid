@@ -1,0 +1,944 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+    margin-top: {{ section.settings.margin_top_mobile }}px;
+    margin-bottom: {{ section.settings.margin_bottom_mobile }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      margin-top: {{ section.settings.margin_top }}px;
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+
+  .footer-top__main-row {
+     display: grid;
+     gap: {{ section.settings.gap_mobile }}px;
+  }
+
+  .footer-top__main-row--first {
+    grid-template-columns: 1fr;
+    margin-bottom: {{ section.settings.gap_mobile }}px;
+  }
+
+  .footer-top__main-row--second {
+     grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (min-width: 990px) {
+    .footer-top__main-row--first {
+      grid-template-columns: repeat(3, 1fr);
+      gap: {{ section.settings.gap_desktop }}px;
+      margin-bottom: {{ section.settings.gap_desktop }}px;
+    }
+    .footer-top__main-row--second {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+      gap: {{ section.settings.gap_desktop }}px;
+    }
+  }
+
+  .footer-top__column {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    color: {{ section.settings.text_color }};
+  }
+
+  .footer-top__block-title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  /* Brand Info Styles */
+  .footer-top__brand-logo img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  .footer-top__brand-social {
+    margin-top: 1.5rem;
+  }
+  .footer-top__brand-social .list-social {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: inherit;
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* USP Block Styles */
+  .footer-top__usp {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .footer-top__usp-icon svg {
+    display: block;
+    height: auto;
+  }
+
+  /* Newsletter Block Styles */
+  .footer-top__newsletter-box {
+    height: 100%;
+  }
+  .footer-top__newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .footer-top__newsletter-form .field {
+    display: flex;
+    width: 100%;
+  }
+  .footer-top__newsletter-input {
+    flex-grow: 1;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  .footer-top__newsletter-button {
+    padding: 1rem 2rem;
+    background: #55a51c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .footer-top__newsletter-button:hover {
+    background: #4a9018;
+  }
+
+  /* Text Block Style */
+  .footer-top__text {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Menu Style */
+  .footer-top__menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .footer-top__menu li {
+    margin-bottom: 0rem;
+    line-height: 1.3;
+  }
+  .footer-top__menu a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  {%- for block in section.blocks -%}
+    #Block-{{ block.id }} {
+      text-align: {{ block.settings.alignment | default: 'left' }};
+      {%- if block.type == 'brand_information' -%}
+        padding-top: {{ block.settings.padding_top_mobile }}px;
+        padding-bottom: {{ block.settings.padding_bottom_mobile }}px;
+        margin-top: {{ block.settings.margin_top_mobile }}px;
+        margin-bottom: {{ block.settings.margin_bottom_mobile }}px;
+        align-items: {% if block.settings.alignment == 'center' %}center{% elsif block.settings.alignment == 'right' %}flex-end{% else %}flex-start{% endif %};
+      {%- endif -%}
+
+      {%- if block.type == 'brand_information' -%}
+        #Block-{{ block.id }} .footer-top__brand-title {
+          color: {{ block.settings.title_color }};
+          font-size: {{ block.settings.title_size_mobile }}rem;
+          font-weight: {{ block.settings.title_weight }};
+          margin-bottom: 1rem;
+        }
+        #Block-{{ block.id }} .footer-top__brand-text {
+          color: {{ block.settings.text_color }};
+          font-size: {{ block.settings.text_size_mobile }}rem;
+        }
+      {%- endif -%}
+      {%- if block.type == 'usp' -%}
+        color: {{ block.settings.text_color }};
+      {%- endif -%}
+    }
+
+    {%- if block.type == 'brand_information' -%}
+      @media screen and (min-width: 750px) {
+        #Block-{{ block.id }} {
+          padding-top: {{ block.settings.padding_top }}px;
+          padding-bottom: {{ block.settings.padding_bottom }}px;
+          margin-top: {{ block.settings.margin_top }}px;
+          margin-bottom: {{ block.settings.margin_bottom }}px;
+        }
+        #Block-{{ block.id }} .footer-top__brand-title {
+          font-size: {{ block.settings.title_size }}rem;
+        }
+        #Block-{{ block.id }} .footer-top__brand-text {
+          font-size: {{ block.settings.text_size }}rem;
+        }
+      }
+    {%- endif -%}
+
+    #Block-{{ block.id }} .footer-top__usp-icon svg {
+       width: {{ block.settings.icon_size | default: 24 }}px;
+       fill: {{ block.settings.icon_color | default: 'currentColor' }};
+    }
+
+    {%- if block.type == 'menu' -%}
+      #Block-{{ block.id }} .footer-top__block-title {
+        color: {{ block.settings.title_color }};
+        font-size: {{ block.settings.title_size_mobile }}rem;
+        font-weight: {{ block.settings.title_weight }};
+      }
+      #Block-{{ block.id }} .footer-top__menu a {
+        color: {{ block.settings.link_color }};
+        font-size: {{ block.settings.link_size_mobile }}rem;
+      }
+
+      @media screen and (min-width: 750px) {
+        #Block-{{ block.id }} .footer-top__block-title {
+          font-size: {{ block.settings.title_size }}rem;
+        }
+        #Block-{{ block.id }} .footer-top__menu a {
+          font-size: {{ block.settings.link_size }}rem;
+        }
+      }
+    {%- endif -%}
+  {%- endfor -%}
+
+  {% if section.settings.show_divider %}
+    .section-{{ section.id }}-padding {
+      border-bottom: 1px solid {{ section.settings.divider_color }};
+    }
+  {% endif %}
+{%- endstyle -%}
+
+<div class="footer-top section-{{ section.id }}-padding">
+  <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+    {%- comment -%} Main Row 1: Brand Info, Reviews, Newsletter {%- endcomment -%}
+    <div class="footer-top__main-row footer-top__main-row--first">
+      {%- comment -%} Col 1: Brand Information {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'brand_information' -%}
+          <div
+            id="Block-{{ block.id }}"
+            class="footer-top__column footer-top__column--brand"
+            {{ block.shopify_attributes }}
+          >
+            {%- assign brand_logo = block.settings.logo | default: settings.logo -%}
+            {%- if brand_logo != blank -%}
+              <div class="footer-top__brand-logo" style="max-width: {{ block.settings.logo_width }}px;">
+                {{ brand_logo | image_url: width: 400 | image_tag: loading: 'lazy', alt: shop.name }}
+              </div>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="footer-top__brand-title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+            {%- assign brand_description = block.settings.text | default: settings.brand_description -%}
+            {%- if brand_description != blank -%}
+              <div class="footer-top__brand-text rte body">
+                {{ brand_description }}
+              </div>
+            {%- endif -%}
+            {%- if block.settings.show_social -%}
+              <div class="footer-top__brand-social">
+                {% render 'social-icons' %}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Col 2: Reviews / USPs / Text {%- endcomment -%}
+      <div class="footer-top__column">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'reviews' -%}
+            <div id="Block-{{ block.id }}" class="footer-top__block--reviews" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h3 class="footer-top__block-title">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              <div class="footer-top__reviews rte">
+                {{ block.settings.text }}
+              </div>
+            </div>
+          {%- elsif block.type == 'usp' -%}
+            <div id="Block-{{ block.id }}" class="footer-top__usp" {{ block.shopify_attributes }}>
+              {%- if block.settings.icon != 'none' -%}
+                <div class="footer-top__usp-icon">
+                  {% render 'icon-library', icon: block.settings.icon %}
+                </div>
+              {%- elsif block.settings.image != blank -%}
+                <div class="footer-top__usp-image">
+                  {{ block.settings.image | image_url: width: 60 | image_tag: loading: 'lazy' }}
+                </div>
+              {%- endif -%}
+              <div class="footer-top__usp-text">
+                {{ block.settings.text }}
+              </div>
+            </div>
+          {%- elsif block.type == 'text' -%}
+            <div id="Block-{{ block.id }}" class="footer-top__block--text" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h3 class="footer-top__block-title">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              <div class="footer-top__text rte">
+                {{ block.settings.text }}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} Col 3: Newsletter {%- endcomment -%}
+      <div class="footer-top__column">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'newsletter' -%}
+            <div id="Block-{{ block.id }}" class="footer-top__newsletter-box" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h3 class="footer-top__block-title">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              {%- if block.settings.subheading != blank -%}
+                <div class="footer-top__newsletter-subheading rte">{{ block.settings.subheading }}</div>
+              {%- endif -%}
+              {%- form 'customer', id: 'FooterTopNewsletter', class: 'footer-top__newsletter-form' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <div class="field">
+                  <input
+                    type="email"
+                    name="contact[email]"
+                    class="footer-top__newsletter-input"
+                    placeholder="Je e-mailadres"
+                    required
+                  >
+                  <button type="submit" class="footer-top__newsletter-button">
+                    {{ block.settings.button_label | default: 'Ok' }}
+                  </button>
+                </div>
+              {%- endform -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} Main Row 2: Menus {%- endcomment -%}
+    <div class="footer-top__main-row footer-top__main-row--second">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'menu' -%}
+          <div
+            id="Block-{{ block.id }}"
+            class="footer-top__column footer-top__column--menu"
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.heading != blank -%}
+              <h3 class="footer-top__block-title">{{ block.settings.heading }}</h3>
+            {%- endif -%}
+            <ul class="footer-top__menu list-unstyled">
+              {%- for link in block.settings.menu.links -%}
+                <li>
+                  <a href="{{ link.url }}" class="link">{{ link.title }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Footer Top",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Overall Styling"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Columns (Desktop)",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap (Desktop)",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Divider"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show Bottom Divider",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider Color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand_information",
+      "name": "Brand Information",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo Override"
+        },
+        {
+          "type": "range",
+          "id": "logo_width",
+          "min": 50,
+          "max": 400,
+          "step": 10,
+          "default": 150,
+          "unit": "px",
+          "label": "Logo Width"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Title",
+          "default": "About Our Brand"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "About Text Override",
+          "info": "Leave blank to use theme settings description."
+        },
+        {
+          "type": "header",
+          "content": "Title Styling"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 1,
+          "max": 6,
+          "step": 0.1,
+          "unit": "rem",
+          "label": "Title Size",
+          "default": 1.6
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "min": 1,
+          "max": 6,
+          "step": 0.1,
+          "unit": "rem",
+          "label": "Title Size (Mobile)",
+          "default": 1.4
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "Title Weight",
+          "options": [
+            { "value": "400", "label": "Normal" },
+            { "value": "600", "label": "Semi-bold" },
+            { "value": "700", "label": "Bold" },
+            { "value": "800", "label": "Extra Bold" }
+          ],
+          "default": "700"
+        },
+        {
+          "type": "header",
+          "content": "Description Styling"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Description Color",
+          "default": "#555555"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 1,
+          "max": 4,
+          "step": 0.1,
+          "unit": "rem",
+          "label": "Description Size",
+          "default": 1.4
+        },
+        {
+          "type": "range",
+          "id": "text_size_mobile",
+          "min": 1,
+          "max": 4,
+          "step": 0.1,
+          "unit": "rem",
+          "label": "Description Size (Mobile)",
+          "default": 1.3
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social",
+          "label": "Show Social Media Icons",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "header",
+          "content": "Block Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Padding Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Padding Bottom",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_top_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Padding Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Padding Bottom (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "margin_top",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Margin Top",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Margin Bottom",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "margin_top_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Margin Top (Mobile)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "margin_bottom_mobile",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "Margin Bottom (Mobile)",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "type": "reviews",
+      "name": "Reviews",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Klantbeoordelingen"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Reviews Text",
+          "default": "<p>\"Geweldige service en snelle levering! Zeker een aanrader.\"</p>"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" }
+          ],
+          "default": "left"
+        }
+      ]
+    },
+    {
+      "type": "usp",
+      "name": "USP Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "none", "label": "None (Use image below)" },
+            { "value": "check-line", "label": "Checkmark" },
+            { "value": "truck-line", "label": "Truck" },
+            { "value": "customer-service-2-line", "label": "Customer Service" },
+            { "value": "hand-heart-line", "label": "Heart" }
+          ],
+          "default": "check-line"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Icon Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "USP Text",
+          "default": "Free shipping over $50"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon Color",
+          "default": "#0057ae"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "min": 16,
+          "max": 48,
+          "step": 2,
+          "unit": "px",
+          "label": "Icon Size",
+          "default": 24
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" }
+          ],
+          "default": "left"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Newsletter"
+        },
+        {
+          "type": "richtext",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "<p>Sign up for latest updates.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Ok"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" }
+          ],
+          "default": "left"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Custom Text",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Our Story"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add your brand story here.</p>"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Quick Menu"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        },
+        {
+          "type": "select",
+          "id": "alignment",
+          "label": "Alignment",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "header",
+          "content": "Title Styling"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title Color",
+          "default": "#333333"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 1,
+          "max": 6,
+          "step": 0.1,
+          "unit": "rem",
+          "label": "Title Size",
+          "default": 1.6
+        },
+        {
+          "type": "range",
+          "id": "title_size_mobile",
+          "min": 1,
+          "max": 6,
+          "step": 0.1,
+          "unit": "rem",
+          "label": "Title Size (Mobile)",
+          "default": 1.4
+        },
+        {
+          "type": "select",
+          "id": "title_weight",
+          "label": "Title Weight",
+          "options": [
+            { "value": "400", "label": "Normal" },
+            { "value": "600", "label": "Semi-bold" },
+            { "value": "700", "label": "Bold" },
+            { "value": "800", "label": "Extra Bold" }
+          ],
+          "default": "700"
+        },
+        {
+          "type": "header",
+          "content": "Item Styling"
+        },
+        {
+          "type": "color",
+          "id": "link_color",
+          "label": "Link Color",
+          "default": "#333333"
+        },
+        {
+          "type": "range",
+          "id": "link_size",
+          "min": 1,
+          "max": 4,
+          "step": 0.1,
+          "unit": "rem",
+          "label": "Link Size",
+          "default": 1.4
+        },
+        {
+          "type": "range",
+          "id": "link_size_mobile",
+          "min": 1,
+          "max": 4,
+          "step": 0.1,
+          "unit": "rem",
+          "label": "Link Size (Mobile)",
+          "default": 1.3
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer Top",
+      "blocks": [
+        { "type": "brand_information" },
+        { "type": "reviews" },
+        { "type": "newsletter" },
+        { "type": "menu" },
+        { "type": "menu" },
+        { "type": "menu" }
+      ]
+    }
+  ]
+}
+{% endschema %}

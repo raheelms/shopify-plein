@@ -1,0 +1,42 @@
+<ul class="flex items-center gap-0 list-none p-0 m-0 w-full" role="list">
+  {%- for link in section.settings.menu.links -%}
+    <li class="flex items-center h-full">
+      {%- if link.links != blank -%}
+        <div class="relative group h-full flex items-center">
+          <button
+            class="flex items-center gap-1 px-4 py-3 text-[15px] font-semibold text-gray-800 hover:text-[#004c97] cursor-pointer transition-colors {% if link.child_active %}text-[#004c97]{% endif %}"
+            aria-expanded="false"
+            aria-controls="HeaderMenu-{{ link.handle }}"
+          >
+            <span>{{- link.title | escape -}}</span>
+            {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-3.5 h-3.5 opacity-40' %}
+          </button>
+          
+          {%- comment -%} [[ DROPDOWN ]] {%- endcomment -%}
+          <ul
+            id="HeaderMenu-{{ link.handle }}"
+            class="absolute top-full left-0 w-64 bg-white border border-gray-100 rounded-lg shadow-lg p-2 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 z-[110]"
+          >
+            {%- for childlink in link.links -%}
+              <li>
+                <a
+                  href="{{ childlink.url }}"
+                  class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#004c97] rounded transition-colors {% if childlink.current %}text-[#004c97] bg-blue-50{% endif %}"
+                >
+                  {{ childlink.title | escape }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- else -%}
+        <a
+          href="{{ link.url }}"
+          class="px-4 py-3 text-[15px] font-semibold text-gray-800 hover:text-[#004c97] transition-colors {% if link.current %}text-[#004c97]{% endif %}"
+        >
+          {{- link.title | escape -}}
+        </a>
+      {%- endif -%}
+    </li>
+  {%- endfor -%}
+</ul>

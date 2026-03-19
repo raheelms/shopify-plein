@@ -1,0 +1,153 @@
+<div class="bg-white py-20 lg:py-32">
+  <div class="max-w-[1440px] mx-auto px-8 lg:px-12">
+    <div class="max-w-md mx-auto">
+      
+      <div class="text-center space-y-4 mb-12">
+        <h1 class="text-4xl lg:text-5xl font-black text-gray-900 tracking-tight uppercase leading-tight">{{ 'customer.register.title' | t }}</h1>
+        <p class="text-gray-400 font-black text-[10px] uppercase tracking-[0.3em]">Join the Elite Collective</p>
+      </div>
+
+      {%- form 'create_customer', novalidate: 'novalidate', class: 'space-y-6' -%}
+        {%- if form.errors -%}
+          <div class="p-6 bg-red-50 border border-red-100 rounded-2xl space-y-4" tabindex="-1" autofocus>
+            <h2 class="flex items-center gap-3 text-red-700 text-sm font-black uppercase tracking-tight">
+              {% render 'icon-library', icon: 'error-warning-line', class: 'w-5 h-5 text-red-500' %}
+              {{ 'templates.contact.form.error_heading' | t }}
+            </h2>
+            <ul class="text-red-500 text-xs font-medium pl-8 space-y-2">
+              {%- for field in form.errors -%}
+                <li>
+                  {%- if field == 'form' -%}
+                    {{ form.errors.messages[field] }}
+                  {%- else -%}
+                    <a href="#RegisterForm-{{ field }}" class="hover:underline">
+                      {{ form.errors.translated_fields[field] | capitalize }}
+                      {{ form.errors.messages[field] }}
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="group">
+            <input
+              type="text"
+              name="customer[first_name]"
+              id="RegisterForm-FirstName"
+              {% if form.first_name %}value="{{ form.first_name }}"{% endif %}
+              autocomplete="given-name"
+              class="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-900 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 focus:bg-white outline-none transition-all font-medium placeholder:text-gray-300"
+              placeholder="{{ 'customer.register.first_name' | t }}"
+            >
+            <label for="RegisterForm-FirstName" class="sr-only">{{ 'customer.register.first_name' | t }}</label>
+          </div>
+          <div class="group">
+            <input
+              type="text"
+              name="customer[last_name]"
+              id="RegisterForm-LastName"
+              {% if form.last_name %}value="{{ form.last_name }}"{% endif %}
+              autocomplete="family-name"
+              class="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-900 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 focus:bg-white outline-none transition-all font-medium placeholder:text-gray-300"
+              placeholder="{{ 'customer.register.last_name' | t }}"
+            >
+            <label for="RegisterForm-LastName" class="sr-only">{{ 'customer.register.last_name' | t }}</label>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div class="group">
+            <input
+              type="email"
+              name="customer[email]"
+              id="RegisterForm-email"
+              {% if form.email %}value="{{ form.email }}"{% endif %}
+              spellcheck="false"
+              autocapitalize="off"
+              autocomplete="email"
+              aria-required="true"
+              class="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-900 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 focus:bg-white outline-none transition-all font-medium placeholder:text-gray-300 {% if form.errors contains 'email' %} border-red-200 bg-red-50/30 {% endif %}"
+              placeholder="{{ 'customer.register.email' | t }}"
+              {% if form.errors contains 'email' %}aria-invalid="true" aria-describedby="RegisterForm-email-error"{% endif %}
+            >
+            <label for="RegisterForm-email" class="sr-only">{{ 'customer.register.email' | t }}</label>
+            {%- if form.errors contains 'email' -%}
+              <p id="RegisterForm-email-error" class="flex items-center gap-2 text-red-500 text-xs font-bold leading-relaxed px-2 mt-2">
+                {% render 'icon-library', icon: 'error-warning-line', class: 'w-4 h-4' %}
+                {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}.
+              </p>
+            {%- endif -%}
+          </div>
+
+          <div class="group">
+            <input
+              type="password"
+              name="customer[password]"
+              id="RegisterForm-password"
+              aria-required="true"
+              class="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-900 focus:ring-4 focus:ring-blue-50 focus:border-blue-200 focus:bg-white outline-none transition-all font-medium placeholder:text-gray-300 {% if form.errors contains 'password' %} border-red-200 bg-red-50/30 {% endif %}"
+              placeholder="{{ 'customer.register.password' | t }}"
+              {% if form.errors contains 'password' %}aria-invalid="true" aria-describedby="RegisterForm-password-error"{% endif %}
+            >
+            <label for="RegisterForm-password" class="sr-only">{{ 'customer.register.password' | t }}</label>
+            {%- if form.errors contains 'password' -%}
+              <p id="RegisterForm-password-error" class="flex items-center gap-2 text-red-500 text-xs font-bold leading-relaxed px-2 mt-2">
+                {% render 'icon-library', icon: 'error-warning-line', class: 'w-4 h-4' %}
+                {{ form.errors.translated_fields.password | capitalize }} {{ form.errors.messages.password }}.
+              </p>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="space-y-6 pt-4">
+          <button class="w-full flex items-center justify-center py-5 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:bg-black transition-all shadow-xl hover:shadow-gray-200 active:scale-[0.98]">
+            {{ 'customer.register.submit' | t }}
+          </button>
+          
+          <div class="text-center space-y-4">
+            <p class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Already have an account?</p>
+            <a href="{{ routes.account_login_url }}" class="inline-flex items-center gap-2 px-8 py-3 bg-white border border-gray-100 text-gray-900 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-50 transition-all shadow-sm">
+              {{ 'customer.login_page.sign_in' | t }}
+              {% render 'icon-library', icon: 'login-box-line', class: 'w-3.5 h-3.5 text-gray-400' %}
+            </a>
+          </div>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-register.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,76 @@
+{% comment %}
+  Plein.nl style product card — white bg, grey border, pink badge, green button
+  Usage: {% render 'card-product-plein', card_product: product, compact: false %}
+{% endcomment %}
+
+{%- if card_product and card_product != empty -%}
+  <div class="group relative bg-white border border-gray-200 rounded overflow-hidden flex flex-col h-full hover:border-gray-300 transition-colors">
+    
+    {%- comment -%} Pink promo badge {%- endcomment -%}
+    {%- if card_product.compare_at_price > card_product.price or card_product.tags contains 'offer' -%}
+      <div class="absolute top-2 left-2 z-10">
+        <span class="bg-[#d81159] text-white text-[10px] font-bold px-2 py-0.5 rounded">
+          {%- if card_product.compare_at_price > card_product.price -%}
+            {{ card_product.compare_at_price | minus: card_product.price | times: 100.0 | divided_by: card_product.compare_at_price | round }}% korting
+          {%- else -%}
+            Aanbieding
+          {%- endif -%}
+        </span>
+      </div>
+    {%- endif -%}
+
+    <a href="{{ card_product.url }}" class="block">
+      <div class="relative aspect-square overflow-hidden bg-gray-50 p-4">
+        {%- if card_product.featured_media -%}
+          <img
+            src="{{ card_product.featured_media | image_url: width: 300 }}"
+            alt="{{ card_product.featured_media.alt | escape }}"
+            loading="lazy"
+            class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+            width="{{ card_product.featured_media.width }}"
+            height="{{ card_product.featured_media.height }}"
+          >
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-200' }}
+        {%- endif -%}
+      </div>
+    </a>
+
+    <div class="p-3 flex flex-col flex-1">
+      <h3 class="text-[13px] font-bold text-gray-900 leading-tight line-clamp-2 group-hover:text-[#004c97] transition-colors">
+        <a href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
+      </h3>
+      
+      {%- liquid
+        assign current_variant = card_product.selected_or_first_available_variant
+        assign variant_title = current_variant.title
+        if variant_title == 'Default Title'
+          assign variant_title = ''
+        endif
+      -%}
+      {%- if variant_title != blank -%}
+        <p class="text-[11px] text-gray-500 mt-0.5">{{ variant_title }}</p>
+      {%- endif -%}
+
+      <div class="mt-auto pt-3 flex items-baseline gap-2">
+        {%- if card_product.compare_at_price > card_product.price -%}
+          <span class="text-[11px] text-gray-400 line-through">{{ card_product.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="text-[15px] font-bold text-[#d81159]">{{ card_product.price | money }}</span>
+      </div>
+
+      {%- form 'product', card_product, class: 'mt-2' -%}
+        <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+        <button
+          type="submit"
+          name="add"
+          class="w-full flex items-center justify-center gap-1.5 py-2 bg-[#55a51c] text-white text-[12px] font-bold rounded hover:bg-[#4a9018] transition-colors disabled:bg-gray-200 disabled:cursor-not-allowed"
+          {% unless card_product.available %}disabled{% endunless %}
+        >
+          {% render 'icon-library', icon: 'shopping-cart-line', class: 'w-4 h-4' %}
+          Voeg toe
+        </button>
+      {%- endform -%}
+    </div>
+  </div>
+{%- endif -%}

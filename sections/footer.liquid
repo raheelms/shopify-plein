@@ -1,0 +1,47 @@
+{% comment %}
+  Footer — Plein.nl style bottom bar
+  Copyright, links, payment icons. Main content is in footer-top.
+{% endcomment %}
+
+<footer class="bg-white border-t border-gray-200 w-full">
+  <div class="max-w-[1440px] mx-auto px-6 lg:px-12 py-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6 text-[12px] text-gray-500">
+      <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 items-center">
+        <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</span>
+        {%- if section.settings.footer_bottom_menu != blank -%}
+          <div class="flex gap-x-6">
+            {%- for link in section.settings.footer_bottom_menu.links -%}
+              <a href="{{ link.url }}" class="hover:text-gray-900 transition-colors">{{ link.title }}</a>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.payment_enable -%}
+        <div class="flex gap-4 opacity-70">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'h-6 w-auto' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "footer_bottom_menu",
+      "label": "Bottom menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_enable",
+      "default": true,
+      "label": "t:sections.footer.settings.payment_enable.label"
+    }
+  ]
+}
+{% endschema %}

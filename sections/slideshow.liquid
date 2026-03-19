@@ -1,0 +1,449 @@
+<slideshow-component
+  class="relative block group/slideshow {% if section.settings.layout == 'grid' %}max-w-[1400px] mx-auto px-6 md:px-12 my-12 md:my-24{% endif %}"
+  role="region"
+  aria-roledescription="{{ 'sections.slideshow.carousel' | t }}"
+  aria-label="{{ section.settings.accessibility_info | escape }}"
+>
+  {%- if section.settings.auto_rotate and section.blocks.size > 1 -%}
+    <div class="absolute top-8 right-8 z-30 flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full p-2 border border-white/20">
+      <button
+        type="button"
+        class="w-10 h-10 flex items-center justify-center rounded-full text-white hover:bg-white hover:text-gray-900 transition-all"
+        name="previous"
+        aria-label="{{ 'sections.slideshow.previous_slideshow' | t }}"
+      >
+        {% render 'icon-library', icon: 'arrow-left-line', class: 'w-5 h-5' %}
+      </button>
+
+      <div class="px-2 text-xs font-black text-white uppercase tracking-widest min-w-[3rem] text-center">
+        <span class="slider-counter--current">1</span>
+        <span class="opacity-50 mx-1">/</span>
+        <span class="slider-counter--total">{{ section.blocks.size }}</span>
+      </div>
+
+      <button
+        type="button"
+        class="w-10 h-10 flex items-center justify-center rounded-full text-white hover:bg-white hover:text-gray-900 transition-all"
+        name="next"
+        aria-label="{{ 'sections.slideshow.next_slideshow' | t }}"
+      >
+        {% render 'icon-library', icon: 'arrow-right-line', class: 'w-5 h-5' %}
+      </button>
+    </div>
+  {%- endif -%}
+
+  <div
+    class="relative flex overflow-hidden {% if section.settings.layout == 'grid' %}rounded-3xl shadow-2xl{% endif %} transition-all duration-500"
+    id="Slider-{{ section.id }}"
+    aria-live="polite"
+    aria-atomic="true"
+    data-autoplay="{{ section.settings.auto_rotate }}"
+    data-speed="{{ section.settings.change_slides_speed }}"
+  >
+    {%- for block in section.blocks -%}
+      <div
+        class="relative min-w-full flex flex-col justify-center items-center min-h-[600px] md:min-h-[800px] bg-gray-900 overflow-hidden"
+        id="Slide-{{ section.id }}-{{ forloop.index }}"
+        {{ block.shopify_attributes }}
+        role="group"
+        tabindex="-1"
+      >
+        {%- comment -%} Background Media {%- endcomment -%}
+        <div class="absolute inset-0 z-0">
+          {%- if block.settings.image -%}
+            {{
+              block.settings.image
+              | image_url: width: 3840
+              | image_tag: 
+                loading: 'lazy', 
+                class: 'w-full h-full object-cover opacity-60 transition-transform duration-[10s] ease-linear group-hover/slideshow:scale-110',
+                widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+            }}
+          {%- else -%}
+            {%- assign placeholder_slide = forloop.index | modulo: 2 -%}
+            {%- if placeholder_slide == 1 -%}
+              {{ 'hero-apparel-2' | placeholder_svg_tag: 'w-full h-full object-cover opacity-60 text-gray-700' }}
+            {%- else -%}
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'w-full h-full object-cover opacity-60 text-gray-700' }}
+            {%- endif -%}
+          {%- endif -%}
+          {%- if block.settings.image_overlay_opacity > 0 -%}
+            <div class="absolute inset-0 bg-black" style="opacity: {{ block.settings.image_overlay_opacity | divided_by: 100.0 }};"></div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Content {%- endcomment -%}
+        <div class="relative z-10 w-full max-w-[1400px] mx-auto px-6 md:px-12 py-24">
+          <div class="flex flex-col {% if block.settings.box_align contains 'center' %}items-center text-center{% elsif block.settings.box_align contains 'right' %}items-end text-right{% else %}items-start text-left{% endif %} space-y-8 max-w-3xl {% if block.settings.box_align contains 'center' %}mx-auto{% elsif block.settings.box_align contains 'right' %}ml-auto{% endif %}">
+            {%- if block.settings.heading != blank -%}
+              <h2 class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.05] tracking-tight">
+                {{ block.settings.heading }}
+              </h2>
+            {%- endif -%}
+            {%- if block.settings.subheading != blank -%}
+              <div class="text-xl md:text-2xl text-white/80 font-medium leading-relaxed">
+                <p>{{ block.settings.subheading }}</p>
+              </div>
+            {%- endif -%}
+            {%- if block.settings.button_label != blank -%}
+              <div class="flex flex-wrap gap-4 pt-4">
+                <a
+                  href="{{ block.settings.link | default: '#' }}"
+                  class="inline-flex items-center justify-center px-10 py-5 rounded-2xl text-lg font-black transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:scale-95 {% if block.settings.button_style_secondary %}bg-transparent text-white border-2 border-white/20 hover:border-white hover:bg-white/10{% else %}bg-white text-gray-900 hover:bg-gray-100{% endif %}"
+                >
+                  {{- block.settings.button_label | escape -}}
+                  {% render 'icon-library', icon: 'arrow-right-line', class: 'ml-3 w-5 h-5' %}
+                </a>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if section.blocks.size > 1 and section.settings.auto_rotate == false -%}
+    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3">
+      {%- for block in section.blocks -%}
+        <button
+          class="w-12 h-1.5 rounded-full transition-all bg-white/20 hover:bg-white/40 [&.is-active]:bg-white [&.is-active]:w-24"
+          aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }}"
+          data-index="{{ forloop.index0 }}"
+        ></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</slideshow-component>
+
+{%- if request.design_mode -%}
+  <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.slideshow.name",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "full_bleed",
+          "label": "t:sections.slideshow.settings.layout.options__1.label"
+        },
+        {
+          "value": "grid",
+          "label": "t:sections.slideshow.settings.layout.options__2.label"
+        }
+      ],
+      "default": "full_bleed",
+      "label": "t:sections.slideshow.settings.layout.label"
+    },
+    {
+      "type": "select",
+      "id": "slide_height",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.slideshow.settings.slide_height.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.slideshow.settings.slide_height.options__2.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.slideshow.settings.slide_height.options__3.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.slideshow.settings.slide_height.options__4.label"
+        }
+      ],
+      "default": "medium",
+      "label": "t:sections.slideshow.settings.slide_height.label"
+    },
+    {
+      "type": "select",
+      "id": "slider_visual",
+      "options": [
+        {
+          "value": "dots",
+          "label": "t:sections.slideshow.settings.slider_visual.options__2.label"
+        },
+        {
+          "value": "counter",
+          "label": "t:sections.slideshow.settings.slider_visual.options__1.label"
+        },
+        {
+          "value": "numbers",
+          "label": "t:sections.slideshow.settings.slider_visual.options__3.label"
+        }
+      ],
+      "default": "counter",
+      "label": "t:sections.slideshow.settings.slider_visual.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "t:sections.slideshow.settings.auto_rotate.label",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "min": 3,
+      "max": 9,
+      "step": 2,
+      "unit": "s",
+      "label": "t:sections.slideshow.settings.change_slides_speed.label",
+      "default": 5
+    },
+    {
+      "type": "select",
+      "id": "image_behavior",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.all.animation.image_behavior.options__1.label"
+        },
+        {
+          "value": "ambient",
+          "label": "t:sections.all.animation.image_behavior.options__2.label"
+        }
+      ],
+      "default": "none",
+      "label": "t:sections.all.animation.image_behavior.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.slideshow.settings.mobile.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_text_below",
+      "label": "t:sections.slideshow.settings.show_text_below.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.slideshow.settings.accessibility.content"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_info",
+      "label": "t:sections.slideshow.settings.accessibility.label",
+      "info": "t:sections.slideshow.settings.accessibility.info",
+      "default": "t:sections.slideshow.settings.accessibility.default"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "t:sections.slideshow.blocks.slide.name",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.slideshow.blocks.slide.settings.image.label"
+        },
+        {
+          "type": "range",
+          "id": "image_overlay_opacity",
+          "min": 0,
+          "max": 100,
+          "step": 10,
+          "unit": "%",
+          "label": "t:sections.slideshow.blocks.slide.settings.image_overlay_opacity.label",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "t:sections.slideshow.blocks.slide.settings.header_text.content"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "t:sections.slideshow.blocks.slide.settings.heading.default",
+          "label": "t:sections.slideshow.blocks.slide.settings.heading.label"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "options": [
+            {
+              "value": "h2",
+              "label": "t:sections.all.heading_size.options__1.label"
+            },
+            {
+              "value": "h1",
+              "label": "t:sections.all.heading_size.options__2.label"
+            },
+            {
+              "value": "h0",
+              "label": "t:sections.all.heading_size.options__3.label"
+            },
+            {
+              "value": "hxl",
+              "label": "t:sections.all.heading_size.options__4.label"
+            },
+            {
+              "value": "hxxl",
+              "label": "t:sections.all.heading_size.options__5.label"
+            }
+          ],
+          "default": "h1",
+          "label": "t:sections.all.heading_size.label"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subheading",
+          "default": "t:sections.slideshow.blocks.slide.settings.subheading.default",
+          "label": "t:sections.slideshow.blocks.slide.settings.subheading.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.slideshow.blocks.slide.settings.header_button.content"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "t:sections.slideshow.blocks.slide.settings.button_label.default",
+          "label": "t:sections.slideshow.blocks.slide.settings.button_label.label",
+          "info": "t:sections.slideshow.blocks.slide.settings.button_label.info"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.slideshow.blocks.slide.settings.link.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "button_style_secondary",
+          "label": "t:sections.slideshow.blocks.slide.settings.secondary_style.label",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "t:sections.slideshow.blocks.slide.settings.header_layout.content"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_text_box",
+          "label": "t:sections.slideshow.blocks.slide.settings.show_text_box.label",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "box_align",
+          "options": [
+            {
+              "value": "top-left",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__1.label"
+            },
+            {
+              "value": "top-center",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__2.label"
+            },
+            {
+              "value": "top-right",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__3.label"
+            },
+            {
+              "value": "middle-left",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__4.label"
+            },
+            {
+              "value": "middle-center",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__5.label"
+            },
+            {
+              "value": "middle-right",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__6.label"
+            },
+            {
+              "value": "bottom-left",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__7.label"
+            },
+            {
+              "value": "bottom-center",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__8.label"
+            },
+            {
+              "value": "bottom-right",
+              "label": "t:sections.slideshow.blocks.slide.settings.box_align.options__9.label"
+            }
+          ],
+          "default": "middle-center",
+          "label": "t:sections.slideshow.blocks.slide.settings.box_align.label"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.slideshow.blocks.slide.settings.text_alignment.option_1.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.slideshow.blocks.slide.settings.text_alignment.option_2.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.slideshow.blocks.slide.settings.text_alignment.option_3.label"
+            }
+          ],
+          "default": "center",
+          "label": "t:sections.slideshow.blocks.slide.settings.text_alignment.label"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment_mobile",
+          "options": [
+            {
+              "value": "left",
+              "label": "t:sections.slideshow.blocks.slide.settings.text_alignment_mobile.options__1.label"
+            },
+            {
+              "value": "center",
+              "label": "t:sections.slideshow.blocks.slide.settings.text_alignment_mobile.options__2.label"
+            },
+            {
+              "value": "right",
+              "label": "t:sections.slideshow.blocks.slide.settings.text_alignment_mobile.options__3.label"
+            }
+          ],
+          "default": "center",
+          "label": "t:sections.slideshow.blocks.slide.settings.text_alignment_mobile.label"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:sections.all.colors.label",
+          "default": "scheme-1"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.slideshow.presets.name",
+      "blocks": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

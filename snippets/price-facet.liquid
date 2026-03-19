@@ -1,0 +1,51 @@
+<div class="flex items-center gap-4">
+  {%- comment -%} [[ FROM FIELD ]] {%- endcomment -%}
+  <div class="relative flex-1 group">
+    <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold pointer-events-none transition-colors group-focus-within:text-gray-900">
+      {{ cart.currency.symbol }}
+    </div>
+    <input
+      class="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm font-bold text-gray-900 placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+      name="{{ filter.min_value.param_name }}"
+      id="{{ id_prefix }}{{ filter.label | escape }}-GTE"
+      {%- if filter.min_value.value -%}
+        value="{{ filter.min_value.value | money_without_currency }}"
+      {%- endif -%}
+      type="text"
+      inputmode="decimal"
+      placeholder="0"
+      data-pattern="\d| |,|\."
+      data-min="0"
+      data-max="{{ filter.range_max | money_without_currency }}"
+    >
+    <label class="sr-only" for="{{ id_prefix }}{{ filter.label | escape }}-GTE">
+      {{- 'products.facets.from' | t -}}
+    </label>
+  </div>
+
+  <span class="text-gray-300 font-bold shrink-0">to</span>
+
+  {%- comment -%} [[ TO FIELD ]] {%- endcomment -%}
+  <div class="relative flex-1 group">
+    <div class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold pointer-events-none transition-colors group-focus-within:text-gray-900">
+      {{ cart.currency.symbol }}
+    </div>
+    <input
+      class="w-full bg-white border border-gray-200 rounded-xl py-3 pl-10 pr-4 text-sm font-bold text-gray-900 placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+      name="{{ filter.max_value.param_name }}"
+      id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
+      {%- if filter.max_value.value -%}
+        value="{{ filter.max_value.value | money_without_currency }}"
+      {%- endif -%}
+      type="text"
+      inputmode="decimal"
+      placeholder="{{ filter.range_max | money_without_currency }}"
+      data-pattern="\d| |,|\."
+      data-min="0"
+      data-max="{{ filter.range_max | money_without_currency }}"
+    >
+    <label class="sr-only" for="{{ id_prefix }}{{ filter.label | escape }}-LTE">
+      {{- 'products.facets.to' | t -}}
+    </label>
+  </div>
+</div>

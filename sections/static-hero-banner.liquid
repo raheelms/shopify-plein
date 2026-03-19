@@ -1,0 +1,139 @@
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .static-hero {
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+  }
+  .static-hero__grid {
+    display: flex;
+    gap: 1.6rem;
+  }
+  .static-hero__item {
+    flex: 1;
+    position: relative;
+  }
+  .static-hero__item img{
+    max-width: 100%;
+    display: block;
+    border-radius: 8px;
+  }
+  .static-hero__item:hover img {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+  }
+
+  @media screen and (max-width: 749px) {
+    .static-hero__grid.slider--mobile {
+      display: block;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      white-space: nowrap;
+      padding-bottom: 2rem;
+    }
+    .static-hero__item.slider__slide {
+      width: 100%;
+      display: inline-block;
+      vertical-align: top;
+      white-space: normal;
+      scroll-snap-align: start;
+    }
+    .slider-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .slider-counter__link--active {
+      background: #004b91;
+    }
+    .static-hero__item{
+      max-width: 100%;
+    }
+  }
+{%- endstyle -%}
+
+<div class="static-hero page-width">
+  <slider-component class="slider-mobile-gutter">
+    <div
+      class="static-hero__grid grid grid--2-col-desktop slider slider--mobile"
+      id="Slider-{{ section.id }}"
+    >
+      {%- for block in section.blocks -%}
+        <div
+          id="Slide-{{ section.id }}-{{ forloop.index }}"
+          class="static-hero__item grid__item slider__slide"
+          {{ block.shopify_attributes }}
+        >
+          <a href="{{ block.settings.link | default: '#' }}" class="static-hero__link">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                loading="lazy"
+              >
+            {%- else -%}
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg static-hero__image' }}
+            {%- endif -%}
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  </slider-component>
+</div>
+
+{% schema %}
+{
+  "name": "Static Hero Banners",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 2,
+  "settings": [
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Static Hero Banners",
+      "blocks": [{ "type": "banner" }, { "type": "banner" }]
+    }
+  ]
+}
+{% endschema %}

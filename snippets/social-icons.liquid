@@ -1,0 +1,74 @@
+<ul class="flex flex-wrap gap-4 list-none p-0 m-0{% if class %} {{ class }}{% endif %}" role="list">
+  {%- if settings.social_facebook_link != blank -%}
+    <li>
+      <a href="{{ settings.social_facebook_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'facebook-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_instagram_link != blank -%}
+    <li>
+      <a href="{{ settings.social_instagram_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'instagram-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_youtube_link != blank -%}
+    <li>
+      <a href="{{ settings.social_youtube_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'youtube-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_tiktok_link != blank -%}
+    <li>
+      <a href="{{ settings.social_tiktok_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'tiktok-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_twitter_link != blank -%}
+    <li>
+      <a href="{{ settings.social_twitter_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'twitter-x-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_pinterest_link != blank -%}
+    <li>
+      <a href="{{ settings.social_pinterest_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'pinterest-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_snapchat_link != blank -%}
+    <li>
+      <a href="{{ settings.social_snapchat_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'snapchat-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_tumblr_link != blank -%}
+    <li>
+      <a href="{{ settings.social_tumblr_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'tumblr-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+  {%- if settings.social_vimeo_link != blank -%}
+    <li>
+      <a href="{{ settings.social_vimeo_link }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-900 transition-all shadow-sm border border-gray-100 group">
+        {% render 'icon-library', icon: 'vimeo-line', class: 'w-5 h-5 transition-transform group-hover:scale-110' %}
+        <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+      </a>
+    </li>
+  {%- endif -%}
+</ul>

@@ -1,0 +1,70 @@
+{% comment %}
+  Refactored Price Component - Tailwind CSS Only
+  Premium SaaS Aesthetic
+{% endcomment %}
+
+{%- liquid
+  if use_variant
+    assign target = product.selected_or_first_available_variant
+  elsif placeholder
+    assign target = null
+  else
+    assign target = product
+  endif
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign available = target.available | default: false
+  
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+    assign compare_at_money = compare_at_price | money_with_currency
+  else
+    assign money_price = price | money
+    assign compare_at_money = compare_at_price | money
+  endif
+
+  if target == product and product.price_varies
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+  endif
+-%}
+
+{%- unless target == null and placeholder == null -%}
+  <div class="inline-flex flex-col gap-1 bg-[#4ade80] py-4 px-2 rounded-md{{ price_class }}">
+    <div class="flex items-baseline gap-2 flex-wrap">
+      {%- comment -%} Current Price {%- endcomment -%}
+      <span class="{% if accent_color %}text-[#f8fafc]{% else %}text-gray-900{% endif %} font-black tracking-tight">
+        {{ money_price }}
+      </span>
+
+      {%- comment -%} Compare At Price {%- endcomment -%}
+      {%- if compare_at_price > price -%}
+        <span class="text-sm font-bold text-gray-400 line-through decoration-gray-300">
+          {{ compare_at_money }}
+        </span>
+        
+        {%- comment -%} Discount Badge {%- endcomment -%}
+        {%- assign discount = compare_at_price | minus: price | times: 100.0 | divided_by: compare_at_price | round -%}
+        <span class="bg-blue-50 text-blue-600 text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+          Save {{ discount }}%
+        </span>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Unit Price {%- endcomment -%}
+    {%- if target.variant.available and target.unit_price_measurement -%}
+      <div class="text-[11px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">
+        <span class="sr-only">{{ 'products.product.price.unit_price' | t }}</span>
+        <span>{{ target.unit_price | money }}</span>
+        <span aria-hidden="true">/</span>
+        <span class="sr-only">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+        <span>
+          {%- if target.unit_price_measurement.reference_value != 1 -%}
+            {{- target.unit_price_measurement.reference_value -}}
+          {%- endif -%}
+          {{ target.unit_price_measurement.reference_unit }}
+        </span>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endunless -%}

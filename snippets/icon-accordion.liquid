@@ -1,0 +1,24 @@
+{%- if icon != 'none' -%}
+  {%- liquid
+    assign remix_icon = icon | replace: '_', '-'
+    case icon
+      when 'check_mark'
+        assign remix_icon = 'check-line'
+      when 'chat_bubble'
+        assign remix_icon = 'chat-3-line'
+      when 'lightning_bolt'
+        assign remix_icon = 'flashlight-line'
+      when 'map_pin'
+        assign remix_icon = 'map-pin-line'
+      when 'paw_print'
+        assign remix_icon = 'mickey-line'
+      when 'price_tag'
+        assign remix_icon = 'price-tag-3-line'
+      when 'question_mark'
+        assign remix_icon = 'question-line'
+      else
+        assign remix_icon = remix_icon | append: '-line'
+    endcase
+  -%}
+  {% render 'icon-library', icon: remix_icon %}
+{%- endif -%}

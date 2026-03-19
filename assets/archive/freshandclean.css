@@ -1,0 +1,31 @@
+/* Plein.nl inspired styling for Product Page - TOKENS ONLY */
+
+:root {
+    --color-freshandclean-teal: #005eb8;
+    --color-freshandclean-pink: #e6007e;
+    --color-freshandclean-yellow: #ffeb00;
+    --color-freshandclean-green: #588f00;
+    --color-freshandclean-bg-light: #f4f6f8;
+    --font-heading-family: 'Nunito', sans-serif;
+    --font-body-family: 'Nunito', sans-serif;
+}
+
+/* Ensure global font is Nunito */
+* {
+    font-family: 'Nunito', sans-serif !important;
+}
+
+body {
+    background-color: var(--color-freshandclean-bg-light);
+}
+
+.page-width {
+    max-width: 1280px !important;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Strip legacy theme paddings that fight Tailwind */
+.product__info-wrapper, .product__media-wrapper {
+    padding: 0 !important;
+}

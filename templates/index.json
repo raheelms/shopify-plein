@@ -1,0 +1,495 @@
+{
+  "sections": {
+    "static_hero_banner": {
+      "type": "static-hero-banner",
+      "blocks": {
+        "banner_1": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/b1.jpg",
+            "link": ""
+          }
+        },
+        "banner_2": {
+          "type": "banner",
+          "settings": {
+            "image": "shopify://shop_images/b2.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "banner_1",
+        "banner_2"
+      ],
+      "settings": {
+        "margin_top": 20,
+        "margin_bottom": 20
+      }
+    },
+    "custom_collection_list_fGWA7y": {
+      "type": "custom-collection-list",
+      "name": "Custom Collection List",
+      "settings": {
+        "heading": "Featured Collections",
+        "heading_size": 2,
+        "heading_size_mobile": 1.6,
+        "heading_weight": "600",
+        "heading_color": "#333333",
+        "heading_margin_bottom": 10,
+        "heading_alignment": "left",
+        "heading_transform": "none",
+        "collection_list": [
+          "beauty",
+          "care",
+          "food-drink",
+          "health",
+          "household",
+          "offers",
+          "pet",
+          "pregnant-baby"
+        ],
+        "columns_desktop": 8,
+        "columns_mobile": 2,
+        "card_title_size": 1.6,
+        "card_title_weight": "600",
+        "card_title_color": "#333333",
+        "card_title_alignment": "center",
+        "card_title_transform": "none",
+        "card_padding_top": 0,
+        "card_padding_bottom": 0,
+        "card_margin_top": 10,
+        "image_padding": 15,
+        "image_margin_bottom": 0,
+        "image_border_radius": 8,
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20,
+        "margin_top_mobile": 0,
+        "margin_bottom_mobile": 0,
+        "show_view_all": false,
+        "view_all_text": "View All",
+        "view_all_link": "",
+        "view_all_font_size": 1.6,
+        "view_all_font_weight": "600",
+        "view_all_bg_color": "#000000",
+        "view_all_text_color": "#ffffff",
+        "footer_text": "",
+        "footer_alignment": "center",
+        "footer_text_size": 1.6,
+        "footer_text_weight": "400",
+        "footer_text_color": "#333333"
+      }
+    },
+    "offers_Ekje9Q": {
+      "type": "offers",
+      "blocks": {
+        "offer_8ndGBy": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/0626_ariel-pods_1106771-1106775_app-only_285x147px_productaanbiedingen.png",
+            "text": "Great Summer Offer",
+            "link": "",
+            "badge_text": "HOT"
+          }
+        },
+        "offer_gUJHKA": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/0526_b_olay-en-biodermal_1113011_755862-1.png",
+            "text": "Great Summer Offer",
+            "link": "",
+            "badge_text": "HOT"
+          }
+        },
+        "offer_RNPTTY": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/2225_pampers_1059929-1060156_285x147px_productaanbiedingen.png",
+            "text": "Pampers",
+            "link": "",
+            "badge_text": "HOT"
+          }
+        },
+        "offer_aK9eYy": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/05-wk-07_b_duurzamer_1108748-removebg-preview.png",
+            "text": "Great Summer Offer",
+            "link": "",
+            "badge_text": "HOT"
+          }
+        },
+        "offer_DnpBnL": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/0626_renske-hond-droog_977890-977904_285x147px_productaanbiedingen.png",
+            "text": "Great Summer Offer",
+            "link": "",
+            "badge_text": "HOT"
+          }
+        },
+        "offer_7LNXRy": {
+          "type": "offer",
+          "settings": {
+            "image": "shopify://shop_images/4825_make-up-rimmel-london-maybelline_1018505-976664_285x147px_productaanbiedingen-1.png",
+            "text": "Great Summer Offer",
+            "link": "",
+            "badge_text": "HOT"
+          }
+        }
+      },
+      "block_order": [
+        "offer_8ndGBy",
+        "offer_gUJHKA",
+        "offer_RNPTTY",
+        "offer_aK9eYy",
+        "offer_DnpBnL",
+        "offer_7LNXRy"
+      ],
+      "name": "Offers",
+      "settings": {
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20,
+        "margin_top_mobile": 0,
+        "margin_bottom_mobile": 0,
+        "heading": "Flash Offers",
+        "heading_size": 2,
+        "heading_size_mobile": 1.6,
+        "heading_weight": "600",
+        "heading_color": "#000000",
+        "heading_margin_bottom": 10,
+        "heading_transform": "none",
+        "heading_alignment": "left",
+        "view_all_text": "View All",
+        "view_all_link": "",
+        "link_size": 1.2,
+        "link_weight": "600",
+        "link_color": "#000000",
+        "items_per_row": 6,
+        "items_per_row_mobile": 2,
+        "gap": 20,
+        "gap_mobile": 10,
+        "item_title_size": 1.6,
+        "item_title_color": "#333333",
+        "card_padding": 0,
+        "image_padding": 0,
+        "text_alignment": "center",
+        "badge_position": "top-left",
+        "badge_bg_color": "#ff0000",
+        "badge_text_color": "#ffffff",
+        "badge_size": 1.2,
+        "badge_weight": "700",
+        "footer_text": "<p>Tested</p>",
+        "footer_alignment": "right",
+        "footer_text_size": 1,
+        "footer_text_weight": "400",
+        "footer_text_color": "#333333"
+      }
+    },
+    "brands_carousel_BbLMVF": {
+      "type": "brands-carousel",
+      "blocks": {
+        "brand_VzdHki": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/1725_lucovitaal_logo_165x120px.png",
+            "link": "",
+            "badge_text": ""
+          }
+        },
+        "brand_XPeJXc": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/nivea.logo.png",
+            "link": "",
+            "badge_text": ""
+          }
+        },
+        "brand_xp649e": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/persil.jpg",
+            "link": "",
+            "badge_text": ""
+          }
+        },
+        "brand_r7fzzm": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/4725_unicura_logo_165x120px.png",
+            "link": "",
+            "badge_text": ""
+          }
+        },
+        "brand_CDRKt3": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/1725_lucovitaal_logo_165x120px.png",
+            "link": "",
+            "badge_text": ""
+          }
+        },
+        "brand_czC3zm": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/invisibobble.jpg",
+            "link": "",
+            "badge_text": ""
+          }
+        },
+        "brand_JP9hxw": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/vogue.jpg",
+            "link": "",
+            "badge_text": ""
+          }
+        },
+        "brand_gY49Y4": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/robijn.logo.png",
+            "link": "",
+            "badge_text": ""
+          }
+        },
+        "brand_Hz8YDh": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/zarqa.png",
+            "link": "",
+            "badge_text": ""
+          }
+        }
+      },
+      "block_order": [
+        "brand_VzdHki",
+        "brand_XPeJXc",
+        "brand_xp649e",
+        "brand_r7fzzm",
+        "brand_CDRKt3",
+        "brand_czC3zm",
+        "brand_JP9hxw",
+        "brand_gY49Y4",
+        "brand_Hz8YDh"
+      ],
+      "name": "Brands Carousel",
+      "settings": {
+        "show_section": true,
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20,
+        "margin_top_mobile": 0,
+        "margin_bottom_mobile": 0,
+        "heading": "Our Brands",
+        "heading_font": "assistant_n4",
+        "heading_size": 2,
+        "heading_size_mobile": 1.6,
+        "heading_weight": "700",
+        "heading_color": "#000000",
+        "heading_margin_bottom": 10,
+        "heading_transform": "none",
+        "heading_alignment": "left",
+        "items_per_row": 8,
+        "scroll_per_click": 2,
+        "items_per_row_mobile": 2,
+        "scroll_per_click_mobile": 1,
+        "gap": 20,
+        "gap_mobile": 10,
+        "image_bg_color": "#f0f0f0",
+        "image_border_radius": 8,
+        "image_border_width": 0,
+        "image_border_color": "#eeeeee",
+        "image_shadow_blur": 0,
+        "image_shadow_opacity": 5,
+        "badge_position": "top-right",
+        "badge_bg_color": "#004b91",
+        "badge_text_color": "#ffffff",
+        "badge_size": 1.1,
+        "badge_weight": "700"
+      }
+    },
+    "featured_categories_eTkUzP": {
+      "type": "featured-categories",
+      "blocks": {
+        "category_EETUJN": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/b5.jpg",
+            "link": ""
+          }
+        },
+        "category_xpc9hm": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/b4.jpg",
+            "link": ""
+          }
+        },
+        "category_hfT4ME": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/b3.jpg",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_EETUJN",
+        "category_xpc9hm",
+        "category_hfT4ME"
+      ],
+      "name": "Featured Categories",
+      "settings": {
+        "heading": "Shop by Category",
+        "heading_size": 2,
+        "heading_size_mobile": 1.6,
+        "heading_weight": "600",
+        "heading_color": "#000000",
+        "heading_margin_bottom": 10,
+        "heading_transform": "none",
+        "heading_alignment": "left",
+        "items_to_show": 3,
+        "items_to_show_mobile": 1,
+        "show_nav": true,
+        "force_static": false,
+        "gap": 20,
+        "gap_mobile": 10,
+        "image_radius": 0,
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top_mobile": 12,
+        "padding_bottom_mobile": 12,
+        "margin_top_mobile": 0,
+        "margin_bottom_mobile": 0
+      }
+    },
+    "popular_products": {
+      "type": "product-row",
+      "settings": {
+        "collection": "featured-copy",
+        "products_to_show": 4,
+        "show_view_all": true,
+        "view_all_text": "Bekijk alles",
+        "view_all_size": 1.4,
+        "view_all_weight": "600",
+        "view_all_color": "#004b91",
+        "card_bg": "#ffffff",
+        "card_border": "#f0f0f0",
+        "price_color": "#212121",
+        "button_bg": "#538908",
+        "button_text": "#ffffff",
+        "badge_bg": "#d13579",
+        "badge_text": "#ffffff",
+        "heading": "Popular Products",
+        "heading_size": 2,
+        "heading_size_mobile": 1.6,
+        "heading_weight": "600",
+        "heading_color": "#000000",
+        "heading_margin_bottom": 20,
+        "heading_transform": "none",
+        "heading_alignment": "left",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top_mobile": 12,
+        "padding_bottom_mobile": 12,
+        "margin_top_mobile": 0,
+        "margin_bottom_mobile": 0
+      }
+    },
+    "collection_products": {
+      "type": "product-row",
+      "settings": {
+        "collection": "weekly-copy",
+        "products_to_show": 4,
+        "show_view_all": true,
+        "view_all_text": "Bekijk alles",
+        "view_all_size": 1.4,
+        "view_all_weight": "600",
+        "view_all_color": "#004b91",
+        "card_bg": "#ffffff",
+        "card_border": "#f0f0f0",
+        "price_color": "#212121",
+        "button_bg": "#538908",
+        "button_text": "#ffffff",
+        "badge_bg": "#d13579",
+        "badge_text": "#ffffff",
+        "heading": "Featured Collection",
+        "heading_size": 2,
+        "heading_size_mobile": 1.6,
+        "heading_weight": "600",
+        "heading_color": "#000000",
+        "heading_margin_bottom": 20,
+        "heading_transform": "none",
+        "heading_alignment": "left",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top_mobile": 12,
+        "padding_bottom_mobile": 24,
+        "margin_top_mobile": 0,
+        "margin_bottom_mobile": 0
+      }
+    },
+    "rich_text_UPiKBT": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_FQbpG4": {
+          "type": "heading",
+          "settings": {
+            "heading": "Talk about your brand",
+            "heading_size": "h1"
+          }
+        },
+        "text_64xP9y": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_FQbpG4",
+        "text_64xP9y"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "static_hero_banner",
+    "custom_collection_list_fGWA7y",
+    "offers_Ekje9Q",
+    "brands_carousel_BbLMVF",
+    "featured_categories_eTkUzP",
+    "popular_products",
+    "collection_products",
+    "rich_text_UPiKBT"
+  ]
+}

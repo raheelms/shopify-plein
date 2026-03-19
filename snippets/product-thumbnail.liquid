@@ -1,0 +1,96 @@
+<div class="relative group aspect-square bg-gray-50 rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm transition-all hover:shadow-md">
+  <modal-opener
+    class="block w-full h-full cursor-zoom-in"
+    data-modal="#ProductModal-{{ modal_id }}"
+  >
+    <div class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 backdrop-blur-sm p-2 rounded-xl shadow-sm border border-gray-100">
+      {% render 'icon-library', icon: 'zoom-in-line', class: 'w-5 h-5 text-gray-900' %}
+    </div>
+
+    {%- render 'loading-spinner' -%}
+    
+    <div class="w-full h-full p-8 flex items-center justify-center">
+      {{
+        media.preview_image
+        | image_url: width: 1946
+        | image_tag:
+          class: 'w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-110 select-none',
+          loading: lazy,
+          sizes: sizes,
+          widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946'
+      }}
+    </div>
+
+    <button
+      class="sr-only"
+      type="button"
+      aria-haspopup="dialog"
+      data-media-id="{{ media.id }}"
+    >
+      {{ 'products.product.media.open_media' | t: index: position }}
+    </button>
+  </modal-opener>
+
+  {%- if media.media_type != 'image' -%}
+    {%- if media.media_type == 'model' -%}
+      <product-model class="absolute inset-0 w-full h-full bg-gray-50/50 flex items-center justify-center" data-media-id="{{ media.id }}">
+    {%- else -%}
+      <deferred-media class="absolute inset-0 w-full h-full bg-gray-50/50 flex items-center justify-center group/deferred" data-media-id="{{ media.id }}">
+    {%- endif -%}
+    <button id="Deferred-Poster-Modal-{{ media.id }}" class="absolute inset-0 w-full h-full p-0 m-0 border-none bg-transparent cursor-pointer z-10 flex items-center justify-center overflow-hidden group/btn-media" type="button">
+      <span class="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-2xl transition-all duration-300 group-hover/btn-media:scale-110 group-hover/btn-media:bg-blue-700">
+        {%- if media.media_type == 'model' -%}
+          {% render 'icon-library', icon: 'box-3-fill', class: 'w-8 h-8' %}
+        {%- else -%}
+          {% render 'icon-library', icon: 'play-fill', class: 'w-10 h-10 ml-1' %}
+        {%- endif -%}
+      </span>
+      {{
+        media.preview_image
+        | image_url: width: 1946
+        | image_tag:
+          loading: lazy,
+          sizes: sizes,
+          widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946',
+          class: 'absolute inset-0 w-full h-full object-cover opacity-40 group-hover/deferred:opacity-60 transition-opacity'
+      }}
+    </button>
+    <template>
+      {%- liquid
+        case media.media_type
+          when 'external_video'
+            assign video_class = 'js-' | append: media.host
+            if media.host == 'youtube'
+              echo media | external_video_url: autoplay: true, loop: loop, playlist: media.external_id | external_video_tag: class: video_class, loading: 'lazy'
+            else
+              echo media | external_video_url: autoplay: true, loop: loop | external_video_tag: class: video_class, loading: 'lazy'
+            endif
+          when 'video'
+            echo media | media_tag: image_size: '2048x', autoplay: true, loop: loop, controls: true, preload: 'none'
+          when 'model'
+            echo media | media_tag: image_size: '2048x', toggleable: true
+        endcase
+      -%}
+    </template>
+
+    {%- if media.media_type == 'model' -%}
+      </product-model>
+      {%- if xr_button -%}
+        <button
+          class="absolute bottom-4 left-4 right-4 bg-gray-900 text-white text-[10px] font-black rounded-xl h-10 flex items-center justify-center gap-2 z-20 shadow-xl transition-all hover:bg-black hover:-translate-y-1 active:scale-95 uppercase tracking-widest"
+          type="button"
+          aria-label="{{ 'products.product.xr_button_label' | t }}"
+          data-shopify-xr
+          data-shopify-model3d-id="{{ media.id }}"
+          data-shopify-title="{{ product.title | escape }}"
+          data-shopify-xr-hidden
+        >
+          {% render 'icon-library', icon: 'box-3-line', class: 'w-4 h-4' %}
+          {{ 'products.product.xr_button' | t }}
+        </button>
+      {%- endif -%}
+    {%- else -%}
+      </deferred-media>
+    {%- endif -%}
+  {%- endif -%}
+</div>

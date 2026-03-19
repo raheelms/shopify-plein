@@ -1,0 +1,74 @@
+{% comment %}
+  Refactored Quantity Selector - Tailwind CSS Only
+  Premium SaaS Aesthetic
+{% endcomment %}
+
+<div
+  id="Quantity-Form-{{ section.id }}"
+  class="relative h-12"
+  {{ block.shopify_attributes }}
+>
+  {%- liquid
+    assign cart_qty = cart | item_count_for_variant: product.selected_or_first_available_variant.id
+    assign variant = product.selected_or_first_available_variant
+  -%}
+  
+  <span class="sr-only" id="quantity-label-{{ section.id }}">
+    {%- if cart_qty > 0 -%}
+      {{- 'products.product.quantity.in_cart_aria_label' | t: quantity: cart_qty -}}
+    {%- else -%}
+      {{- 'products.product.quantity.label' | t -}}
+    {%- endif -%}
+  </span>
+
+  <div class="relative group h-full">
+    <select
+      name="quantity"
+      id="Quantity-{{ section.id }}"
+      class="appearance-none w-full h-full bg-white border border-gray-200 rounded-lg px-4 text-sm font-medium text-gray-900 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#004c97]/20 focus:border-[#004c97] transition-all text-center"
+      form="{{ product_form_id }}"
+    >
+      {%- for i in (1..10) -%}
+        <option value="{{ i }}">{{ i }}</option>
+      {%- endfor -%}
+    </select>
+    
+    <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-gray-900 transition-colors">
+      {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+    </div>
+  </div>
+
+  {%- if product.quantity_price_breaks_configured? -%}
+    <div class="mt-6 p-6 bg-gray-50 rounded-[2rem] border border-gray-100 space-y-4 animate-in fade-in transition-all">
+      <p class="text-[10px] font-black uppercase text-gray-400 tracking-[0.2em]">{{ 'products.product.volume_pricing.title' | t }}</p>
+      <ul class="space-y-3">
+        {%- assign variant_price = variant.price | money_with_currency -%}
+        <li class="flex justify-between items-center text-sm">
+          <span class="font-bold text-gray-500">{{ variant.quantity_rule.min }}+</span>
+          <span class="font-black text-gray-900">{{ variant_price }}</span>
+        </li>
+        {%- for price_break in variant.quantity_price_breaks -%}
+          {%- assign price_break_price = price_break.price | money_with_currency -%}
+          <li class="flex justify-between items-center text-sm pt-3 border-t border-gray-100/50">
+            <span class="font-bold text-gray-500">{{ price_break.minimum_quantity }}+</span>
+            <span class="font-black text-blue-600">{{ price_break_price }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  {%- if variant.quantity_rule.increment > 1 or variant.quantity_rule.min > 1 or variant.quantity_rule.max != null -%}
+    <div class="mt-4 text-[10px] font-black text-gray-400 uppercase tracking-widest flex flex-wrap gap-x-4 gap-y-1 px-2" id="Quantity-Rules-{{ section.id }}">
+      {%- if variant.quantity_rule.increment > 1 -%}
+        <span>{{ 'products.product.quantity.multiples_of' | t: quantity: variant.quantity_rule.increment }}</span>
+      {%- endif -%}
+      {%- if variant.quantity_rule.min > 1 -%}
+        <span>{{ 'products.product.quantity.minimum_of' | t: quantity: variant.quantity_rule.min }}</span>
+      {%- endif -%}
+      {%- if variant.quantity_rule.max != null -%}
+        <span>{{ 'products.product.quantity.maximum_of' | t: quantity: variant.quantity_rule.max }}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>

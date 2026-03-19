@@ -1,0 +1,348 @@
+<div class="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-24 color-{{ section.settings.color_scheme }} gradient">
+  <div class="flex flex-col lg:flex-row gap-8">
+    {%- comment -%} Main Slider {%- endcomment -%}
+    <div class="lg:w-2/3 relative group/hero shadow-2xl rounded-[2.5rem] overflow-hidden bg-gray-100 min-h-[450px] md:min-h-[600px]">
+      <div id="hero-slider-{{ section.id }}" class="relative w-full h-full overflow-hidden">
+        <div id="slider-track-{{ section.id }}" class="flex h-full transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'slide' -%}
+              <div class="min-w-full relative h-full flex flex-col justify-end" {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 2000 | image_tag: 
+                    loading: 'lazy',
+                    class: 'absolute inset-0 w-full h-full object-cover select-none',
+                    widths: '375, 750, 1100, 1500, 1780, 2000'
+                  }}
+                {%- else -%}
+                  {{ 'hero-apparel-1' | placeholder_svg_tag: 'absolute inset-0 w-full h-full object-cover bg-gray-200 text-gray-400' }}
+                {%- endif -%}
+
+                {%- comment -%} Content Overlay {%- endcomment -%}
+                <div class="relative z-10 w-full p-8 md:p-16 bg-gradient-to-t from-black/80 via-black/40 to-transparent text-white">
+                  {%- if block.settings.pill_text != blank -%}
+                    <span class="inline-block px-4 py-1.5 mb-6 rounded-full bg-blue-600 text-white text-xs font-black uppercase tracking-widest shadow-lg">
+                      {{ block.settings.pill_text }}
+                    </span>
+                  {%- endif -%}
+
+                  <h2 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-none mb-6 max-w-2xl drop-shadow-2xl" style="color: {{ block.settings.heading_color }};">
+                    {{ block.settings.heading }}
+                  </h2>
+
+                  {%- if block.settings.subheading != blank -%}
+                    <div class="text-xl md:text-2xl font-medium mb-10 max-w-xl opacity-90 drop-shadow-md" style="color: {{ block.settings.subheading_color }};">
+                      {{ block.settings.subheading }}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.button_text != blank -%}
+                    <a 
+                      href="{{ block.settings.link }}" 
+                      class="inline-flex items-center gap-4 px-10 py-5 rounded-2xl bg-white text-gray-900 text-lg font-black transition-all hover:gap-6 hover:shadow-[0_20px_50px_rgba(255,255,255,0.3)] hover:-translate-y-1 active:scale-95 group/btn"
+                    >
+                      {{ block.settings.button_text }}
+                      {% render 'icon-library', icon: 'arrow-right-line', class: 'w-6 h-6 text-blue-600 transition-transform group-hover/btn:translate-x-1' %}
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- assign slide_count = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'slide' -%}
+            {%- assign slide_count = slide_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if slide_count > 1 -%}
+          <button class="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 flex items-center justify-center transition-all hover:bg-white hover:text-gray-900 opacity-0 group-hero:opacity-100 focus:opacity-100 z-20" aria-label="Previous slide" data-slider-prev>
+            {% render 'icon-library', icon: 'arrow-left-s-line', class: 'w-8 h-8' %}
+          </button>
+          <button class="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 flex items-center justify-center transition-all hover:bg-white hover:text-gray-900 opacity-0 group-hero:opacity-100 focus:opacity-100 z-20" aria-label="Next slide" data-slider-next>
+            {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-8 h-8' %}
+          </button>
+
+          <div class="absolute bottom-8 right-12 flex gap-3 z-20">
+            {%- for i in (1..slide_count) -%}
+              <button
+                class="w-3 h-3 rounded-full bg-white/30 border border-white/20 transition-all hover:bg-white/50 data-[active=true]:w-10 data-[active=true]:bg-white data-[active=true]:border-white"
+                data-slide="{{ forloop.index0 }}"
+                data-active="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-label="Go to slide {{ forloop.index }}"
+              ></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} Side Tiles {%- endcomment -%}
+    <div class="lg:w-1/3 flex flex-col gap-8">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'side_tile' -%}
+          <a href="{{ block.settings.link }}" class="flex-1 relative group/tile rounded-[2rem] overflow-hidden shadow-xl min-h-[220px] bg-gray-100" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 1000 | image_tag: 
+                loading: 'lazy',
+                class: 'absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/tile:scale-110' 
+              }}
+            {%- else -%}
+              {{ 'hero-apparel-2' | placeholder_svg_tag: 'absolute inset-0 w-full h-full object-cover bg-gray-200 text-gray-400 transition-transform duration-700 group-hover/tile:scale-110' }}
+            {%- endif -%}
+
+            {%- comment -%} Tile Content {%- endcomment -%}
+            <div class="relative z-10 w-full h-full p-8 flex flex-col justify-end bg-gradient-to-t from-black/70 via-black/20 to-transparent text-white transition-opacity group-hover/tile:from-black/80">
+              {%- if block.settings.pill_text != blank -%}
+                <span class="inline-block px-3 py-1 mb-3 rounded-full bg-red-600 text-white text-[10px] font-black uppercase tracking-widest self-start shadow-md">
+                  {{ block.settings.pill_text }}
+                </span>
+              {%- endif -%}
+              <h3 class="text-2xl md:text-3xl font-black tracking-tight leading-tight group-hover/tile:translate-x-2 transition-transform duration-300">
+                {{ block.settings.heading }}
+              </h3>
+            </div>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const initSlider = () => {
+      const slider = document.getElementById('hero-slider-{{ section.id }}');
+      if (!slider) return;
+      
+      const track = document.getElementById('slider-track-{{ section.id }}');
+      const slides = track.children;
+      const dots = slider.querySelectorAll('[data-slide]');
+      const prevBtn = slider.querySelector('[data-slider-prev]');
+      const nextBtn = slider.querySelector('[data-slider-next]');
+      
+      if (slides.length <= 1) return;
+      
+      let currentIndex = 0;
+      let autoplayInterval;
+      
+      function updateSlider(index) {
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        
+        currentIndex = index;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        
+        dots.forEach((dot, i) => {
+          dot.setAttribute('data-active', i === currentIndex);
+        });
+      }
+      
+      const nextSlide = () => updateSlider(currentIndex + 1);
+      const prevSlide = () => updateSlider(currentIndex - 1);
+      
+      const startAutoplay = () => {
+        {% if section.settings.autoplay %}
+          autoplayInterval = setInterval(nextSlide, {{ section.settings.autoplay_speed | default: 5 }}000);
+        {% endif %}
+      };
+      
+      const resetAutoplay = () => {
+        clearInterval(autoplayInterval);
+        startAutoplay();
+      };
+      
+      if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetAutoplay(); });
+      if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetAutoplay(); });
+      
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          updateSlider(index);
+          resetAutoplay();
+        });
+      });
+      
+      startAutoplay();
+      
+      slider.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+      slider.addEventListener('mouseleave', startAutoplay);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSlider);
+    } else {
+      initSlider();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Kruidvat Hero Slider",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 10,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Slide duration",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "pill_text",
+          "label": "Badge Text",
+          "default": "WEEKENDDEAL"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Main Promotion Title"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "font_picker",
+          "id": "heading_font",
+          "label": "Heading Font",
+          "default": "work_sans_n6"
+        },
+        {
+          "type": "richtext",
+          "id": "subheading",
+          "label": "Sub-heading",
+          "default": "<p>Sub-heading details here</p>"
+        },
+        {
+          "type": "color",
+          "id": "subheading_color",
+          "label": "Sub-heading Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "font_picker",
+          "id": "subheading_font",
+          "label": "Sub-heading Font",
+          "default": "work_sans_n4"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "color",
+          "id": "button_color",
+          "label": "Button Background Color",
+          "default": "#004b91"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "Button Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "color",
+          "id": "box_background",
+          "label": "Box Background",
+          "default": "transparent"
+        }
+      ]
+    },
+    {
+      "type": "side_tile",
+      "name": "Side Tile",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Tile Image"
+        },
+        {
+          "type": "text",
+          "id": "pill_text",
+          "label": "Badge Text",
+          "default": "TOPDEAL"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Side Deal Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kruidvat Hero Slider",
+      "settings": {
+        "autoplay": true,
+        "autoplay_speed": 5
+      },
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "pill_text": "WEEKENDDEAL",
+            "heading": "Héél véél weekenddeals!",
+            "box_background": "rgba(0,0,0,0.5)"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": { "pill_text": "NIEUW", "heading": "Nieuwe producten!", "box_background": "rgba(0,0,0,0.5)" }
+        },
+        {
+          "type": "slide",
+          "settings": { "pill_text": "ACTIE", "heading": "Extra voordeel!", "box_background": "rgba(0,0,0,0.5)" }
+        },
+        { "type": "side_tile", "settings": { "pill_text": "TOPDEAL", "heading": "Nivea: 2+2 GRATIS*" } },
+        { "type": "side_tile", "settings": { "pill_text": "TOPDEAL", "heading": "Lucovitaal: 1+1 GRATIS*" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

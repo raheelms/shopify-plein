@@ -1,0 +1,73 @@
+{%- style -%}
+  .collection-promo {
+    margin-bottom: 3rem;
+  }
+  .collection-promo__inner {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    line-height: 0;
+  }
+  .collection-promo__image-only {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign banner_meta = collection.metafields.custom.banner.value
+  assign banner_image = banner_meta.image.value | default: banner_meta.image | default: banner_meta | default: section.settings.image
+-%}
+
+{%- if banner_image != blank -%}
+  <div class="collection-promo page-width">
+    <div class="collection-promo__inner">
+      {{ banner_image | image_url: width: 1400 | image_tag: class: 'collection-promo__image-only' }}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection Promo Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ontdek jouw perfecte match met de skincare keuzehulp"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#d8f1ff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#004b91"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Promo Banner"
+    }
+  ]
+}
+{% endschema %}

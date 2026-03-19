@@ -1,0 +1,56 @@
+{%- if article and article != empty -%}
+  <div class="group flex flex-col h-full bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-500">
+    
+    {%- if show_image == true and article.image -%}
+      <a href="{{ article.url }}" class="block overflow-hidden aspect-[16/9]">
+        {{
+          article.image
+          | image_url: width: 1100
+          | image_tag:
+            widths: '375, 550, 750, 1100',
+            class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105'
+        }}
+      </a>
+    {%- endif -%}
+
+    <div class="flex-1 flex flex-col p-8 md:p-10">
+      {%- if show_date or show_author -%}
+        <div class="flex items-center gap-3 text-xs font-black uppercase tracking-widest text-blue-600 mb-4">
+          {%- if show_date -%}
+            <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+          {%- endif -%}
+          {%- if show_date and show_author -%}
+            <span class="w-1 h-1 rounded-full bg-blue-200"></span>
+          {%- endif -%}
+          {%- if show_author -%}
+            <span>{{ article.author }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <h3 class="text-2xl md:text-3xl font-black text-gray-900 leading-tight mb-4 group-hover:text-blue-600 transition-colors">
+        <a href="{{ article.url }}">
+          {{ article.title | escape }}
+        </a>
+      </h3>
+
+      {%- if show_excerpt -%}
+        {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+          <div class="text-gray-500 font-medium leading-relaxed mb-8 line-clamp-3">
+            {%- if article.excerpt.size > 0 -%}
+              {{ article.excerpt | strip_html }}
+            {%- else -%}
+              {{ article.content | strip_html }}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
+      <a href="{{ article.url }}" class="mt-auto inline-flex items-center text-sm font-black text-gray-900 group/link">
+        {{ 'blogs.article.read_more' | t | default: 'Read More' }}
+        {% render 'icon-library', icon: 'arrow-right-line', class: 'ml-2 w-4 h-4 transition-transform group-hover/link:translate-x-1' %}
+      </a>
+    </div>
+
+  </div>
+{%- endif -%}

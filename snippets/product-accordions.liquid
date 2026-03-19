@@ -1,0 +1,71 @@
+{% comment %}
+  Product Accordions — Plein.nl style
+  Thin grey borders, chevron arrow, clean modular feel
+{% endcomment %}
+
+<div class="space-y-0 border border-gray-200 rounded overflow-hidden">
+  {%- if product.description != blank -%}
+    <details class="group/details border-b border-gray-200 last:border-b-0" open>
+      <summary class="flex justify-between items-center px-4 py-4 cursor-pointer hover:bg-gray-50 transition-colors list-none text-left">
+        <span class="text-[15px] font-bold text-gray-900">Omschrijving</span>
+        <span class="w-6 h-6 flex items-center justify-center text-gray-400 group-open/details:rotate-180 transition-transform">
+          {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+        </span>
+      </summary>
+      <div class="px-4 pb-6 pt-0">
+        <div class="prose prose-sm max-w-none text-gray-600 leading-relaxed text-[14px]">
+          {{ product.description }}
+        </div>
+      </div>
+    </details>
+  {%- endif -%}
+
+  {%- comment -%} Samenstelling (Composition) — from metafields if available {%- endcomment -%}
+  {%- if product.metafields.custom.composition != blank -%}
+    <details class="group/details border-b border-gray-200 last:border-b-0">
+      <summary class="flex justify-between items-center px-4 py-4 cursor-pointer hover:bg-gray-50 transition-colors list-none text-left">
+        <span class="text-[15px] font-bold text-gray-900">Samenstelling</span>
+        <span class="w-6 h-6 flex items-center justify-center text-gray-400 group-open/details:rotate-180 transition-transform">
+          {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+        </span>
+      </summary>
+      <div class="px-4 pb-6 pt-0 text-[14px] text-gray-600">
+        {{ product.metafields.custom.composition }}
+      </div>
+    </details>
+  {%- endif -%}
+
+  {%- comment -%} Gebruik (Usage) {%- endcomment -%}
+  {%- if product.metafields.custom.usage != blank -%}
+    <details class="group/details border-b border-gray-200 last:border-b-0">
+      <summary class="flex justify-between items-center px-4 py-4 cursor-pointer hover:bg-gray-50 transition-colors list-none text-left">
+        <span class="text-[15px] font-bold text-gray-900">Gebruik</span>
+        <span class="w-6 h-6 flex items-center justify-center text-gray-400 group-open/details:rotate-180 transition-transform">
+          {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+        </span>
+      </summary>
+      <div class="px-4 pb-6 pt-0 text-[14px] text-gray-600">
+        {{ product.metafields.custom.usage }}
+      </div>
+    </details>
+  {%- endif -%}
+
+  {%- comment -%} Fabrikant informatie {%- endcomment -%}
+  <details class="group/details">
+    <summary class="flex justify-between items-center px-4 py-4 cursor-pointer hover:bg-gray-50 transition-colors list-none text-left">
+      <span class="text-[15px] font-bold text-gray-900">Fabrikant informatie</span>
+      <span class="w-6 h-6 flex items-center justify-center text-gray-400 group-open/details:rotate-180 transition-transform">
+        {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+      </span>
+    </summary>
+    <div class="px-4 pb-6 pt-0">
+      <div class="flex items-start gap-3 p-4 border border-[#d81159]/30 rounded bg-pink-50/30">
+        <span class="text-[#d81159] shrink-0">{% render 'icon-library', icon: 'error-warning-line', class: 'w-5 h-5' %}</span>
+        <p class="text-[13px] text-gray-600">Let op: {{ product.vendor | default: 'Fabrikant' }} — Controleer altijd de verpakking voor de meest actuele informatie.</p>
+      </div>
+      {%- if product.vendor != blank -%}
+        <p class="text-[14px] text-gray-600 mt-4"><strong>Merk:</strong> {{ product.vendor }}</p>
+      {%- endif -%}
+    </div>
+  </details>
+</div>

@@ -1,0 +1,32 @@
+{% comment %}
+  Renders an offer collection card refined for Plein style
+  Accepts:
+  - collection: {Object} Collection object
+  - custom_title: {String} Optional custom title
+  - custom_image: {Image} Optional custom image
+{% endcomment %}
+
+<a href="{{ collection.url }}" class="offer-card">
+  {%- assign offer_text = collection.metafields.custom.offer_text
+    | default: collection.metafields.custom.offer_text.value
+  -%}
+  {%- if offer_text != blank -%}
+    <span class="offer-card__badge">{{ offer_text }}</span>
+  {%- elsif collection.all_products_count > 0 -%}
+    <span class="offer-card__badge">-%{{ collection.all_products_count | at_least: 15 }}</span>
+  {%- endif -%}
+  <div class="offer-card__image-wrapper">
+    {%- if custom_image != blank -%}
+      {{ custom_image | image_url: width: 400 | image_tag: class: 'offer-card__image', loading: 'lazy' }}
+    {%- elsif collection.featured_image != blank -%}
+      {{ collection.featured_image | image_url: width: 400 | image_tag: class: 'offer-card__image', loading: 'lazy' }}
+    {%- else -%}
+      {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg offer-card__image' }}
+    {%- endif -%}
+  </div>
+  <div class="offer-card__content">
+    <h3 class="offer-card__title">
+      {{ custom_title | default: collection.title }}
+    </h3>
+  </div>
+</a>

@@ -1,0 +1,147 @@
+<div class="bg-white py-20 lg:py-32">
+  <div class="max-w-[1440px] mx-auto px-8 lg:px-12">
+    
+    {%- comment -%} [[ HEADER ]] {%- endcomment -%}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 lg:mb-24">
+      <div class="space-y-4">
+        <h1 class="text-4xl lg:text-5xl font-black text-gray-900 tracking-tight uppercase leading-tight">{{ 'customer.account.title' | t }}</h1>
+        <p class="text-gray-400 font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-2">
+            Welcome back, {{ customer.first_name }}
+            <span class="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
+        </p>
+      </div>
+      <a href="{{ routes.account_logout_url }}" class="inline-flex items-center gap-3 px-6 py-3 bg-gray-50 border border-gray-100 text-gray-900 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-100 transition-all shadow-sm group">
+        {% render 'icon-library', icon: 'logout-box-line', class: 'w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors' %}
+        {{ 'customer.log_out' | t }}
+      </a>
+    </div>
+
+    <div class="flex flex-col lg:grid lg:grid-cols-12 gap-12 lg:gap-20">
+      
+      {%- comment -%} [[ LEFT: ORDER HISTORY ]] {%- endcomment -%}
+      <div class="lg:col-span-8 space-y-10">
+        <div class="flex items-center justify-between">
+            <h2 class="text-xs font-black text-gray-400 uppercase tracking-[0.3em]">{{ 'customer.orders.title' | t }}</h2>
+            <div class="h-px bg-gray-100 flex-1 ml-6"></div>
+        </div>
+
+        {% paginate customer.orders by 20 %}
+          {%- if customer.orders.size > 0 -%}
+            <div class="space-y-4">
+              {%- for order in customer.orders -%}
+                <div class="group relative bg-gray-50/50 border border-gray-100/50 rounded-[2rem] p-6 lg:p-8 hover:bg-white hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500">
+                  <div class="flex flex-wrap items-center justify-between gap-6">
+                    <div class="space-y-2">
+                        <a href="{{ order.customer_url }}" class="text-lg font-black text-gray-900 tracking-tight hover:text-blue-600 transition-colors block">
+                            {{ order.name }}
+                        </a>
+                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ order.created_at | time_tag: format: 'date' }}</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4 lg:gap-8">
+                        <div class="space-y-1">
+                            <span class="block text-[8px] font-black text-gray-300 uppercase tracking-widest">{{ 'customer.orders.payment_status' | t }}</span>
+                            <span class="inline-flex px-3 py-1 bg-white border border-gray-100 rounded-full text-[10px] font-black text-gray-700 uppercase tracking-tight">{{ order.financial_status_label }}</span>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="block text-[8px] font-black text-gray-300 uppercase tracking-widest">{{ 'customer.orders.fulfillment_status' | t }}</span>
+                            <span class="inline-flex px-3 py-1 bg-blue-600/10 border border-blue-100 rounded-full text-[10px] font-black text-blue-700 uppercase tracking-tight">{{ order.fulfillment_status_label }}</span>
+                        </div>
+                        <div class="space-y-1 text-right">
+                            <span class="block text-[8px] font-black text-gray-300 uppercase tracking-widest">{{ 'customer.orders.total' | t }}</span>
+                            <span class="text-xl font-black text-gray-900 tracking-tight">{{ order.total_net_amount | money_with_currency }}</span>
+                        </div>
+                    </div>
+
+                    <a href="{{ order.customer_url }}" class="h-12 w-12 flex items-center justify-center bg-white border border-gray-100 rounded-2xl text-gray-400 hover:text-blue-600 hover:border-blue-200 hover:shadow-lg transition-all">
+                        {% render 'icon-library', icon: 'arrow-right-line', class: 'w-5 h-5' %}
+                    </a>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <div class="bg-gray-50 rounded-[3rem] p-20 text-center border border-dashed border-gray-200">
+                {% render 'icon-library', icon: 'shopping-bag-line', class: 'w-12 h-12 text-gray-200 mx-auto mb-6' %}
+                <p class="text-sm font-black text-gray-400 uppercase tracking-[0.2em]">{{ 'customer.orders.none' | t }}</p>
+            </div>
+          {%- endif -%}
+
+          {%- if paginate.pages > 1 -%}
+            <div class="pt-12">
+                {% render 'pagination', paginate: paginate %}
+            </div>
+          {%- endif -%}
+        {% endpaginate %}
+      </div>
+
+      {%- comment -%} [[ RIGHT: ACCOUNT DETAILS ]] {%- endcomment -%}
+      <div class="lg:col-span-4 lg:sticky lg:top-8 h-fit">
+        <div class="bg-gray-900 rounded-[3rem] p-10 lg:p-12 text-white shadow-2xl shadow-gray-200 space-y-12">
+            <div class="space-y-6">
+                <h2 class="text-xs font-black text-gray-500 uppercase tracking-[0.3em]">{{ 'customer.account.details' | t }}</h2>
+                
+                <div class="bg-white/5 border border-white/10 rounded-[2rem] p-8 space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="h-12 w-12 bg-blue-600 rounded-2xl flex items-center justify-center font-black text-lg">
+                            {{ customer.first_name | slice: 0 }}
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-sm font-black tracking-tight leading-none">{{ customer.name }}</p>
+                            <p class="text-[10px] font-bold text-gray-400">{{ customer.email }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 pt-4 border-t border-white/10">
+                        <div class="flex items-start gap-3">
+                            {% render 'icon-library', icon: 'map-pin-line', class: 'w-4 h-4 text-gray-500 shrink-0 mt-1' %}
+                            <div class="text-[11px] font-medium text-gray-400 leading-relaxed uppercase tracking-widest">
+                                {{ customer.default_address | format_address }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ routes.account_addresses_url }}" class="flex items-center justify-center gap-3 w-full py-5 bg-white text-gray-900 rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:bg-gray-100 transition-all shadow-xl active:scale-95 group">
+              {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
+              {% render 'icon-library', icon: 'arrow-right-line', class: 'w-4 h-4 text-gray-400 group-hover:translate-x-1 transition-transform' %}
+            </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-account.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,97 @@
+/* Kruidvat Cart Drawer Styles */
+
+.cart-drawer .drawer__inner {
+    background-color: #ffffff;
+}
+
+.cart-drawer .drawer__heading {
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #121212;
+    letter-spacing: 0.05em;
+}
+
+/* Product Items */
+.cart-item__name {
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    color: #121212;
+    text-decoration: none;
+}
+
+.cart-item__price-wrapper .price {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #E30613;
+    /* Kruidvat Red for prices */
+}
+
+.cart-item__price-wrapper .price--end {
+    font-size: 1.6rem;
+}
+
+/* Quantity Input */
+.quantity {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.quantity__button {
+    color: #121212;
+}
+
+.quantity__input {
+    font-weight: 600;
+}
+
+/* Footer / Checkout */
+.cart-drawer__footer {
+    background-color: #f9f9f9;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+}
+
+.totals__total {
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+}
+
+.totals__total-value {
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: #E30613;
+}
+
+.cart__checkout-button {
+    background-color: #E30613 !important;
+    /* Primary Red Action */
+    color: #ffffff !important;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    font-size: 1.6rem;
+    transition: opacity 0.2s ease;
+    box-shadow: none;
+}
+
+.cart__checkout-button:hover {
+    opacity: 0.9;
+    box-shadow: 0 4px 8px rgba(227, 6, 19, 0.2);
+}
+
+.cart__checkout-button::after {
+    box-shadow: none !important;
+}
+
+/* Empty State */
+.cart__empty-text {
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.drawer__close svg {
+    color: #121212;
+}

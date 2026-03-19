@@ -1,0 +1,160 @@
+/* Clean & Care - Kruidvat Style Collection Page Overrides */
+
+/* Vertical Filters Sidebar */
+.facets-vertical .facets-wrapper {
+    padding-right: 2rem;
+}
+
+.facets__disclosure-vertical>summary {
+    font-weight: 600;
+    text-transform: capitalize;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    padding: 1.2rem 0;
+    border-bottom: 0px solid rgba(var(--color-foreground), 0.1);
+    color: rgb(var(--color-foreground));
+    margin-bottom: 12px;
+}
+
+.facets__disclosure-vertical[open]>summary {
+    color: #E30613;
+    display: block;
+}
+
+.facets__disclosure-vertical .facets__display-vertical {
+    padding: 0rem 0 0.8rem;
+}
+
+.facet-checkbox {
+    padding: 0
+}
+
+.facet-checkbox__text-label {
+    font-size: 1.4rem;
+}
+
+/* Product Count */
+.product-count-vertical {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    margin-bottom: 1rem;
+}
+
+.product-count__text {
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+/* Product Grid */
+.product-grid {
+    gap: 1.6rem;
+}
+
+/* Product Card Enhancements */
+.card-wrapper {
+    position: relative;
+}
+
+.card__inner {
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow var(--duration-short) ease;
+}
+
+.card-wrapper:hover .card__inner {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Vendor/Brand Name */
+.card__information .card__heading {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.card-information .caption-with-letter-spacing {
+    font-weight: 700;
+    color: rgb(var(--color-foreground));
+    text-transform: uppercase;
+    font-size: 1.1rem;
+}
+
+/* Price Display - Kruidvat Style */
+.price-item--regular,
+.price-item--sale {
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+
+.price--on-sale .price-item--regular {
+    text-decoration: line-through;
+    color: rgba(var(--color-foreground), 0.5);
+    font-size: 1.3rem;
+}
+
+.price--on-sale .price-item--sale {
+    color: #E30613;
+}
+
+/* Quick Add Button */
+.quick-add__submit {
+    background-color: #E30613 !important;
+    color: #ffffff !important;
+    border-radius: 4px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+    transition: opacity var(--duration-short) ease;
+}
+
+.quick-add__submit:hover {
+    opacity: 0.9;
+}
+
+/* Rating Stars */
+.rating {
+    margin-top: 0.5rem;
+}
+
+.rating-star {
+    color: #E30613;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+}
+
+.pagination__item--current {
+    background-color: #E30613;
+    color: #ffffff;
+    border-radius: 4px;
+}
+
+/* Sort Dropdown */
+.facet-filters__sort {
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+/* Active Filter Tags */
+.active-facets__button-inner {
+    background-color: rgba(227, 6, 19, 0.1);
+    border-color: #E30613;
+    color: #E30613;
+}
+
+/* Collection Banner/Title */
+.collection-hero__title {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Subcategory Visual Hints */
+.collection-hero__description {
+    font-size: 1.5rem;
+    max-width: 60rem;
+}

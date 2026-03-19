@@ -1,0 +1,150 @@
+<header-drawer data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}">
+  <details id="{{ id_prefix }}Details-menu-drawer-container" class="group">
+    <summary
+      class="flex items-center justify-center w-10 h-10 rounded-xl hover:bg-gray-50 text-gray-900 cursor-pointer list-none transition-colors"
+      aria-label="{{ 'sections.header.menu' | t }}"
+    >
+      <span class="text-2xl">
+        {% render 'icon-library', icon: 'menu-line' %}
+      </span>
+    </summary>
+    <div
+      id="{{ id_prefix }}menu-drawer"
+      class="fixed inset-0 z-[100] flex flex-col bg-white overflow-y-auto translate-x-full group-open:translate-x-0 transition-transform duration-500 ease-in-out"
+    >
+      <div class="flex flex-col h-full bg-white">
+        <div class="flex items-center justify-between p-6 border-b border-gray-100">
+           <span class="text-[15px] font-black text-gray-900 uppercase tracking-widest">{{ shop.name }}</span>
+           <button type="button" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-gray-50 text-gray-900 border border-gray-100 shadow-sm transition-all active:scale-95 hover:bg-white hover:text-[#004c97] hover:border-[#004c97]" onclick="this.closest('details').removeAttribute('open')">
+              {% render 'icon-library', icon: 'close-line', class: 'w-6 h-6' %}
+           </button>
+        </div>
+
+        <nav class="flex-1 px-4 py-8 overflow-y-auto">
+          <ul class="space-y-2 list-none p-0 m-0" role="list">
+            {%- for link in section.settings.menu.links -%}
+              <li>
+                {%- if link.links != blank -%}
+                  <details id="{{ id_prefix }}Details-menu-drawer-menu-item-{{ forloop.index }}" class="group/sub">
+                    <summary
+                      id="{{ id_prefix }}HeaderDrawer-{{ link.handle }}"
+                      class="flex items-center justify-between px-6 py-5 text-[15px] font-black text-gray-900 uppercase tracking-widest hover:bg-blue-50 hover:text-[#004c97] rounded-3xl cursor-pointer list-none transition-all {% if link.child_active %}bg-blue-50 text-[#004c97]{% endif %}"
+                    >
+                      {{ link.title | escape }}
+                      {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5 transition-transform group-open/sub:rotate-180 opacity-60' %}
+                    </summary>
+                    <div
+                      id="link-{{ link.handle | escape }}"
+                      class="mt-4 ml-6 pl-6 border-l-2 border-blue-50 space-y-2"
+                    >
+                       {%- for childlink in link.links -%}
+                         <li>
+                           {%- if childlink.links == blank -%}
+                             <a
+                               id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+                               href="{{ childlink.url }}"
+                               class="block p-4 text-[13px] font-black text-[#004c97] uppercase tracking-widest hover:bg-gray-50 rounded-2xl transition-colors {% if childlink.current %}bg-white shadow-sm border border-gray-100{% endif %}"
+                               {% if childlink.current %}aria-current="page"{% endif %}
+                             >
+                               {{ childlink.title | escape }}
+                             </a>
+                           {%- else -%}
+                             <details id="Details-menu-drawer-{{ link.handle }}-{{ childlink.handle }}" class="group/grand">
+                               <summary
+                                 id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+                                 class="flex items-center justify-between p-4 text-[13px] font-black text-gray-900 uppercase tracking-widest hover:bg-gray-50 rounded-2xl cursor-pointer list-none transition-all"
+                               >
+                                 {{ childlink.title | escape }}
+                                 {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-4 h-4 transition-transform group-open/grand:rotate-180 opacity-60' %}
+                               </summary>
+                               <ul class="mt-2 ml-6 space-y-2 list-none p-0 m-0 border-l border-gray-100 pl-6" role="list">
+                                 {%- for grandchildlink in childlink.links -%}
+                                   <li>
+                                     <a
+                                       id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                       href="{{ grandchildlink.url }}"
+                                       class="block p-3 text-[13px] font-bold text-gray-500 hover:text-[#004c97] transition-colors {% if grandchildlink.current %}text-[#004c97]{% endif %}"
+                                       {% if grandchildlink.current %}aria-current="page"{% endif %}
+                                     >
+                                       {{ grandchildlink.title | escape }}
+                                     </a>
+                                   </li>
+                                 {%- endfor -%}
+                               </ul>
+                             </details>
+                           {%- endif -%}
+                         </li>
+                       {%- endfor -%}
+                    </div>
+                  </details>
+                {%- else -%}
+                  <a
+                    id="{{ id_prefix }}HeaderDrawer-{{ link.handle }}"
+                    href="{{ link.url }}"
+                    class="block px-6 py-5 text-[15px] font-black text-gray-900 uppercase tracking-widest hover:bg-blue-50 hover:text-[#004c97] rounded-3xl transition-all {% if link.current %}text-[#004c97] bg-blue-50{% endif %}"
+                    {% if link.current %}aria-current="page"{% endif %}
+                  >
+                    {{ link.title | escape }}
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+
+        <div class="p-6 border-t border-gray-100 bg-gray-50 space-y-6">
+          {%- if shop.customer_accounts_enabled -%}
+            <a
+              href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+              class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm"
+              rel="nofollow"
+            >
+              <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+                {%- if customer and customer.has_avatar? -%}
+                  {{ customer | avatar: class: 'w-full h-full rounded-full' }}
+                {%- else -%}
+                  {% render 'icon-library', icon: 'user-line', class: 'w-6 h-6' %}
+                {%- endif -%}
+              </div>
+              <div class="flex flex-col">
+                 <span class="text-sm font-black text-gray-900">
+                   {%- if customer -%}
+                     {{ customer.first_name | default: 'Mijn Account' }}
+                   {%- else -%}
+                     {{ 'customer.log_in' | t }}
+                   {%- endif -%}
+                 </span>
+                 <span class="text-xs text-gray-500 font-medium">{{ 'customer.account_fallback' | t }}</span>
+              </div>
+              {% render 'icon-library', icon: 'arrow-right-s-line', class: 'ml-auto w-5 h-5 text-gray-300' %}
+            </a>
+          {%- endif -%}
+
+          {%- if localization.available_countries or localization.available_languages -%}
+            <div class="flex gap-4">
+              {%- if localization.available_countries and localization.available_countries.size > 1 -%}
+                <localization-form class="flex-1">
+                  {%- form 'localization', id: 'HeaderCountryMobileForm' -%}
+                    {%- render 'country-localization', localPosition: 'HeaderCountryMobile' -%}
+                  {%- endform -%}
+                </localization-form>
+              {% endif %}
+
+              {%- if localization.available_languages and localization.available_languages.size > 1 -%}
+                <localization-form class="flex-1">
+                  {%- form 'localization', id: 'HeaderLanguageMobileForm' -%}
+                    {%- render 'language-localization', localPosition: 'HeaderLanguageMobile' -%}
+                  {%- endform -%}
+                </localization-form>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          <div class="flex justify-center pt-2">
+            {%- render 'social-icons' -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+</header-drawer>

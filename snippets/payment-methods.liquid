@@ -1,0 +1,70 @@
+<div class="payment-methods">
+  <div class="payment-methods__icons">
+    {%- for type in shop.enabled_payment_types -%}
+      {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+    {%- endfor -%}
+    
+    {%- comment -%} iDEAL | wero official-style SVG {%- endcomment -%}
+    {%- unless shop.enabled_payment_types contains 'ideal' -%}
+      <svg role="img" viewBox="0 0 160 80" xmlns="http://www.w3.org/2000/svg" class="icon icon--full-color">
+        <rect width="160" height="80" rx="4" fill="white"/>
+        <path d="M15 15h130v50H15z" fill="#fff"/>
+        <path d="M35 25c-5 0-10 5-10 15s5 15 10 15 10-5 10-15-5-15-10-15zm0 5c3 0 5 3 5 10s-2 10-5 10-5-3-5-10 2-10 5-10z" fill="#CC0066"/>
+        <text x="55" y="47" font-family="Arial, sans-serif" font-weight="900" font-size="22" fill="#000">iDEAL</text>
+        <line x1="110" y1="20" x2="110" y2="60" stroke="#eee" stroke-width="1"/>
+        <text x="115" y="47" font-family="Arial, sans-serif" font-weight="900" font-size="16" fill="#000">wero</text>
+      </svg>
+    {%- endunless -%}
+
+    {%- unless shop.enabled_payment_types contains 'bancontact' -%}
+      <svg role="img" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="icon icon--full-color">
+        <rect width="120" height="80" rx="4" fill="white"/>
+        <path d="M15 15h90v50H15z" fill="#fff"/>
+        <path d="M30 30h60v20H30z" fill="#003399"/>
+        <path d="M40 35h40v10H40z" fill="#FBA900"/>
+      </svg>
+    {%- endunless -%}
+
+    {%- unless shop.enabled_payment_types contains 'klarna' -%}
+      <svg role="img" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" class="icon icon--full-color">
+        <rect width="120" height="80" rx="4" fill="#FFA8CD"/>
+        <text x="15" y="47" font-family="Arial, sans-serif" font-weight="900" font-size="20" fill="#0B051D">Klarna.</text>
+      </svg>
+    {%- endunless -%}
+  </div>
+</div>
+
+<style>
+  .payment-methods {
+    margin: 1rem 0;
+  }
+  .payment-methods__icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+  .payment-methods__icons svg,
+  .payment-methods__icons .icon {
+    height: 3.5rem !important;
+    width: auto !important;
+    display: block !important;
+  }
+</style>
+
+<style>
+  .payment-methods {
+    margin: 1.5rem 0;
+  }
+  .payment-methods__icons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
+  }
+  .payment-methods__icons svg,
+  .payment-methods__icons .icon {
+    height: 2.4rem;
+    width: auto;
+  }
+</style>

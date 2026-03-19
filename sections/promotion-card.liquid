@@ -1,0 +1,288 @@
+{%- style -%}
+  .promotion-grid-section-{{ section.id }} {
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+    padding: 3rem 5rem;
+  }
+
+  .promotion-grid__title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    text-transform: none;
+    margin-bottom: 2rem;
+    color: #004b91;
+  }
+
+  .promotion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    .promotion-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 550px) {
+    .promotion-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .promotion-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    height: 100%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .promotion-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .promotion-card__image-wrapper {
+    width: 100%;
+    aspect-ratio: 16/9; /* Or whatever aspect ratio makes sense, maybe 4/3 */
+    overflow: hidden;
+  }
+
+  .promotion-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .promotion-card:hover .promotion-card__image {
+    transform: scale(1.05);
+  }
+
+  .promotion-card__content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+
+  .promotion-card__text {
+    margin-bottom: 1.5rem;
+  }
+
+  .promotion-card__title {
+    margin: 0 0 0.8rem 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .promotion-card__desc {
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    opacity: 0.9;
+  }
+
+  .promotion-card__btn {
+    align-self: flex-start;
+    padding: 1rem 2rem;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-align: center;
+    border: none;
+    background: #004b91;
+    color: #fff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .promotion-card__btn:hover {
+    background: currentColor;
+    /* We need to invert text color on hover, but we don't know the background color easily without JS or complex CSS var.
+       Simple solution: Opacity change or simple invert filter if possible.
+       Let's stick to opacity for now. */
+    opacity: 0.8;
+  }
+{%- endstyle -%}
+
+<div class="promotion-grid-section-{{ section.id }} page-width">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="promotion-grid__title">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  <div class="promotion-grid">
+    {%- for block in section.blocks -%}
+      <div
+        class="promotion-card"
+        style="background-color: {{ block.settings.card_bg }}; color: {{ block.settings.text_color }};"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.image != blank -%}
+          <div class="promotion-card__image-wrapper">
+            {{
+              block.settings.image
+              | image_url: width: 600
+              | image_tag: loading: 'lazy', class: 'promotion-card__image'
+            }}
+          </div>
+        {%- endif -%}
+
+        <div class="promotion-card__content">
+          <div class="promotion-card__text">
+            {%- if block.settings.title != blank -%}
+              <h3 class="promotion-card__title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+
+            {%- if block.settings.description != blank -%}
+              <p class="promotion-card__desc">{{ block.settings.description }}</p>
+            {%- endif -%}
+          </div>
+
+          {%- if block.settings.link != blank and block.settings.button_text != blank -%}
+            <a
+              href="{{ block.settings.link }}"
+              class="promotion-card__btn"
+            >
+              {{ block.settings.button_text }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Promotion Grid",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Promotions"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promotion_card",
+      "name": "Promotion Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Promotion Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Short description of the offer."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "View Offer"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "card_bg",
+          "label": "Card Background",
+          "default": "#f4f4f4"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#000000"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promotion Grid",
+      "blocks": [
+        {
+          "type": "promotion_card",
+          "settings": {
+            "title": "Summer Sale",
+            "description": "Up to 50% off on summer items.",
+            "card_bg": "#ffe5e5",
+            "text_color": "#ff0000"
+          }
+        },
+        {
+          "type": "promotion_card",
+          "settings": {
+            "title": "New Arrivals",
+            "description": "Check out the latest trends.",
+            "card_bg": "#e5f9ff",
+            "text_color": "#0066cc"
+          }
+        },
+        {
+          "type": "promotion_card",
+          "settings": {
+            "title": "Best Sellers",
+            "description": "Our most popular products.",
+            "card_bg": "#f0ffe5",
+            "text_color": "#006600"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

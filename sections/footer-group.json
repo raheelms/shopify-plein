@@ -1,0 +1,227 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer_top_R7P6ch": {
+      "type": "footer-top",
+      "blocks": {
+        "brand_information_TUB78F": {
+          "type": "brand_information",
+          "settings": {
+            "logo_width": 150,
+            "title": "About Our Brand",
+            "text": "",
+            "title_color": "#000000",
+            "title_size": 1.6,
+            "title_size_mobile": 1.4,
+            "title_weight": "700",
+            "text_color": "#555555",
+            "text_size": 1.4,
+            "text_size_mobile": 1.3,
+            "show_social": false,
+            "alignment": "left",
+            "padding_top": 0,
+            "padding_bottom": 0,
+            "padding_top_mobile": 0,
+            "padding_bottom_mobile": 0,
+            "margin_top": 0,
+            "margin_bottom": 0,
+            "margin_top_mobile": 0,
+            "margin_bottom_mobile": 0
+          }
+        },
+        "reviews_CbXLdh": {
+          "type": "reviews",
+          "settings": {
+            "heading": "Klantbeoordelingen",
+            "text": "<p>\"Geweldige service en snelle levering! Zeker een aanrader.\"</p>",
+            "alignment": "left"
+          }
+        },
+        "newsletter_P7mdG9": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Newsletter",
+            "subheading": "<p>Sign up for latest updates.</p>",
+            "button_label": "Ok",
+            "alignment": "left"
+          }
+        },
+        "menu_hfCJgT": {
+          "type": "menu",
+          "settings": {
+            "heading": "Quick Menu",
+            "menu": "footer",
+            "alignment": "left"
+          }
+        },
+        "menu_ed7yd6": {
+          "type": "menu",
+          "settings": {
+            "heading": "Quick Menu",
+            "menu": "footer-menu-2",
+            "alignment": "left"
+          }
+        },
+        "menu_XNRz7i": {
+          "type": "menu",
+          "settings": {
+            "heading": "Quick Menu",
+            "menu": "footer-menu-3",
+            "alignment": "left"
+          }
+        }
+      },
+      "block_order": [
+        "brand_information_TUB78F",
+        "reviews_CbXLdh",
+        "newsletter_P7mdG9",
+        "menu_hfCJgT",
+        "menu_ed7yd6",
+        "menu_XNRz7i"
+      ],
+      "name": "Footer Top",
+      "settings": {
+        "bg_color": "#f5f5f5",
+        "text_color": "#333333",
+        "columns_desktop": 3,
+        "gap_desktop": 40,
+        "gap_mobile": 20,
+        "show_divider": false,
+        "divider_color": "#eeeeee",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "footer_logos_xhQpCC": {
+      "type": "footer-logos",
+      "blocks": {
+        "logo_Cy6hiH": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/nivea.logo.png",
+            "link": "",
+            "width": 120,
+            "padding": 10,
+            "width_mobile": 80,
+            "padding_mobile": 5,
+            "grayscale": false,
+            "initial_opacity": 100,
+            "hover_scale": 1.1
+          }
+        },
+        "logo_dWJmEF": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/4725_unicura_logo_165x120px.png",
+            "link": "",
+            "width": 120,
+            "padding": 10,
+            "width_mobile": 80,
+            "padding_mobile": 5,
+            "grayscale": false,
+            "initial_opacity": 100,
+            "hover_scale": 1.1
+          }
+        },
+        "logo_zKnDBq": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/vogue.jpg",
+            "link": "",
+            "width": 120,
+            "padding": 10,
+            "width_mobile": 80,
+            "padding_mobile": 5,
+            "grayscale": false,
+            "initial_opacity": 100,
+            "hover_scale": 1.1
+          }
+        },
+        "logo_gnqxYf": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/1725_lucovitaal_logo_165x120px.png",
+            "link": "",
+            "width": 120,
+            "padding": 10,
+            "width_mobile": 80,
+            "padding_mobile": 5,
+            "grayscale": false,
+            "initial_opacity": 100,
+            "hover_scale": 1.1
+          }
+        },
+        "logo_XfeUVw": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/persil.jpg",
+            "link": "",
+            "width": 120,
+            "padding": 10,
+            "width_mobile": 80,
+            "padding_mobile": 5,
+            "grayscale": false,
+            "initial_opacity": 100,
+            "hover_scale": 1.1
+          }
+        }
+      },
+      "block_order": [
+        "logo_Cy6hiH",
+        "logo_dWJmEF",
+        "logo_zKnDBq",
+        "logo_gnqxYf",
+        "logo_XfeUVw"
+      ],
+      "name": "Footer Logos",
+      "settings": {
+        "bg_color": "rgba(0,0,0,0)",
+        "alignment": "center",
+        "gap": 20,
+        "gap_mobile": 10,
+        "border_color": "#eeeeee",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 24,
+        "margin_top_mobile": 0,
+        "margin_bottom_mobile": 0
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "enable_follow_on_shop": true,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "show_policy": false,
+        "margin_top": 0,
+        "padding_top": 0,
+        "padding_bottom": 36,
+        "footer_bottom_menu": "copyright"
+      }
+    }
+  },
+  "order": [
+    "footer_top_R7P6ch",
+    "footer_logos_xhQpCC",
+    "footer"
+  ]
+}

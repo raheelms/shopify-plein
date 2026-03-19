@@ -1,0 +1,302 @@
+<div class="bg-white py-20 lg:py-32" data-customer-addresses>
+  <div class="max-w-[1440px] mx-auto px-8 lg:px-12">
+    
+    {%- comment -%} [[ HEADER ]] {%- endcomment -%}
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 lg:mb-24">
+      <div class="space-y-4">
+        <h1 class="text-4xl lg:text-5xl font-black text-gray-900 tracking-tight uppercase leading-tight">{{ 'customer.addresses.title' | t }}</h1>
+        <div class="flex items-center gap-6">
+            <a href="{{ routes.account_url }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest hover:text-blue-600 transition-colors flex items-center gap-2">
+                {% render 'icon-library', icon: 'arrow-left-line', class: 'w-3.5 h-3.5' %}
+                {{ 'customer.account.return' | t }}
+            </a>
+            <span class="w-1 h-1 bg-gray-200 rounded-full"></span>
+            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ customer.addresses_count }} Saved Locations</p>
+        </div>
+      </div>
+
+      <div data-address>
+        <button
+          type="button"
+          aria-expanded="false"
+          aria-controls="AddAddress"
+          class="inline-flex items-center gap-3 px-8 py-4 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:bg-black transition-all shadow-xl active:scale-95 group"
+        >
+          {% render 'icon-library', icon: 'add-line', class: 'w-4 h-4' %}
+          {{ 'customer.addresses.add_new' | t }}
+        </button>
+
+        {%- comment -%} [[ ADD ADDRESS FORM ]] {%- endcomment -%}
+        <div id="AddAddress" class="fixed inset-0 z-[100] bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-6 opacity-0 pointer-events-none aria-expanded:opacity-100 aria-expanded:pointer-events-auto transition-all duration-500">
+            <div class="bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl p-10 lg:p-16 max-h-[90vh] overflow-y-auto transform translate-y-8 aria-expanded:translate-y-0 transition-transform duration-500">
+                <div class="flex items-center justify-between mb-12">
+                    <h2 id="AddressNewHeading" class="text-2xl font-black text-gray-900 uppercase tracking-tight">{{ 'customer.addresses.add_new' | t }}</h2>
+                    <button type="reset" class="p-2 hover:bg-gray-50 rounded-xl transition-colors">{% render 'icon-library', icon: 'close-line', class: 'w-6 h-6 text-gray-400' %}</button>
+                </div>
+
+                {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading', class: 'space-y-8' -%}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label for="AddressFirstNameNew" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.first_name' | t }}</label>
+                            <input type="text" id="AddressFirstNameNew" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="AddressLastNameNew" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.last_name' | t }}</label>
+                            <input type="text" id="AddressLastNameNew" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="AddressCompanyNew" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.company' | t }}</label>
+                        <input type="text" id="AddressCompanyNew" name="address[company]" value="{{ form.company }}" autocomplete="organization" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label for="AddressAddress1New" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.address1' | t }}</label>
+                            <input type="text" id="AddressAddress1New" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="AddressAddress2New" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.address2' | t }}</label>
+                            <input type="text" id="AddressAddress2New" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label for="AddressCityNew" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.city' | t }}</label>
+                            <input type="text" id="AddressCityNew" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label for="AddressZipNew" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.zip' | t }}</label>
+                            <input type="text" id="AddressZipNew" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label for="AddressCountryNew" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.country' | t }}</label>
+                            <div class="relative group">
+                                <select id="AddressCountryNew" name="address[country]" data-default="{{ form.country }}" autocomplete="country" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all appearance-none cursor-pointer hover:bg-white">
+                                    {{ all_country_option_tags }}
+                                </select>
+                                <span class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-blue-500 transition-colors">
+                                    {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+                                </span>
+                            </div>
+                        </div>
+                        <div id="AddressProvinceContainerNew" style="display: none" class="space-y-2">
+                            <label for="AddressProvinceNew" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.province' | t }}</label>
+                            <div class="relative group">
+                                <select id="AddressProvinceNew" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all appearance-none cursor-pointer hover:bg-white">
+                                </select>
+                                <span class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-blue-500 transition-colors">
+                                    {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="AddressPhoneNew" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.phone' | t }}</label>
+                        <input type="tel" id="AddressPhoneNew" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                    </div>
+
+                    <label class="flex items-center gap-4 cursor-pointer group w-fit">
+                        {{ form.set_as_default_checkbox }}
+                        <span class="text-xs font-black text-gray-700 uppercase tracking-tight group-hover:text-blue-600 transition-colors">{{ 'customer.addresses.set_default' | t }}</span>
+                    </label>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                        <button class="flex-1 py-5 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:bg-black transition-all shadow-xl active:scale-95">{{ 'customer.addresses.add' | t }}</button>
+                        <button type="reset" class="flex-1 py-5 bg-white border border-gray-100 text-gray-900 rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:bg-gray-50 transition-all active:scale-95">{{ 'customer.addresses.cancel' | t }}</button>
+                    </div>
+                {%- endform -%}
+            </div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} [[ ADDRESS GRID ]] {%- endcomment -%}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {%- for address in customer.addresses -%}
+        <div data-address class="group relative bg-gray-50/50 border border-gray-100/50 rounded-[2.5rem] p-10 hover:bg-white hover:border-blue-100 hover:shadow-2xl hover:shadow-blue-500/5 transition-all duration-500 flex flex-col h-full">
+            
+            <div class="flex-1 space-y-8">
+                <div class="flex items-center justify-between">
+                    {%- if address == customer.default_address -%}
+                        <span class="inline-flex px-4 py-1.5 bg-blue-600 text-white rounded-full text-[9px] font-black uppercase tracking-widest">{{ 'customer.addresses.default' | t }}</span>
+                    {%- else -%}
+                        <span class="inline-flex px-4 py-1.5 bg-gray-200 text-gray-500 rounded-full text-[9px] font-black uppercase tracking-widest">Additional</span>
+                    {%- endif -%}
+                    <div class="h-10 w-10 bg-white border border-gray-100 rounded-xl flex items-center justify-center">
+                        {% render 'icon-library', icon: 'map-pin-line', class: 'w-5 h-5 text-gray-300 group-hover:text-blue-500 transition-colors' %}
+                    </div>
+                </div>
+
+                <div class="text-gray-900 text-sm font-medium leading-[1.8] tracking-widest uppercase">
+                    {{ address | format_address }}
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 mt-12 pt-8 border-t border-gray-100/50">
+                <button
+                    type="button"
+                    id="EditFormButton_{{ address.id }}"
+                    aria-label="{{ 'customer.addresses.edit_address' | t }} {{ forloop.index }}"
+                    aria-controls="EditAddress_{{ address.id }}"
+                    aria-expanded="false"
+                    data-address-id="{{ address.id }}"
+                    class="flex-1 py-4 bg-white border border-gray-100 text-gray-900 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-gray-50 transition-all group/edit flex items-center justify-center gap-2"
+                >
+                    {% render 'icon-library', icon: 'edit-line', class: 'w-3.5 h-3.5 text-gray-400 group-hover/edit:text-blue-500' %}
+                    {{ 'customer.addresses.edit' | t }}
+                </button>
+                <button
+                    type="button"
+                    aria-label="{{ 'customer.addresses.delete' | t }} {{ forloop.index }}"
+                    data-target="{{ address.url }}"
+                    data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"
+                    class="h-12 w-12 flex items-center justify-center bg-gray-50 border border-gray-100 rounded-xl text-gray-400 hover:bg-red-50 hover:border-red-100 hover:text-red-500 transition-all"
+                >
+                    {% render 'icon-library', icon: 'delete-bin-line', class: 'w-5 h-5' %}
+                </button>
+            </div>
+
+            {%- comment -%} [[ EDIT ADDRESS FORM ]] {%- endcomment -%}
+            <div id="EditAddress_{{ address.id }}" class="fixed inset-0 z-[100] bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-6 opacity-0 pointer-events-none aria-expanded:opacity-100 aria-expanded:pointer-events-auto transition-all duration-500">
+                <div class="bg-white w-full max-w-2xl rounded-[3rem] shadow-2xl p-10 lg:p-16 max-h-[90vh] overflow-y-auto transform translate-y-8 aria-expanded:translate-y-0 transition-transform duration-500 text-left">
+                    <div class="flex items-center justify-between mb-12">
+                        <h2 class="text-2xl font-black text-gray-900 uppercase tracking-tight">{{ 'customer.addresses.edit_address' | t }}</h2>
+                        <button type="reset" class="p-2 hover:bg-gray-50 rounded-xl transition-colors">{% render 'icon-library', icon: 'close-line', class: 'w-6 h-6 text-gray-400' %}</button>
+                    </div>
+
+                    {%- form 'customer_address', address, class: 'space-y-8' -%}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="AddressFirstName_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.first_name' | t }}</label>
+                                <input type="text" id="AddressFirstName_{{ form.id }}" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="AddressLastName_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.last_name' | t }}</label>
+                                <input type="text" id="AddressLastName_{{ form.id }}" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="AddressCompany_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.company' | t }}</label>
+                            <input type="text" id="AddressCompany_{{ form.id }}" name="address[company]" value="{{ form.company }}" autocomplete="organization" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="AddressAddress1_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.address1' | t }}</label>
+                                <input type="text" id="AddressAddress1_{{ form.id }}" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="AddressAddress2_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.address2' | t }}</label>
+                                <input type="text" id="AddressAddress2_{{ form.id }}" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="AddressCity_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.city' | t }}</label>
+                                <input type="text" id="AddressCity_{{ form.id }}" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                            </div>
+                            <div class="space-y-2">
+                                <label for="AddressZip_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.zip' | t }}</label>
+                                <input type="text" id="AddressZip_{{ form.id }}" name="address[zip]" value="{{ form.zip }}" autocapitalize="characters" autocomplete="postal-code" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="AddressCountry_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.country' | t }}</label>
+                                <div class="relative group">
+                                    <select id="AddressCountry_{{ form.id }}" name="address[country]" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all appearance-none cursor-pointer hover:bg-white">
+                                        {{ all_country_option_tags }}
+                                    </select>
+                                    <span class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-blue-500 transition-colors">
+                                        {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="AddressProvinceContainer_{{ form.id }}" style="display:none;" class="space-y-2">
+                                <label for="AddressProvince_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.province' | t }}</label>
+                                <div class="relative group">
+                                    <select id="AddressProvince_{{ form.id }}" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all appearance-none cursor-pointer hover:bg-white">
+                                    </select>
+                                    <span class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-blue-500 transition-colors">
+                                        {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-5 h-5' %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="AddressPhone_{{ form.id }}" class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">{{ 'customer.addresses.phone' | t }}</label>
+                            <input type="tel" id="AddressPhone_{{ form.id }}" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" class="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl text-sm font-medium focus:ring-4 focus:ring-blue-50 focus:border-blue-200 outline-none transition-all">
+                        </div>
+
+                        <label class="flex items-center gap-4 cursor-pointer group w-fit">
+                            {{ form.set_as_default_checkbox }}
+                            <span class="text-xs font-black text-gray-700 uppercase tracking-tight group-hover:text-blue-600 transition-colors">{{ 'customer.addresses.set_default' | t }}</span>
+                        </label>
+
+                        <div class="flex flex-col sm:flex-row gap-4 pt-6">
+                            <button class="flex-1 py-5 bg-gray-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:bg-black transition-all shadow-xl active:scale-95">{{ 'customer.addresses.update' | t }}</button>
+                            <button type="reset" class="flex-1 py-5 bg-white border border-gray-100 text-gray-900 rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:bg-gray-50 transition-all active:scale-95">{{ 'customer.addresses.cancel' | t }}</button>
+                        </div>
+                    {%- endform -%}
+                </div>
+            </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if paginate.pages > 1 -%}
+      <div class="pt-12">
+        {% render 'pagination', paginate: paginate %}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  window.addEventListener('load', () => {
+    typeof CustomerAddresses !== 'undefined' && new CustomerAddresses();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.main-addresses.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,47 @@
+{%- comment -%}
+  Renders the language picker for the localization form
+
+  Accepts:
+    - localPosition: pass in the position in which the form is coming up to create specific IDs
+{%- endcomment -%}
+
+<div class="relative group/lang">
+  <button
+    type="button"
+    class="flex items-center justify-between gap-3 w-full px-4 h-12 bg-white border border-gray-100 rounded-xl text-sm font-bold text-gray-900 hover:border-gray-300 hover:shadow-sm transition-all focus:ring-2 focus:ring-gray-900 focus:outline-none"
+    aria-expanded="false"
+    aria-controls="{{ localPosition }}List"
+    aria-describedby="{{ localPosition }}Label"
+    onclick="this.nextElementSibling.classList.toggle('hidden')"
+  >
+    <span>{{ localization.language.endonym_name | capitalize }}</span>
+    {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-4 h-4 text-gray-400' %}
+  </button>
+  <div 
+    id="{{ localPosition }}List" 
+    class="absolute bottom-full mb-2 left-0 w-full min-w-[160px] bg-white border border-gray-100 rounded-xl shadow-2xl p-2 hidden z-[120] backdrop-blur-xl bg-white/95"
+  >
+    <ul role="list" class="space-y-1 list-none p-0 m-0">
+      {%- for language in localization.available_languages -%}
+        <li>
+          <a
+            class="flex items-center justify-between p-3 text-sm font-bold rounded-lg transition-all {% if language.iso_code == localization.language.iso_code %}bg-blue-50 text-blue-600{% else %}text-gray-700 hover:bg-gray-50 hover:text-gray-900{% endif %}"
+            href="#"
+            hreflang="{{ language.iso_code }}"
+            lang="{{ language.iso_code }}"
+            {% if language.iso_code == localization.language.iso_code %}
+              aria-current="true"
+            {% endif %}
+            data-value="{{ language.iso_code }}"
+          >
+            <span>{{ language.endonym_name | capitalize }}</span>
+            {% if language.iso_code == localization.language.iso_code %}
+              {% render 'icon-library', icon: 'check-line', class: 'w-4 h-4' %}
+            {% endif %}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+<input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}">

@@ -1,0 +1,711 @@
+{%- if section.settings.show_section -%}
+  {%- style -%}
+    #section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top_mobile }}px;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+      margin-top: {{ section.settings.margin_top_mobile }}px;
+      margin-bottom: {{ section.settings.margin_bottom_mobile }}px;
+      background-color: {{ section.settings.bg_color }};
+    }
+
+    @media screen and (min-width: 750px) {
+      #section-{{ section.id }} {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+        margin-top: {{ section.settings.margin_top }}px;
+        margin-bottom: {{ section.settings.margin_bottom }}px;
+      }
+    }
+
+    .brands-{{ section.id }}__container {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .brands-{{ section.id }}__header {
+      margin-bottom: {{ section.settings.heading_margin_bottom }}px;
+      text-align: {{ section.settings.heading_alignment }};
+    }
+
+    .brands-{{ section.id }}__heading {
+      margin: 0;
+      font-size: {{ section.settings.heading_size_mobile }}rem;
+      font-weight: {{ section.settings.heading_weight }};
+      color: {{ section.settings.heading_color }};
+      line-height: 1.2;
+      text-transform: {{ section.settings.heading_transform }};
+      {% if section.settings.heading_font != blank %}
+        font-family: {{ section.settings.heading_font.family }}, {{ section.settings.heading_font.fallback_families }};
+      {% endif %}
+    }
+
+    @media screen and (min-width: 750px) {
+      .brands-{{ section.id }}__heading {
+        font-size: {{ section.settings.heading_size }}rem;
+      }
+    }
+
+    .brands-carousel-{{ section.id }} {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brands-carousel-{{ section.id }}__track {
+      display: flex;
+      gap: {{ section.settings.gap_mobile }}px;
+      transition: transform 0.4s ease;
+      scroll-behavior: smooth;
+    }
+
+    @media screen and (min-width: 750px) {
+      .brands-carousel-{{ section.id }}__track {
+        gap: {{ section.settings.gap }}px;
+      }
+    }
+
+    .brand-item-{{ section.id }} {
+      flex: 0 0 calc((100% - ({{ section.settings.items_per_row_mobile | minus: 1 }} * {{ section.settings.gap_mobile }}px)) / {{ section.settings.items_per_row_mobile }});
+      position: relative;
+      text-decoration: none;
+      background: {{ section.settings.image_bg_color }};
+      border: {{ section.settings.image_border_width }}px solid {{ section.settings.image_border_color }};
+      border-radius: {{ section.settings.image_border_radius }}px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 {{ section.settings.image_shadow_blur | divided_by: 4 }}px {{ section.settings.image_shadow_blur }}px rgba(0,0,0,{{ section.settings.image_shadow_opacity | divided_by: 100.0 }});
+      aspect-ratio: 1.5;
+    }
+
+    @media screen and (min-width: 750px) {
+      .brand-item-{{ section.id }} {
+        flex: 0 0 calc((100% - ({{ section.settings.items_per_row | minus: 1 }} * {{ section.settings.gap }}px)) / {{ section.settings.items_per_row }});
+      }
+    }
+
+    .brand-item-{{ section.id }}__image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .brand-item-{{ section.id }}:hover .brand-item-{{ section.id }}__image {
+      transform: scale(1.05);
+    }
+
+    .brand-item-{{ section.id }}__badge {
+      position: absolute;
+      z-index: 2;
+      padding: 0.3rem 0.8rem;
+      font-size: {{ section.settings.badge_size }}rem;
+      font-weight: {{ section.settings.badge_weight }};
+      color: {{ section.settings.badge_text_color }};
+      background-color: {{ section.settings.badge_bg_color }};
+      border-radius: 4px;
+      line-height: 1;
+      white-space: nowrap;
+
+      {% case section.settings.badge_position %}
+        {% when 'top-left' %}
+          top: -10px; left: -10px;
+        {% when 'top-right' %}
+          top: -10px; right: -10px;
+        {% when 'bottom-left' %}
+          bottom: -10px; left: -10px;
+        {% when 'bottom-right' %}
+          bottom: -10px; right: -10px;
+      {% endcase %}
+    }
+
+    /* Navigation */
+    .brands-nav-{{ section.id }} {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      left: 0;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 5;
+      padding: 0 0.5rem;
+    }
+
+    .brands-nav-{{ section.id }} button {
+      pointer-events: auto;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+    }
+
+    .brands-nav-{{ section.id }} button:hover:not(:disabled) {
+      background: #f8f8f8;
+      transform: scale(1.1);
+    }
+
+    .brands-nav-{{ section.id }} button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .brands-nav-{{ section.id }} svg {
+      width: 20px;
+      height: 20px;
+    }
+  {%- endstyle -%}
+
+  <div id="section-{{ section.id }}" class="brands-{{ section.id }}">
+    <div class="brands-{{ section.id }}__container page-width">
+      {%- if section.settings.heading != blank -%}
+        <div class="brands-{{ section.id }}__header">
+          <h2 class="brands-{{ section.id }}__heading">{{ section.settings.heading }}</h2>
+        </div>
+      {%- endif -%}
+
+      <div class="brands-carousel-{{ section.id }}" data-brands-carousel>
+        <div class="brands-carousel-{{ section.id }}__track" data-brands-track>
+          {%- for block in section.blocks -%}
+            <a
+              {{ block.shopify_attributes }}
+              href="{{ block.settings.link | default: '#' }}"
+              class="brand-item-{{ section.id }}"
+            >
+              {%- if block.settings.badge_text != blank -%}
+                <span class="brand-item-{{ section.id }}__badge">
+                  {{ block.settings.badge_text }}
+                </span>
+              {%- endif -%}
+
+              {%- if block.settings.image != blank -%}
+                {%- assign image_class = 'brand-item-' | append: section.id | append: '__image' -%}
+                {{ block.settings.image | image_url: width: 300 | image_tag: class: image_class, loading: 'lazy' }}
+              {%- else -%}
+                {%- assign placeholder_class = 'placeholder-svg brand-item-'
+                  | append: section.id
+                  | append: '__image'
+                -%}
+                {{ 'logo' | placeholder_svg_tag: placeholder_class }}
+              {%- endif -%}
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- if section.blocks.size > section.settings.items_per_row -%}
+          <div class="brands-nav-{{ section.id }}">
+            <button type="button" data-brands-prev aria-label="Previous">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button type="button" data-brands-next aria-label="Next">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    const initCarousel = () => {
+      const carousel = document.querySelector('#section-{{ section.id }} [data-brands-carousel]');
+      if (!carousel) return;
+
+      const track = carousel.querySelector('[data-brands-track]');
+      const nextBtn = carousel.querySelector('[data-brands-next]');
+      const prevBtn = carousel.querySelector('[data-brands-prev]');
+      
+      const getItemsToScroll = () => {
+        return window.innerWidth < 750 ? {{ section.settings.scroll_per_click_mobile }} : {{ section.settings.scroll_per_click }};
+      };
+
+      const getItemsPerRow = () => {
+        return window.innerWidth < 750 ? {{ section.settings.items_per_row_mobile }} : {{ section.settings.items_per_row }};
+      };
+
+      const getGap = () => {
+        return window.innerWidth < 750 ? {{ section.settings.gap_mobile }} : {{ section.settings.gap }};
+      };
+
+      let currentPosition = 0;
+      const totalItems = {{ section.blocks.size }};
+
+      const updateButtons = () => {
+        if (!prevBtn || !nextBtn) return;
+        const itemsPerRow = getPerRow();
+        prevBtn.disabled = currentPosition === 0;
+        nextBtn.disabled = currentPosition >= totalItems - itemsPerRow;
+      };
+
+      const getPerRow = () => getItemsPerRow();
+
+      const move = (direction) => {
+        const itemsToScroll = getItemsToScroll();
+        const itemsPerRow = getPerRow();
+        const gap = getGap();
+        
+        if (direction === 'next') {
+          currentPosition = Math.min(currentPosition + itemsToScroll, totalItems - itemsPerRow);
+        } else {
+          currentPosition = Math.max(currentPosition - itemsToScroll, 0);
+        }
+
+        const itemWidth = track.firstElementChild ? track.firstElementChild.offsetWidth : 0;
+        const translateX = -currentPosition * (itemWidth + gap);
+        track.style.transform = `translateX(${translateX}px)`;
+        updateButtons();
+      };
+
+      if (nextBtn) nextBtn.addEventListener('click', () => move('next'));
+      if (prevBtn) prevBtn.addEventListener('click', () => move('prev'));
+
+      updateButtons();
+      
+      // Re-calculate on resize
+      window.addEventListener('resize', () => {
+        currentPosition = 0;
+        track.style.transform = `translateX(0)`;
+        updateButtons();
+      });
+    };
+
+    if (document.readyState === 'complete') {
+      initCarousel();
+    } else {
+      window.addEventListener('load', initCarousel);
+    }
+    
+    // Support Shopify Theme Editor
+    document.addEventListener('shopify:section:load', (e) => {
+      if (e.target.id === 'shopify-section-{{ section.id }}') initCarousel();
+    });
+  })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Brands Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Layout"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "transparent"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Onze Merken"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading Font",
+      "default": "assistant_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 1.0,
+      "max": 6.0,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading Size (Desktop)",
+      "default": 2.0
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 1.0,
+      "max": 6.0,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Heading Size (Mobile)",
+      "default": 1.8
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading Weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" },
+        { "value": "800", "label": "Extra Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Margin Bottom",
+      "default": 10
+    },
+    {
+      "type": "select",
+      "id": "heading_transform",
+      "label": "Heading Text Style",
+      "options": [
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "none", "label": "Normal" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Carousel Control"
+    },
+    {
+      "type": "range",
+      "id": "items_per_row",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Visible Items (Desktop)",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "scroll_per_click",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Items to scroll (Desktop)",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "items_per_row_mobile",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Visible Items (Mobile)",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "scroll_per_click_mobile",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Items to scroll (Mobile)",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap (Desktop)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap (Mobile)",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Image Styling"
+    },
+    {
+      "type": "color",
+      "id": "image_bg_color",
+      "label": "Image Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Border Radius",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "image_border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Border Width",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "image_border_color",
+      "label": "Border Color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "range",
+      "id": "image_shadow_blur",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Shadow Blur",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "image_shadow_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Shadow Opacity",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Badge Styling"
+    },
+    {
+      "type": "select",
+      "id": "badge_position",
+      "label": "Badge Position",
+      "options": [
+        { "value": "top-left", "label": "Top Left" },
+        { "value": "top-right", "label": "Top Right" },
+        { "value": "bottom-left", "label": "Bottom Left" },
+        { "value": "bottom-right", "label": "Bottom Right" }
+      ],
+      "default": "top-right"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background Color",
+      "default": "#004b91"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "min": 0.8,
+      "max": 2,
+      "step": 0.1,
+      "unit": "rem",
+      "label": "Badge Font Size",
+      "default": 1.1
+    },
+    {
+      "type": "select",
+      "id": "badge_weight",
+      "label": "Badge Weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "700"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Brand Logo"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Brand Link"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text",
+          "placeholder": "New"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brands Carousel",
+      "blocks": [
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" },
+        { "type": "brand" }
+      ]
+    }
+  ]
+}
+{% endschema %}

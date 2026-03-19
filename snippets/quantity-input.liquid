@@ -1,0 +1,50 @@
+{% comment %}
+  Quantity input - Tailwind Refactored
+{% endcomment %}
+
+<quantity-input class="flex items-center bg-white border border-gray-100 rounded-xl p-1 shadow-sm transition-shadow focus-within:shadow-md">
+  {%- comment -%} [[ MINUS BUTTON ]] {%- endcomment -%}
+  <button 
+    class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-30 disabled:grayscale" 
+    name="minus" 
+    type="button" 
+    data-target="decrement-{{ variant.id }}"
+    aria-label="{{ 'products.product.quantity.decrease' | t: product: variant.title | escape }}"
+  >
+    {% render 'icon-library', icon: 'subtract-line', class: 'w-4 h-4' %}
+  </button>
+
+  {%- comment -%} [[ INPUT FIELD ]] {%- endcomment -%}
+  <input
+    class="w-12 bg-transparent text-center text-sm font-black text-gray-900 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+    data-quantity-variant-id="{{ variant.id }}"
+    type="number"
+    name="updates[{{ variant_id }}]"
+    value="{{ cart | item_count_for_variant: variant.id }}"
+    data-cart-quantity="{{ cart | item_count_for_variant: variant.id }}"
+    min="{{ min }}"
+    data-min="{{ variant.quantity_rule.min }}"
+    {% if variant.quantity_rule.max != null %}
+      max="{{ variant.quantity_rule.max }}"
+    {% endif %}
+    step="{{ variant.quantity_rule.increment }}"
+    aria-label="{{ 'products.product.quantity.input_label' | t: product: variant.title | escape }}"
+    id="Quantity-{{ variant.id }}"
+    data-index="{{ variant.id }}"
+    data-target="quantity-input-{{ variant.id }}"
+  >
+
+  {%- comment -%} [[ PLUS BUTTON ]] {%- endcomment -%}
+  <button 
+    class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-30 disabled:grayscale" 
+    name="plus" 
+    type="button" 
+    data-target="increment-{{ variant.id }}"
+    aria-label="{{ 'products.product.quantity.increase' | t: product: variant.title | escape }}"
+  >
+    {% render 'icon-library', icon: 'add-line', class: 'w-4 h-4' %}
+  </button>
+
+  {%- comment -%} Progress Bar (If applicable / maintained) {%- endcomment -%}
+  {%- render 'progress-bar' -%}
+</quantity-input>

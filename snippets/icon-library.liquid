@@ -1,0 +1,20 @@
+{% comment %}
+  Renders a Remix Icon.
+  Accepts:
+  - icon: {String} The icon name (e.g., 'heart-fill', 'user-line'). Required.
+  - class: {String} Extra classes to add to the icon element. Optional.
+  - style: {String} Inline styles for the icon. Optional.
+
+  Usage:
+  {% render 'icon-library', icon: 'heart-fill', class: 'custom-class' %}
+{% endcomment %}
+
+{%- if icon != blank -%}
+  <i
+    class="ri-{{ icon }} {{ class }}"
+    {% if style != blank %}
+      style="{{ style }}"
+    {% endif %}
+    aria-hidden="true"
+  ></i>
+{%- endif -%}
