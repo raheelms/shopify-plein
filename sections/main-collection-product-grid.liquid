@@ -1,29 +1,54 @@
 <div class="bg-white">
   {%- paginate collection.products by section.settings.products_per_page -%}
+    {%- assign menu = linklists['main-menu'] -%}
+    {%- assign has_categories = false -%}
+    {%- assign is_all_coll = false -%}
+    {%- if collection.handle == 'all' -%}{%- assign is_all_coll = true -%}{%- endif -%}
+    {%- if menu != blank -%}
+      {%- for link in menu.links -%}
+        {%- if link.active or link.child_active -%}
+          {%- assign has_categories = true -%}
+          {%- break -%}
+        {%- endif -%}
+        {%- if is_all_coll and link.links.size > 0 -%}
+          {%- assign has_categories = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
     <div class="max-w-[1440px] mx-auto px-8 lg:px-12 py-12 lg:py-20">
       <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
         
         {%- comment -%} [[ SIDEBAR ]] {%- endcomment -%}
         {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
-          <aside class="lg:w-72 shrink-0 space-y-12">
-            {%- if collection.links.size > 0 or collection.all_types.size > 0 -%}
-              <div class="space-y-6">
-                <h2 class="text-xs font-black text-gray-900 uppercase tracking-[0.2em] border-b border-gray-100 pb-4">Categorie</h2>
-                <ul class="space-y-3 list-none p-0">
-                  {%- for link in linklists['main-menu'].links -%}
-                    {%- if link.active or link.child_active -%}
-                      {%- for child_link in link.links -%}
-                        <li>
-                          <a
-                            href="{{ child_link.url }}"
-                            class="block text-sm font-bold transition-all {% if child_link.active %}text-blue-600{% else %}text-gray-400 hover:text-gray-900 hover:translate-x-1{% endif %}"
-                          >
-                            {{ child_link.title }}
-                          </a>
-                        </li>
-                      {%- endfor -%}
-                    {%- endif -%}
-                  {%- endfor -%}
+          <aside class="lg:w-72 shrink-0 space-y-8 lg:pr-8 lg:border-r lg:border-gray-200">
+            <h2 class="text-lg font-bold text-gray-900 border-b border-gray-200 pb-4">Filteren</h2>
+            {%- if has_categories -%}
+              <div class="space-y-4">
+                <h3 class="text-sm font-bold text-gray-900">Categorie</h3>
+                <ul class="space-y-2 list-none p-0">
+                  {%- if menu != blank -%}
+                    {%- for link in menu.links -%}
+                      {%- if link.active or link.child_active -%}
+                        {%- for child_link in link.links -%}
+                          <li>
+                            <a href="{{ child_link.url }}" class="block py-1.5 text-[13px] font-medium text-gray-700 hover:text-[#004c97] transition-colors border-l-2 border-transparent hover:border-[#004c97] pl-3 -ml-px {% if child_link.active %}text-[#004c97] font-semibold border-[#004c97]{% endif %}">
+                              {{ child_link.title }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      {%- elsif is_all_coll and link.links.size > 0 and forloop.first -%}
+                        {%- for child_link in link.links -%}
+                          <li>
+                            <a href="{{ child_link.url }}" class="block py-1.5 text-[13px] font-medium text-gray-700 hover:text-[#004c97] transition-colors border-l-2 border-transparent hover:border-[#004c97] pl-3 -ml-px">
+                              {{ child_link.title }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
                 </ul>
               </div>
             {%- endif -%}
@@ -44,21 +69,45 @@
         
         {%- comment -%} [[ HEADER ]] {%- endcomment -%}
         <div class="space-y-6">
-          <h1 class="text-5xl lg:text-7xl font-black text-gray-900 tracking-tight leading-[1.1]">
+          <h1 class="text-3xl lg:text-4xl font-black text-gray-900 tracking-tight leading-tight">
             {{ collection.title | escape }}
           </h1>
 
           {%- if collection.description != blank -%}
-            <div class="max-w-3xl prose prose-slate prose-sm text-gray-500 leading-relaxed font-medium">
-              {{ collection.description | truncatewords: 25 -}}
-              <a href="#CollectionFullDescription" class="inline-flex items-center gap-1 font-black text-blue-600 uppercase tracking-widest text-[10px] ml-2 hover:translate-x-1 transition-transform">
-                Lees meer {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-3 h-3' %}
+            <div class="max-w-3xl prose prose-slate prose-sm text-gray-600 leading-relaxed font-medium">
+              {{ collection.description | truncatewords: 40 -}}
+              <a href="#CollectionFullDescription" class="inline-flex items-center gap-1 font-bold text-[#004c97] text-[13px] ml-2 hover:underline transition-colors">
+                Lees meer {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-3.5 h-3.5' %}
               </a>
             </div>
           {%- endif -%}
         </div>
 
-        {%- comment -%} [[ SUBCATEGORY SCROLLER ]] {%- endcomment -%}
+        {%- comment -%} [[ Snel winkelen — plein.nl style text links grid ]] {%- endcomment -%}
+        {%- if has_categories and menu != blank -%}
+          <div class="space-y-4">
+            <h2 class="text-base font-bold text-gray-900">Snel winkelen</h2>
+            <div class="flex flex-wrap gap-x-6 gap-y-2">
+              {%- for link in menu.links -%}
+                {%- if link.active or link.child_active -%}
+                  {%- for child_link in link.links -%}
+                    <a href="{{ child_link.url }}" class="text-[14px] font-medium text-[#004c97] hover:underline {% if child_link.active %}font-semibold{% endif %}">
+                      {{ child_link.title }}
+                    </a>
+                  {%- endfor -%}
+                {%- elsif is_all_coll and link.links.size > 0 and forloop.first -%}
+                  {%- for child_link in link.links -%}
+                    <a href="{{ child_link.url }}" class="text-[14px] font-medium text-[#004c97] hover:underline">
+                      {{ child_link.title }}
+                    </a>
+                  {%- endfor -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} [[ SUBCATEGORY SCROLLER — image cards (optional) ]] {%- endcomment -%}
         {%- for block in section.blocks -%}
           {%- if block.type == 'related_collections' -%}
             {%- assign related_meta = collection.metafields.custom.related_collections.value -%}
@@ -72,7 +121,7 @@
             {%- if has_related -%}
               <div class="space-y-6">
                 {%- if block.settings.heading != blank -%}
-                  <h2 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ block.settings.heading }}</h2>
+                  <h2 class="text-sm font-bold text-gray-900">{{ block.settings.heading }}</h2>
                 {%- endif -%}
                 <div class="flex gap-4 overflow-x-auto pb-6 -mx-4 px-4 scrollbar-none items-stretch">
                   {%- if related_meta != blank -%}
@@ -81,15 +130,15 @@
                       {%- if item.collection -%}{%- assign coll_item = item.collection.value -%}{%- endif -%}
                       {%- if coll_item != blank -%}
                         <a href="{{ coll_item.url }}" class="flex-none w-40 group/card">
-                          <div class="bg-gray-50/50 rounded-3xl p-6 border border-gray-100 transition-all group-hover/card:bg-white group-hover/card:shadow-xl group-hover/card:border-blue-100 group-hover/card:-translate-y-1">
-                            <div class="aspect-square bg-white rounded-2xl overflow-hidden mb-4 border border-gray-100 group-hover/card:scale-105 transition-transform">
+                          <div class="bg-gray-50/50 rounded-2xl p-6 border border-gray-200 transition-all group-hover/card:bg-white group-hover/card:shadow-lg group-hover/card:border-gray-300 group-hover/card:-translate-y-0.5">
+                            <div class="aspect-square bg-white rounded-xl overflow-hidden mb-4 border border-gray-100 group-hover/card:scale-105 transition-transform">
                               {%- if coll_item.image -%}
                                 {{ coll_item.image | image_url: width: 300 | image_tag: class: 'w-full h-full object-contain p-4' }}
                               {%- else -%}
                                 {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full p-4 text-gray-200' }}
                               {%- endif -%}
                             </div>
-                            <h3 class="text-center text-xs font-black text-gray-900 tracking-tight group-hover/card:text-blue-600 transition-colors">{{ coll_item.title }}</h3>
+                            <h3 class="text-center text-xs font-bold text-gray-900 tracking-tight group-hover/card:text-[#004c97] transition-colors">{{ coll_item.title }}</h3>
                           </div>
                         </a>
                       {%- endif -%}
@@ -97,15 +146,15 @@
                   {%- elsif block.settings.menu != blank -%}
                     {%- for link in block.settings.menu.links -%}
                       <a href="{{ link.url }}" class="flex-none w-40 group/card">
-                        <div class="bg-gray-50/50 rounded-3xl p-6 border border-gray-100 transition-all group-hover/card:bg-white group-hover/card:shadow-xl group-hover/card:border-blue-100 group-hover/card:-translate-y-1">
-                          <div class="aspect-square bg-white rounded-2xl overflow-hidden mb-4 border border-gray-100 group-hover/card:scale-105 transition-transform">
+                        <div class="bg-gray-50/50 rounded-2xl p-6 border border-gray-200 transition-all group-hover/card:bg-white group-hover/card:shadow-lg group-hover/card:border-gray-300 group-hover/card:-translate-y-0.5">
+                          <div class="aspect-square bg-white rounded-xl overflow-hidden mb-4 border border-gray-100 group-hover/card:scale-105 transition-transform">
                             {%- if link.type == 'collection_link' and link.object.image -%}
                                 {{ link.object.image | image_url: width: 300 | image_tag: class: 'w-full h-full object-contain p-4' }}
                             {%- else -%}
                                 {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full p-4 text-gray-200' }}
                             {%- endif -%}
                           </div>
-                          <h3 class="text-center text-xs font-black text-gray-900 tracking-tight group-hover/card:text-blue-600 transition-colors">{{ link.title }}</h3>
+                          <h3 class="text-center text-xs font-bold text-gray-900 tracking-tight group-hover/card:text-[#004c97] transition-colors">{{ link.title }}</h3>
                         </div>
                       </a>
                     {%- endfor -%}
@@ -128,31 +177,32 @@
           </div>
         {%- endif -%}
 
-        {%- comment -%} [[ TOOLBAR ]] {%- endcomment -%}
-        <div class="flex items-center justify-between border-b border-gray-100 pb-8">
-          <div class="product-count" role="status">
-            <h2 class="text-xs font-black text-gray-400 uppercase tracking-[0.2em]">
-              <span id="ProductCount">
+        {%- comment -%} [[ TOOLBAR ]] plein.nl style {%- endcomment -%}
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 pb-6">
+          <div class="flex items-center gap-6">
+            <span class="text-sm font-bold text-gray-900">Filters</span>
+            <div class="product-count" role="status">
+              <span id="ProductCount" class="text-sm font-medium text-gray-600">
                 {%- if collection.results_count -%}
-                  {{ 'templates.search.results_with_count' | t: terms: collection.terms, count: collection.results_count }}
+                  {{ collection.results_count }} Resultaten
                 {%- elsif collection.products_count == collection.all_products_count -%}
-                  {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
+                  {{ collection.products_count }} Resultaten
                 {%- else -%}
-                  {{ 'products.facets.product_count' | t: product_count: collection.products_count, count: collection.all_products_count }}
+                  {{ collection.products_count }} van {{ collection.all_products_count }} Resultaten
                 {%- endif -%}
               </span>
-            </h2>
+            </div>
           </div>
 
           {%- if section.settings.enable_sorting -%}
             <facet-filters-form class="facets">
-              <form id="FacetSortFormCompact" class="flex items-center gap-4">
-                <label for="SortBy-Compact" class="text-xs font-black text-gray-400 uppercase tracking-widest">{{ 'products.facets.sort_by_label' | t }}</label>
+              <form id="FacetSortFormCompact" class="flex items-center gap-3">
+                <label for="SortBy-Compact" class="text-sm font-medium text-gray-600">{{ 'products.facets.sort_by_label' | t }}</label>
                 <div class="relative group">
                   {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
                   <select
                     name="sort_by"
-                    class="appearance-none bg-gray-50 border border-gray-100 rounded-xl px-5 py-2.5 pr-12 text-sm font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all cursor-pointer hover:bg-white hover:shadow-md"
+                    class="appearance-none bg-white border border-gray-200 rounded-lg px-4 py-2 pr-10 text-sm font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#004c97]/20 focus:border-[#004c97] transition-all cursor-pointer hover:border-gray-300"
                     id="SortBy-Compact"
                   >
                     {%- for option in collection.sort_options -%}
@@ -161,7 +211,7 @@
                       </option>
                     {%- endfor -%}
                   </select>
-                  <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-blue-600 transition-colors">
+                  <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                     {% render 'icon-library', icon: 'arrow-down-s-line', class: 'w-4 h-4' %}
                   </div>
                 </div>
@@ -180,7 +230,7 @@
                {{ 'sections.collection_template.empty' | t }}
              </h2>
              <p class="text-gray-500 max-w-xs mx-auto text-sm font-medium">
-               {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: 'text-blue-600 font-black underline underline-offset-4' }}
+               {{ 'sections.collection_template.use_fewer_filters_html' | t: link: collection.url, class: 'text-[#004c97] font-bold underline underline-offset-4' }}
              </p>
           </div>
         {%- else -%}
@@ -188,7 +238,7 @@
             <ul
               id="product-grid"
               data-id="{{ section.id }}"
-              class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-10 list-none p-0"
+              class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 list-none p-0"
             >
               {%- for product in collection.products -%}
                 {% assign lazy_load = false %}
@@ -196,16 +246,7 @@
                   {%- assign lazy_load = true -%}
                 {%- endif -%}
                 <li class="animate-in fade-in slide-in-from-bottom-4 duration-700" style="animation-delay: {{ forloop.index | times: 100 }}ms">
-                  {% render 'card-product-kruidvat',
-                    card_product: product,
-                    media_aspect_ratio: section.settings.image_ratio,
-                    show_secondary_image: section.settings.show_secondary_image,
-                    show_vendor: section.settings.show_vendor,
-                    show_rating: section.settings.show_rating,
-                    lazy_load: lazy_load,
-                    quick_add: section.settings.quick_add,
-                    section_id: section.id
-                  %}
+                  {% render 'card-product-plein', card_product: product %}
                 </li>
               {%- endfor -%}
             </ul>
@@ -449,7 +490,7 @@
           "type": "text",
           "id": "heading",
           "label": "Heading",
-          "default": "Populaire categorieën"
+          "default": "Snel winkelen"
         },
         {
           "type": "link_list",

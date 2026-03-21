@@ -1,0 +1,3 @@
+# Exclude sample data from theme upload (GitHub / theme push)
+products.csv
+SAMPLE_DATA_SETUP.md

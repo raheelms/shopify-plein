@@ -9,14 +9,14 @@
     {%- comment -%} [[ BADGE ]] {%- endcomment -%}
     {%- if card_product.compare_at_price > card_product.price or card_product.tags contains 'offer' -%}
       <div class="absolute top-4 left-4 z-10">
-        <span class="bg-blue-600 text-white text-[10px] font-black px-3 py-1.5 rounded-xl uppercase tracking-widest shadow-lg">
+        <span class="bg-blue-600 text-white text-[10px] font-black px-3 py-1.5 rounded-md uppercase tracking-widest shadow-lg">
           {{ 'products.product.on_sale' | t | default: 'Offer' }}
         </span>
       </div>
     {%- endif -%}
 
     {%- comment -%} [[ IMAGE SECTION ]] {%- endcomment -%}
-    <div class="relative aspect-square overflow-hidden bg-gray-50 p-6">
+    <div class="relative aspect-square overflow-hidden bg-white p-4">
       <a href="{{ card_product.url }}" class="block w-full h-full">
         {%- if card_product.featured_media -%}
           <img
@@ -31,22 +31,44 @@
           {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-200' }}
         {%- endif -%}
       </a>
+
+      <button
+        type="button"
+        class="card__wishlist absolute top-4 right-4 z-10 text-gray-300 hover:text-red-500 transition-colors"
+        data-product-handle="{{ card_product.handle }}"
+        aria-label="Wishlist"
+      >
+        {% render 'icon-library', icon: 'heart-line', class: 'w-6 h-6' %}
+      </button>
     </div>
 
     {%- comment -%} [[ CONTENT SECTION ]] {%- endcomment -%}
-    <div class="p-6 flex flex-col flex-1 gap-4">
+    <div class="p-6 flex flex-col flex-1 gap-3">
       
-      <div class="space-y-2">
-        {%- comment -%} Brand/Category (Optional but common in SaaS) {%- endcomment -%}
-        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none">
+      <div class="space-y-1">
+        {%- comment -%} Brand (Title Case) {%- endcomment -%}
+        <p class="text-[12px] font-bold text-gray-400 tracking-wide">
           {{ card_product.vendor | default: 'Premium Quality' }}
         </p>
         
-        <h3 class="text-base font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">
+        <h3 class="text-sm font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">
           <a href="{{ card_product.url }}">
             {{ card_product.title | escape }}
           </a>
         </h3>
+      </div>
+
+      {%- comment -%} Rating {%- endcomment -%}
+      <div class="flex items-center gap-1">
+        <div class="flex items-center text-yellow-400">
+          {% render 'icon-library', icon: 'star-fill', class: 'w-3 h-3' %}
+        </div>
+        <span class="text-[11px] font-bold text-gray-900">
+          {{- card_product.metafields.reviews.rating.value | default: '4.8' -}}
+        </span>
+        <span class="text-[10px] font-medium text-gray-400">
+          ({{ card_product.metafields.reviews.rating_count | default: '12' }})
+        </span>
       </div>
 
       {%- comment -%} Variant Info {%- endcomment -%}
@@ -62,37 +84,26 @@
         endif
       -%}
       
-      <div class="flex items-center gap-3 text-[11px] font-medium text-gray-500">
+      <div class="flex items-center gap-2 text-[11px] font-medium text-gray-400">
         {%- if variant_title != blank or variant_weight != blank -%}
-          <span>{{ variant_title }}{% if variant_title != blank and variant_weight != blank %} • {% endif %}{{ variant_weight }}</span>
+          <span>{{- variant_title -}}{% if variant_title != blank and variant_weight != blank %} • {% endif %}{{- variant_weight -}}</span>
         {%- endif -%}
         
         {%- if current_variant.unit_price_measurement -%}
-          <span class="text-gray-300">|</span>
+          <span class="text-gray-200">|</span>
           <span>{{ current_variant.unit_price | money }} / {{ current_variant.unit_price_measurement.reference_unit }}</span>
         {%- endif -%}
       </div>
 
-      {%- comment -%} Rating {%- endcomment -%}
-      <div class="flex items-center gap-1.5">
-        <div class="flex items-center text-yellow-400">
-          {% render 'icon-library', icon: 'star-fill', class: 'w-3 h-3' %}
-        </div>
-        <span class="text-xs font-bold text-gray-900">
-          {{- card_product.metafields.reviews.rating.value | default: '4.8' -}}
-        </span>
-        <span class="text-[10px] font-medium text-gray-400">
-          ({{ card_product.metafields.reviews.rating_count | default: '12' }})
-        </span>
-      </div>
-
       {%- comment -%} Bottom Row: Price & Buy {%- endcomment -%}
-      <div class="mt-auto pt-4 flex items-center justify-between border-t border-gray-50">
-        <div class="flex flex-col">
-          <span class="text-lg font-black text-gray-900">{{ card_product.price | money }}</span>
-          {%- if card_product.compare_at_price > card_product.price -%}
-            <span class="text-xs text-gray-400 line-through decoration-gray-300">{{ card_product.compare_at_price | money }}</span>
-          {%- endif -%}
+      <div class="mt-auto pt-4 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex flex-col">
+            <span class="text-xl font-black text-gray-900 tracking-tight">{{ card_product.price | money }}</span>
+            {%- if card_product.compare_at_price > card_product.price -%}
+              <span class="text-xs text-gray-400 line-through decoration-gray-300 font-medium">{{ card_product.compare_at_price | money }}</span>
+            {%- endif -%}
+          </div>
         </div>
 
         {%- form 'product', card_product -%}
@@ -100,20 +111,23 @@
           <button
             type="submit"
             name="add"
-            class="flex items-center justify-center w-10 h-10 bg-gray-900 text-white rounded-xl hover:bg-blue-600 transition-colors shadow-sm active:scale-95 disabled:bg-gray-200 disabled:cursor-not-allowed"
+            class="flex items-center justify-center w-full h-12 bg-[#004b91] text-white rounded-xl font-black text-xs uppercase tracking-[0.15em] hover:bg-gray-900 transition-all shadow-sm active:scale-95 disabled:bg-gray-200 disabled:cursor-not-allowed group/btn"
             {% unless card_product.available %}
               disabled
             {% endunless %}
           >
             {%- if card_product.available -%}
-              {% render 'icon-library', icon: 'shopping-cart-line', class: 'w-5 h-5' %}
-              <span class="sr-only">Add to cart</span>
+              <span class="flex items-center gap-2">
+                In winkelmand
+                {% render 'icon-library', icon: 'shopping-cart-line', class: 'w-4 h-4 transition-transform group-hover/btn:translate-x-1' %}
+              </span>
             {%- else -%}
-              <span class="text-[8px] font-black uppercase tracking-tighter">Out</span>
+              <span>Uitverkocht</span>
             {%- endif -%}
           </button>
         {%- endform -%}
       </div>
+    </div>
 
     </div>
   </div>

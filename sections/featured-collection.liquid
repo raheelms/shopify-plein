@@ -73,14 +73,15 @@
                 style="--animation-order: {{ forloop.index }};"
               {% endif %}
             >
-              {% render 'card-product-kruidvat',
+              {% render 'card-product-plein',
                 card_product: product,
                 media_aspect_ratio: section.settings.image_ratio,
+                image_shape: section.settings.image_shape,
                 show_secondary_image: section.settings.show_secondary_image,
                 show_vendor: section.settings.show_vendor,
                 show_rating: section.settings.show_rating,
-                section_id: section.id,
-                quick_add: section.settings.quick_add
+                show_quick_add: section.settings.enable_quick_add,
+                section_id: section.id
               %}
             </div>
           {%- endfor -%}

@@ -23,22 +23,27 @@
     {%- comment -%} [[ ABOVE THE FOLD: Two-column product layout ]] {%- endcomment -%}
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
       
-      {%- comment -%} [[ LEFT: Media Gallery — plein.nl style ]] {%- endcomment -%}
-      <div class="lg:col-span-7">
-        <div class="relative bg-white overflow-hidden border border-gray-200">
-          {%- comment -%} Pink promo badge (2+2 gratis style) {%- endcomment -%}
+      {%- comment -%} [[ LEFT: Media Gallery ]] {%- endcomment -%}
+      <div class="lg:col-span-6">
+        <div class="relative bg-white overflow-hidden border border-gray-200 rounded-md">
+          {%- comment -%} Magenta promo badge {%- endcomment -%}
           {%- if product.compare_at_price > product.price or product.tags contains '2+2' or product.tags contains 'offer' -%}
             <div class="absolute top-4 left-4 z-10">
-              <span class="bg-[#d81159] text-white text-xs font-bold px-3 py-1.5 rounded">
-                {%- if product.tags contains '2+2' -%}2+2 gratis{%- else -%}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% korting{%- endif -%}
+              <span class="bg-[#DA2F79] text-white text-[11px] font-black px-3 py-1.5 rounded shadow-sm uppercase">
+                {%- if product.tags contains '2+2' -%}2+2 gratis{%- else -%}aanbieding{%- endif -%}
               </span>
             </div>
           {%- endif -%}
 
-          {%- comment -%} Light blue outline wishlist heart {%- endcomment -%}
-          <a href="/pages/wishlist" class="absolute top-4 right-4 z-10 w-9 h-9 bg-white/90 rounded-full border-2 border-[#007fb1] flex items-center justify-center text-[#007fb1] hover:bg-[#007fb1] hover:text-white transition-colors">
-            {% render 'icon-library', icon: 'heart-line', class: 'w-5 h-5' %}
-          </a>
+          {%- comment -%} Square Wishlist Button {%- endcomment -%}
+          <button
+            type="button"
+            class="card__wishlist absolute top-4 right-4 z-10 w-11 h-11 bg-white border border-gray-100 rounded-lg flex items-center justify-center text-[#004c97] hover:bg-gray-50 transition-colors shadow-sm"
+            data-product-handle="{{ product.handle }}"
+            aria-label="Add to wishlist"
+          >
+            {% render 'icon-library', icon: 'heart-line', class: 'w-6 h-6' %}
+          </button>
           
           <div class="p-4 lg:p-6">
             {% render 'product-media-gallery', variant_images: variant_images, media_count: media_count %}
@@ -46,9 +51,9 @@
         </div>
       </div>
 
-      {%- comment -%} [[ RIGHT: Purchase Box & USPs — plein.nl style ]] {%- endcomment -%}
-      <div class="lg:col-span-5 lg:sticky lg:top-28">
-        <div class="bg-white border border-gray-200 rounded p-6 lg:p-8 space-y-5">
+      {%- comment -%} [[ RIGHT: Purchase Box & USPs ]] {%- endcomment -%}
+      <div class="lg:col-span-6 lg:sticky lg:top-28">
+        <div class="bg-[#e5e7eb] border border-gray-200 rounded p-6 lg:p-8 space-y-5">
           
           <h1 class="text-[22px] font-bold text-[#1a1a2e] leading-snug">
             {{ product.title }}
@@ -201,6 +206,66 @@
       "type": "description",
       "name": "t:sections.main-product.blocks.description.name",
       "limit": 1
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_info",
+      "default": true,
+      "label": "t:sections.main-product.settings.enable_sticky_info.label"
+    },
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "options": [
+        {
+          "value": "stacked",
+          "label": "t:sections.main-product.settings.gallery_layout.options__1.label"
+        },
+        {
+          "value": "thumbnail",
+          "label": "t:sections.main-product.settings.gallery_layout.options__2.label"
+        },
+        {
+          "value": "thumbnail_slider",
+          "label": "t:sections.main-product.settings.gallery_layout.options__3.label"
+        }
+      ],
+      "default": "stacked",
+      "label": "t:sections.main-product.settings.gallery_layout.label"
+    },
+    {
+      "type": "select",
+      "id": "mobile_thumbnails",
+      "options": [
+        {
+          "value": "columns",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__1.label"
+        },
+        {
+          "value": "show",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__2.label"
+        },
+        {
+          "value": "hide",
+          "label": "t:sections.main-product.settings.mobile_thumbnails.options__3.label"
+        }
+      ],
+      "default": "hide",
+      "label": "t:sections.main-product.settings.mobile_thumbnails.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_variants",
+      "default": false,
+      "label": "t:sections.main-product.settings.hide_variants.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "default": false,
+      "label": "t:sections.main-product.settings.enable_video_looping.label"
     }
   ]
 }

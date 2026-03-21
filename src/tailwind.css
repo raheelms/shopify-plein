@@ -34,7 +34,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Search Focus Overlay - Corrected Z-Index Hierarchy */
+  /* Search Focus Overlay - Plein.nl style: dim content when search bar is focused */
   body.search-focused::after {
     content: '';
     position: fixed;
@@ -42,12 +42,17 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 50;
     opacity: 1;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
     pointer-events: none;
+  }
+
+  .search-focused .header__wrapper {
+    z-index: 60 !important;
   }
 
   .search-focused .header {
@@ -77,5 +82,14 @@
   .z-above-overlay {
     position: relative !important;
     z-index: 70 !important;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

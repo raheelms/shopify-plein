@@ -11,12 +11,17 @@
   {% render 'product-media-gallery' %}
 {% endcomment %}
 
+{%- liquid
+  assign media_count = product.media.size
+  assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+-%}
+
 <media-gallery
   id="MediaGallery-{{ section.id }}"
   role="region"
   class="block relative {% if section.settings.enable_sticky_info %}lg:sticky lg:top-32{% endif %}"
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
-  data-desktop-layout="{{ section.settings.gallery_layout }}"
+  data-desktop-layout="{{ section.settings.gallery_layout | default: 'thumbnail' }}"
 >
   <div id="GalleryStatus-{{ section.id }}" class="sr-only" role="status"></div>
   
@@ -31,8 +36,7 @@
       class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-0 list-none"
       role="list"
     >
-      {%- if product.selected_or_first_available_variant.featured_media != null -%}
-        {%- assign featured_media = product.selected_or_first_available_variant.featured_media -%}
+      {%- if featured_media != null -%}
         <li
           id="Slide-{{ section.id }}-{{ featured_media.id }}"
           class="flex-shrink-0 w-full snap-center relative"
@@ -91,25 +95,25 @@
     </ul>
     
     {%- if media_count > 1 -%}
-      <div class="absolute inset-y-0 left-6 flex items-center opacity-0 group-hover/main:opacity-100 transition-opacity">
+      <div class="absolute inset-y-0 left-4 flex items-center z-10 transition-opacity">
         <button
           type="button"
-          class="w-14 h-14 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-900 border border-white/20 shadow-xl hover:bg-white hover:scale-105 transition-all disabled:opacity-30 disabled:pointer-events-none"
+          class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#004c97] border border-[#004c97] shadow-md hover:bg-gray-50 transition-all disabled:opacity-0"
           name="previous"
           aria-label="{{ 'general.slider.previous_slide' | t }}"
         >
-          {% render 'icon-library', icon: 'arrow-left-s-line', class: 'w-8 h-8' %}
+          {% render 'icon-library', icon: 'arrow-left-s-line', class: 'w-6 h-6' %}
         </button>
       </div>
       
-      <div class="absolute inset-y-0 right-6 flex items-center opacity-0 group-hover/main:opacity-100 transition-opacity">
+      <div class="absolute inset-y-0 right-4 flex items-center z-10 transition-opacity">
         <button
           type="button"
-          class="w-14 h-14 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-900 border border-white/20 shadow-xl hover:bg-white hover:scale-105 transition-all disabled:opacity-30 disabled:pointer-events-none"
+          class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-[#004c97] border border-[#004c97] shadow-md hover:bg-gray-50 transition-all disabled:opacity-0"
           name="next"
           aria-label="{{ 'general.slider.next_slide' | t }}"
         >
-          {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-8 h-8' %}
+          {% render 'icon-library', icon: 'arrow-right-s-line', class: 'w-6 h-6' %}
         </button>
       </div>
 
@@ -140,7 +144,7 @@
         
         <ul
           id="Slider-Thumbnails-{{ section.id }}"
-          class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 list-none py-1"
+          class="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 list-none py-2"
         >
           {%- if featured_media != null -%}
             <li
@@ -149,7 +153,7 @@
               data-target="{{ section.id }}-{{ featured_media.id }}"
             >
               <button
-                class="w-full h-full relative rounded-md overflow-hidden border-2 border-transparent transition-all hover:border-gray-200 aria-[current=true]:border-[#007fb1] aria-[current=true]:shadow-lg bg-gray-50"
+                class="w-full h-full relative rounded-md overflow-hidden border-2 border-transparent transition-all hover:border-gray-200 aria-[current=true]:border-[#004c97] aria-[current=true]:shadow-sm bg-gray-50"
                 aria-current="true"
                 aria-controls="GalleryViewer-{{ section.id }}"
               >
@@ -173,7 +177,7 @@
               data-target="{{ section.id }}-{{ media.id }}"
             >
               <button
-                class="w-full h-full relative rounded-md overflow-hidden border-2 border-transparent transition-all hover:border-gray-200 aria-[current=true]:border-[#007fb1] aria-[current=true]:shadow-lg bg-gray-50 group"
+                class="w-full h-full relative rounded-md overflow-hidden border-2 border-transparent transition-all hover:border-gray-200 aria-[current=true]:border-[#004c97] aria-[current=true]:shadow-sm bg-gray-50 group"
                 aria-controls="GalleryViewer-{{ section.id }}"
                 {% if media == product.selected_or_first_available_variant.featured_media or product.selected_or_first_available_variant.featured_media == null and forloop.index == 1 %}aria-current="true"{% endif %}
               >

@@ -119,13 +119,16 @@
                   <li class="animate-in fade-in slide-in-from-bottom-4 duration-700" style="animation-delay: {{ forloop.index | times: 100 }}ms">
                     {%- case item.object_type -%}
                       {%- when 'product' -%}
-                        {% render 'card-product-kruidvat',
+                        {% render 'card-product-plein',
                           card_product: item,
                           media_aspect_ratio: section.settings.image_ratio,
+                          image_shape: section.settings.image_shape,
                           show_secondary_image: section.settings.show_secondary_image,
                           show_vendor: section.settings.show_vendor,
                           show_rating: section.settings.show_rating,
-                          lazy_load: lazy_load
+                          lazy_load: lazy_load,
+                          show_quick_add: section.settings.enable_quick_add,
+                          section_id: section.id
                         %}
                       {%- when 'article' -%}
                         {% render 'article-card',

@@ -15,13 +15,13 @@
       {%- if collection != blank -%}
         {%- for product in collection.products limit: products_to_show -%}
           <div>
-            {% render 'card-product-kruidvat',
+            {% render 'card-product-plein',
               card_product: product,
-              media_aspect_ratio: 'square',
-              show_secondary_image: true,
-              show_vendor: true,
-              show_rating: true,
-              quick_add: 'standard'
+              media_aspect_ratio: section.settings.image_ratio,
+              show_secondary_image: section.settings.show_secondary_image,
+              show_vendor: section.settings.show_vendor,
+              show_rating: section.settings.show_rating,
+              section_id: section.id
             %}
           </div>
         {%- endfor -%}

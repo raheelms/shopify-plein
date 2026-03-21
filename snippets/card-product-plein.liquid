@@ -1,76 +1,102 @@
-{% comment %}
-  Plein.nl style product card — white bg, grey border, pink badge, green button
-  Usage: {% render 'card-product-plein', card_product: product, compact: false %}
-{% endcomment %}
+{%- comment -%}
+  Plein.nl Pixel-Perfect Product Card
+  Design: Magenta price boxes, yellow adviesprijs labels, square wishlist, Title Case vendors.
+{%- endcomment -%}
 
 {%- if card_product and card_product != empty -%}
-  <div class="group relative bg-white border border-gray-200 rounded overflow-hidden flex flex-col h-full hover:border-gray-300 transition-colors">
+  <div class="group relative bg-white border border-gray-100 rounded-lg overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow duration-300">
     
-    {%- comment -%} Pink promo badge {%- endcomment -%}
-    {%- if card_product.compare_at_price > card_product.price or card_product.tags contains 'offer' -%}
-      <div class="absolute top-2 left-2 z-10">
-        <span class="bg-[#d81159] text-white text-[10px] font-bold px-2 py-0.5 rounded">
-          {%- if card_product.compare_at_price > card_product.price -%}
-            {{ card_product.compare_at_price | minus: card_product.price | times: 100.0 | divided_by: card_product.compare_at_price | round }}% korting
-          {%- else -%}
-            Aanbieding
-          {%- endif -%}
-        </span>
-      </div>
-    {%- endif -%}
+    {%- comment -%} [[ TOP: Image & Badges ]] {%- endcomment -%}
+    <div class="relative aspect-square overflow-hidden bg-white p-4">
+      {%- comment -%} Magenta Badges (top left) {%- endcomment -%}
+      {%- if card_product.compare_at_price > card_product.price or card_product.tags contains '2+2' or card_product.tags contains 'aanbieding' -%}
+        <div class="absolute top-3 left-3 z-10 flex flex-col gap-1">
+          <span class="bg-[#DA2F79] text-white text-[11px] font-extrabold px-2.5 py-1 rounded shadow-sm">
+            {%- if card_product.tags contains '2+2' -%}2+2 gratis{%- elsif card_product.tags contains 'aanbieding' -%}aanbieding{%- else -%}-{{ card_product.compare_at_price | minus: card_product.price | times: 100.0 | divided_by: card_product.compare_at_price | round }}%{%- endif -%}
+          </span>
+        </div>
+      {%- endif -%}
 
-    <a href="{{ card_product.url }}" class="block">
-      <div class="relative aspect-square overflow-hidden bg-gray-50 p-4">
+      {%- comment -%} Square Wishlist Button (top right) {%- endcomment -%}
+      <button
+        type="button"
+        class="card__wishlist absolute top-3 right-3 z-10 w-9 h-9 bg-white border border-gray-100 rounded-md flex items-center justify-center text-[#004c97] hover:bg-gray-50 transition-colors shadow-sm"
+        data-product-handle="{{ card_product.handle }}"
+        aria-label="Add to wishlist"
+      >
+        {% render 'icon-library', icon: 'heart-line', class: 'w-5 h-5' %}
+      </button>
+
+      <a href="{{ card_product.url }}" class="block w-full h-full">
         {%- if card_product.featured_media -%}
           <img
-            src="{{ card_product.featured_media | image_url: width: 300 }}"
+            src="{{ card_product.featured_media | image_url: width: 400 }}"
             alt="{{ card_product.featured_media.alt | escape }}"
             loading="lazy"
-            class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+            class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
             width="{{ card_product.featured_media.width }}"
             height="{{ card_product.featured_media.height }}"
           >
         {%- else -%}
           {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-200' }}
         {%- endif -%}
-      </div>
-    </a>
+      </a>
+    </div>
 
-    <div class="p-3 flex flex-col flex-1">
-      <h3 class="text-[13px] font-bold text-gray-900 leading-tight line-clamp-2 group-hover:text-[#004c97] transition-colors">
-        <a href="{{ card_product.url }}">{{ card_product.title | escape }}</a>
-      </h3>
-      
-      {%- liquid
-        assign current_variant = card_product.selected_or_first_available_variant
-        assign variant_title = current_variant.title
-        if variant_title == 'Default Title'
-          assign variant_title = ''
-        endif
-      -%}
-      {%- if variant_title != blank -%}
-        <p class="text-[11px] text-gray-500 mt-0.5">{{ variant_title }}</p>
-      {%- endif -%}
+    {%- comment -%} [[ BOTTOM: Content Area ]] {%- endcomment -%}
+    <div class="p-4 flex flex-col flex-1 space-y-3">
+      <div class="space-y-1 flex-1">
+        {%- comment -%} Brand (Title Case) {%- endcomment -%}
+        <p class="text-[12px] font-bold text-gray-400">
+          {{ card_product.vendor | default: 'Premium Selection' }}
+        </p>
 
-      <div class="mt-auto pt-3 flex items-baseline gap-2">
-        {%- if card_product.compare_at_price > card_product.price -%}
-          <span class="text-[11px] text-gray-400 line-through">{{ card_product.compare_at_price | money }}</span>
+        <h3 class="text-[14px] font-bold text-gray-900 leading-snug line-clamp-2">
+          <a href="{{ card_product.url }}" class="hover:text-[#004c97] transition-colors">
+            {{ card_product.title | escape }}
+          </a>
+        </h3>
+        
+        {%- assign variant_info = card_product.selected_or_first_available_variant.title -%}
+        {%- if variant_info != 'Default Title' and variant_info != blank -%}
+          <p class="text-[12px] text-gray-500">{{ variant_info }}</p>
         {%- endif -%}
-        <span class="text-[15px] font-bold text-[#d81159]">{{ card_product.price | money }}</span>
       </div>
 
-      {%- form 'product', card_product, class: 'mt-2' -%}
-        <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
-        <button
-          type="submit"
-          name="add"
-          class="w-full flex items-center justify-center gap-1.5 py-2 bg-[#55a51c] text-white text-[12px] font-bold rounded hover:bg-[#4a9018] transition-colors disabled:bg-gray-200 disabled:cursor-not-allowed"
-          {% unless card_product.available %}disabled{% endunless %}
-        >
-          {% render 'icon-library', icon: 'shopping-cart-line', class: 'w-4 h-4' %}
-          Voeg toe
-        </button>
-      {%- endform -%}
+      {%- comment -%} Price Area: Magenta Highlight {%- endcomment -%}
+      <div class="space-y-2">
+        {%- if card_product.compare_at_price > card_product.price -%}
+          <div class="flex items-center gap-2">
+            <span class="bg-[#ffff00] text-black text-[10px] font-bold px-1.5 py-0.5 rounded-sm uppercase tracking-tighter">Adviesprijs</span>
+            <span class="text-[12px] text-gray-400 line-through">{{ card_product.compare_at_price | money }}</span>
+          </div>
+        {%- endif -%}
+
+        <div class="flex items-center justify-between gap-4">
+          <div class="{% if card_product.compare_at_price > card_product.price %}bg-[#DA2F79] text-white px-3 py-1.5 rounded-md font-black text-lg{% else %}text-gray-900 font-black text-lg{% endif %}">
+            {{ card_product.price | money }}
+          </div>
+          
+          {%- comment -%} Cart Button (Standard Green/Blue) {%- endcomment -%}
+          {%- form 'product', card_product -%}
+            <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+            <button
+              type="submit"
+              name="add"
+              class="flex items-center justify-center gap-1.5 px-4 py-2 bg-[#528300] text-white text-[13px] font-bold rounded hover:bg-[#467000] transition-colors"
+              {% unless card_product.available %}disabled{% endunless %}
+            >
+              {% render 'icon-library', icon: 'shopping-cart-line', class: 'w-4 h-4' %}
+              Voeg toe
+            </button>
+          {%- endform -%}
+        </div>
+        
+        <p class="text-[11px] text-[#528300] font-medium flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#528300]"></span>
+          Morgen in huis
+        </p>
+      </div>
     </div>
   </div>
 {%- endif -%}
